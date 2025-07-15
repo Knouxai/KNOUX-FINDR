@@ -2,24 +2,16 @@ const { app, BrowserWindow, ipcMain, dialog, Menu } = require("electron");
 const path = require("path");
 const isDev = process.env.NODE_ENV === "development";
 
-// Import AI and File System modules
-const FileIndexer = require("./modules/fileIndexer");
-const AIProcessor = require("./modules/aiProcessor");
-const DatabaseManager = require("./modules/databaseManager");
+// Import new AI and File System modules
+const SmartIndexer = require("./modules/smartIndexer");
 
 let mainWindow;
-let fileIndexer;
-let aiProcessor;
-let dbManager;
+let smartIndexer;
 
 async function createWindow() {
-  // Initialize core modules
-  dbManager = new DatabaseManager();
-  await dbManager.initialize();
-
-  fileIndexer = new FileIndexer(dbManager);
-  aiProcessor = new AIProcessor();
-  await aiProcessor.initialize();
+  // Initialize smart indexer
+  smartIndexer = new SmartIndexer();
+  await smartIndexer.initialize();
 
   // Create the browser window
   mainWindow = new BrowserWindow({
@@ -34,8 +26,8 @@ async function createWindow() {
       webSecurity: false, // Only for development
     },
     icon: path.join(__dirname, "assets/icon.png"),
-    titleBarStyle: "hiddenInset",
-    frame: process.platform === "darwin" ? false : true,
+    titleBarStyle: process.platform === "darwin" ? "hiddenInset" : "default",
+    frame: true,
     show: false,
     backgroundColor: "#0F123B",
   });
@@ -52,7 +44,7 @@ async function createWindow() {
   mainWindow.once("ready-to-show", () => {
     mainWindow.show();
 
-    // Start file indexing in background
+    // Start initial indexing in background
     setTimeout(() => {
       startInitialIndexing();
     }, 2000);
@@ -80,24 +72,33 @@ async function startInitialIndexing() {
     // Send indexing status to renderer
     mainWindow.webContents.send("indexing-status", {
       status: "started",
-      message: "بدء فهرسة الملفات...",
+      message: "🚀 بدء الفهرسة الذكية مع FTS5...",
     });
 
     for (const scanPath of commonPaths) {
-      await fileIndexer.indexDirectory(scanPath, (progress) => {
-        mainWindow.webContents.send("indexing-progress", progress);
-      });
+      if (require("fs").existsSync(scanPath)) {
+        console.log(`📁 فهرسة: ${scanPath}`);
+
+        await smartIndexer.indexDirectory(scanPath, (progress) => {
+          mainWindow.webContents.send("indexing-progress", {
+            ...progress,
+            path: scanPath,
+          });
+        });
+      }
     }
 
+    const stats = smartIndexer.getStats();
     mainWindow.webContents.send("indexing-status", {
       status: "completed",
-      message: "تم إكمال فهرسة الملفات بنجاح",
+      message: `✅ اكتملت الفهرسة: ${stats.totalFiles} ملف مفهرس`,
+      stats: stats,
     });
   } catch (error) {
     console.error("Indexing error:", error);
     mainWindow.webContents.send("indexing-status", {
       status: "error",
-      message: "خطأ في فهرسة الملفات",
+      message: "❌ خطأ في الفهرسة: " + error.message,
     });
   }
 }
@@ -108,30 +109,42 @@ function setupApplicationMenu() {
       label: "ملف",
       submenu: [
         {
-          label: "فهرسة مجلد جديد",
+          label: "🔍 فهرسة مجلد جديد",
           accelerator: "CmdOrCtrl+O",
           click: async () => {
             const result = await dialog.showOpenDialog(mainWindow, {
               properties: ["openDirectory"],
-              title: "اختر مجلد للفهرسة",
+              title: "اختر مجلد للفهرسة الذكية",
             });
 
             if (!result.canceled && result.filePaths.length > 0) {
-              await fileIndexer.indexDirectory(
-                result.filePaths[0],
-                (progress) => {
-                  mainWindow.webContents.send("indexing-progress", progress);
-                },
-              );
+              const selectedPath = result.filePaths[0];
+              console.log(`📁 فهرسة مجلد محدد: ${selectedPath}`);
+
+              await smartIndexer.indexDirectory(selectedPath, (progress) => {
+                mainWindow.webContents.send("indexing-progress", {
+                  ...progress,
+                  path: selectedPath,
+                });
+              });
             }
           },
         },
         { type: "separator" },
         {
-          label: "إعادة تعيين قاعدة البيانات",
+          label: "🔄 إعادة بناء الفهرس",
           click: async () => {
-            await dbManager.resetDatabase();
-            mainWindow.webContents.send("database-reset");
+            if (smartIndexer) {
+              smartIndexer.optimize();
+              mainWindow.webContents.send("database-optimized");
+            }
+          },
+        },
+        {
+          label: "📊 إحصائيات الفهرسة",
+          click: () => {
+            const stats = smartIndexer ? smartIndexer.getStats() : {};
+            mainWindow.webContents.send("show-stats", stats);
           },
         },
         { type: "separator" },
@@ -159,24 +172,49 @@ function setupApplicationMenu() {
       ],
     },
     {
-      label: "ذكاء اصطناعي",
+      label: "🔍 بحث متقدم",
       submenu: [
         {
-          label: "تحليل المحتوى",
+          label: "🚀 بحث فوري (FTS5)",
+          accelerator: "CmdOrCtrl+F",
           click: () => {
-            mainWindow.webContents.send("ai-analyze-content");
+            mainWindow.webContents.send("focus-search");
           },
         },
         {
-          label: "تصنيف تلقائي",
-          click: () => {
-            mainWindow.webContents.send("ai-auto-categorize");
+          label: "🔄 البحث عن المكررات",
+          click: async () => {
+            const duplicates = smartIndexer
+              ? await smartIndexer.findDuplicates()
+              : [];
+            mainWindow.webContents.send("show-duplicates", duplicates);
           },
         },
         {
-          label: "اقتراحات ذكية",
+          label: "📂 تصنيف الملفات",
           click: () => {
-            mainWindow.webContents.send("ai-smart-suggestions");
+            mainWindow.webContents.send("show-categories");
+          },
+        },
+      ],
+    },
+    {
+      label: "⚙️ أدوات",
+      submenu: [
+        {
+          label: "🔧 تحسين قاعدة البيانات",
+          click: () => {
+            if (smartIndexer) {
+              smartIndexer.optimize();
+              mainWindow.webContents.send("database-optimized");
+            }
+          },
+        },
+        {
+          label: "📋 معلومات النظام",
+          click: () => {
+            const info = smartIndexer ? smartIndexer.getInfo() : {};
+            mainWindow.webContents.send("show-system-info", info);
           },
         },
       ],
@@ -187,20 +225,16 @@ function setupApplicationMenu() {
   Menu.setApplicationMenu(menu);
 }
 
-// IPC Handlers
+// IPC Handlers for the new system
 ipcMain.handle("search-files", async (event, query, options = {}) => {
   try {
-    const results = await fileIndexer.searchFiles(query, options);
+    console.log(`🔍 بحث: "${query}"`);
+    const results = await smartIndexer.searchFiles(query, {
+      limit: options.limit || 50,
+      ...options,
+    });
 
-    // AI-enhanced search results
-    if (options.useAI && results.length > 0) {
-      const enhancedResults = await aiProcessor.enhanceSearchResults(
-        query,
-        results,
-      );
-      return enhancedResults;
-    }
-
+    console.log(`📋 النتائج: ${results.length} ملف`);
     return results;
   } catch (error) {
     console.error("Search error:", error);
@@ -208,55 +242,123 @@ ipcMain.handle("search-files", async (event, query, options = {}) => {
   }
 });
 
+ipcMain.handle("advanced-search", async (event, query, filters = {}) => {
+  try {
+    console.log(`🔍 بحث متقدم: "${query}"`);
+    console.log("🔧 المرشحات:", filters);
+
+    const results = await smartIndexer.advancedSearch(query, filters);
+    console.log(`📋 النتائج المتقدمة: ${results.length} ملف`);
+
+    return results;
+  } catch (error) {
+    console.error("Advanced search error:", error);
+    return [];
+  }
+});
+
 ipcMain.handle("get-file-stats", async () => {
-  return await dbManager.getFileStatistics();
+  try {
+    return smartIndexer ? smartIndexer.getStats() : {};
+  } catch (error) {
+    console.error("Stats error:", error);
+    return {};
+  }
 });
 
 ipcMain.handle("get-recent-files", async (event, limit = 10) => {
-  return await dbManager.getRecentFiles(limit);
-});
-
-ipcMain.handle("analyze-file-content", async (event, filePath) => {
-  return await aiProcessor.analyzeFileContent(filePath);
-});
-
-ipcMain.handle("get-file-suggestions", async (event, context) => {
-  return await aiProcessor.getSmartSuggestions(context);
-});
-
-ipcMain.handle("categorize-files", async () => {
-  const files = await dbManager.getUncategorizedFiles();
-  const categorizedFiles = await aiProcessor.categorizeFiles(files);
-
-  for (const file of categorizedFiles) {
-    await dbManager.updateFileCategory(file.id, file.category, file.tags);
+  try {
+    const results = await smartIndexer.advancedSearch("", {
+      limit: limit,
+      sortBy: "modified",
+    });
+    return results;
+  } catch (error) {
+    console.error("Recent files error:", error);
+    return [];
   }
-
-  return categorizedFiles.length;
-});
-
-ipcMain.handle("extract-file-text", async (event, filePath) => {
-  return await aiProcessor.extractTextFromFile(filePath);
 });
 
 ipcMain.handle("get-duplicate-files", async () => {
-  return await dbManager.findDuplicateFiles();
+  try {
+    return smartIndexer ? await smartIndexer.findDuplicates() : [];
+  } catch (error) {
+    console.error("Duplicates error:", error);
+    return [];
+  }
 });
 
 ipcMain.handle("open-file-location", async (event, filePath) => {
   const { shell } = require("electron");
-  shell.showItemInFolder(filePath);
+  try {
+    shell.showItemInFolder(filePath);
+    return true;
+  } catch (error) {
+    console.error("Open location error:", error);
+    return false;
+  }
 });
 
 ipcMain.handle("delete-file", async (event, filePath) => {
   const fs = require("fs-extra");
   try {
     await fs.remove(filePath);
-    await dbManager.removeFile(filePath);
+    if (smartIndexer) {
+      smartIndexer.deleteFile(filePath);
+    }
     return true;
   } catch (error) {
     console.error("Delete error:", error);
     return false;
+  }
+});
+
+ipcMain.handle(
+  "update-file-category",
+  async (event, fileId, category, tags = []) => {
+    try {
+      return smartIndexer
+        ? smartIndexer.updateFileCategory(fileId, category, tags)
+        : false;
+    } catch (error) {
+      console.error("Update category error:", error);
+      return false;
+    }
+  },
+);
+
+ipcMain.handle("reindex-file", async (event, filePath) => {
+  try {
+    if (smartIndexer) {
+      await smartIndexer.reindexFile(filePath);
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error("Reindex error:", error);
+    return false;
+  }
+});
+
+ipcMain.handle("optimize-database", async () => {
+  try {
+    if (smartIndexer) {
+      smartIndexer.optimize();
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error("Optimize error:", error);
+    return false;
+  }
+});
+
+ipcMain.handle("get-system-info", async () => {
+  try {
+    return smartIndexer ? smartIndexer.getInfo() : {};
+  } catch (error) {
+    console.error("System info error:", error);
+    return {};
   }
 });
 
@@ -277,8 +379,8 @@ app.on("activate", () => {
 
 // Handle app closing
 app.on("before-quit", async () => {
-  if (dbManager) {
-    await dbManager.close();
+  if (smartIndexer) {
+    await smartIndexer.close();
   }
 });
 
@@ -288,3 +390,16 @@ app.on("web-contents-created", (event, contents) => {
     event.preventDefault();
   });
 });
+
+// Handle certificate errors in development
+app.on(
+  "certificate-error",
+  (event, webContents, url, error, certificate, callback) => {
+    if (isDev) {
+      event.preventDefault();
+      callback(true);
+    } else {
+      callback(false);
+    }
+  },
+);
