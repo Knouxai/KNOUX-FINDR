@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
+import DuplicateManager from "./DuplicateManager";
 
 const PowerOps = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -173,7 +174,7 @@ const PowerOps = () => {
     {
       id: "auto_categorize",
       name: "تصنيف تلقائي",
-      description: "تصنيف الملفات بالذكاء الاصطناعي",
+      description: "تصنيف الملفات بالذك��ء الاصطناعي",
       icon: "🏷️",
       color: "purple",
       dangerous: false,
@@ -217,7 +218,7 @@ const PowerOps = () => {
     },
     {
       id: "bulk_encrypt",
-      name: "تشفير محسن",
+      name: "تشفير مح��ن",
       description: "تشفير متقدم للملفات الحساسة",
       icon: "🔒",
       color: "red",
@@ -553,6 +554,29 @@ const PowerOps = () => {
     setOperationProgress(0);
   }, []);
 
+  // معالجة حل ا��تكرارات
+  const handleDuplicateResolution = useCallback((resolutionData) => {
+    console.log("✅ تم حل التكرارات:", resolutionData);
+
+    // تحديث قائمة الملفات بناءً على الحل المطبق
+    if (resolutionData.strategy === "smart") {
+      // إزالة الملفات المحذوفة من القائمة
+      setFileList((prev) =>
+        prev.filter(
+          (file) =>
+            !file.duplicateGroup ||
+            prev.find(
+              (f) =>
+                f.duplicateGroup === file.duplicateGroup && f.id !== file.id,
+            ),
+        ),
+      );
+    }
+
+    // إعادة تعيين نتائج التكرار
+    setDuplicateResults(null);
+  }, []);
+
   // تنفيذ العملية
   const executeOperation = async (operationId) => {
     switch (operationId) {
@@ -614,7 +638,7 @@ const PowerOps = () => {
   // تأكيد العملية الخطيرة
   const confirmDangerousOperation = (operation) => {
     const confirmed = window.confirm(
-      `هل أنت متأكد من تنفيذ "${operation.name}" على ${selectedFiles.length} ملف؟\n` +
+      `هل أنت متأ��د من تنفيذ "${operation.name}" على ${selectedFiles.length} ملف؟\n` +
         `هذه العملية قد تكون غير قابلة للتراجع!`,
     );
 
@@ -661,7 +685,7 @@ const PowerOps = () => {
   // رندر تبويب التنظيم
   const renderOrganizeTab = () => (
     <div className="space-y-6">
-      {/* أدوات التنظيم */}
+      {/* أ��وات التنظيم */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* العمليات المتاحة */}
         <div className="lg:col-span-1">
