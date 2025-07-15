@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import SignupForm from "./components/SignupForm";
 import Dashboard from "./components/Dashboard";
 import DesktopApp from "./components/DesktopApp";
+import InstantSearch from "./components/InstantSearch";
 
 function App() {
   const [currentPage, setCurrentPage] = useState("signup");
@@ -34,9 +35,9 @@ function App() {
     setCurrentPage("signup");
   };
 
-  // If running in Electron, show desktop app directly
+  // If running in Electron, show instant search directly
   if (isElectron && currentPage === "desktop") {
-    return <DesktopApp user={user} onLogout={handleLogout} />;
+    return <InstantSearch user={user} onLogout={handleLogout} />;
   }
 
   return (
