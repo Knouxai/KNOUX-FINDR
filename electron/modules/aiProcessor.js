@@ -57,14 +57,66 @@ class AIProcessor {
     this.initializeAdvancedFeatures();
   }
 
+  // تهيئة الميزات المتقدمة
+  initializeAdvancedFeatures() {
+    // تهيئة أنماط المشاعر
+    this.emotionAnalyzer.emotionPatterns.set("positive", [
+      /سعيد|فرح|رائع|ممتاز|جميل|نجاح/gi,
+      /happy|joy|great|excellent|beautiful|success|amazing|wonderful/gi,
+    ]);
+
+    this.emotionAnalyzer.emotionPatterns.set("negative", [
+      /حزين|زعلان|سيء|فشل|مشكلة|خطأ/gi,
+      /sad|angry|bad|fail|problem|error|terrible|awful/gi,
+    ]);
+
+    this.emotionAnalyzer.emotionPatterns.set("neutral", [
+      /عادي|طبيعي|مقبول|متوسط/gi,
+      /normal|regular|average|standard|typical/gi,
+    ]);
+
+    // تهيئة معالج المفاهيم
+    this.semanticAnalyzer.conceptExtractor.set("work_concepts", [
+      "عمل",
+      "مشروع",
+      "شركة",
+      "موظف",
+      "راتب",
+      "اجتماع",
+      "work",
+      "project",
+      "company",
+      "employee",
+      "salary",
+      "meeting",
+    ]);
+
+    this.semanticAnalyzer.conceptExtractor.set("personal_concepts", [
+      "شخصي",
+      "عائلة",
+      "صديق",
+      "إجازة",
+      "هواية",
+      "منزل",
+      "personal",
+      "family",
+      "friend",
+      "vacation",
+      "hobby",
+      "home",
+    ]);
+  }
+
   async initialize() {
     try {
-      console.log("تهيئة نظام الذكاء الاصطناعي...");
+      console.log("🧠 تهيئة نظام الذكاء الاصطناعي المتقدم...");
 
       // Initialize NLP Manager with Arabic and English support
       this.nlpManager = new NlpManager({
         languages: ["ar", "en"],
         forceNER: true,
+        nluThreshold: 0.7,
+        autoSave: false,
       });
 
       // Train the model with predefined patterns
@@ -73,12 +125,41 @@ class AIProcessor {
       // Train and save the model
       await this.nlpManager.train();
 
+      // تهيئة المحركات المتقدمة
+      await this.intelligentCategorizer.initialize();
+
+      // تهيئة معالج التحليل الدلالي
+      await this.initializeSemanticAnalysis();
+
       this.isInitialized = true;
-      console.log("تم تهيئة نظام الذكاء الاصطناعي بنجاح");
+      console.log("✅ تم تهيئة نظام الذكاء الاصطناعي بنجاح");
     } catch (error) {
-      console.error("خطأ في تهيئة AI:", error);
+      console.error("❌ خطأ في تهيئة AI:", error);
       throw error;
     }
+  }
+
+  // تهيئة التحليل الدلالي
+  async initializeSemanticAnalysis() {
+    console.log("📊 تهيئة محرك التحليل الدلالي...");
+
+    // بناء مصفوفة التشابه الأولية
+    const concepts = [
+      { word: "عمل", vector: [0.8, 0.2, 0.1, 0.9, 0.3] },
+      { word: "شخصي", vector: [0.2, 0.9, 0.8, 0.1, 0.7] },
+      { word: "مالي", vector: [0.9, 0.1, 0.2, 0.8, 0.4] },
+      { word: "تعليمي", vector: [0.4, 0.7, 0.9, 0.3, 0.8] },
+      { word: "work", vector: [0.8, 0.2, 0.1, 0.9, 0.3] },
+      { word: "personal", vector: [0.2, 0.9, 0.8, 0.1, 0.7] },
+      { word: "finance", vector: [0.9, 0.1, 0.2, 0.8, 0.4] },
+      { word: "education", vector: [0.4, 0.7, 0.9, 0.3, 0.8] },
+    ];
+
+    concepts.forEach((concept) => {
+      this.semanticAnalyzer.vectorCache.set(concept.word, concept.vector);
+    });
+
+    console.log("✅ تم تهيئة محرك التحليل الدلالي");
   }
 
   initializeCategoryPatterns() {
