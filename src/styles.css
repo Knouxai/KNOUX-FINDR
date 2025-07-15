@@ -295,3 +295,351 @@ body {
     background-position: 100% 50%;
   }
 }
+
+/* Enhanced Animations and Effects */
+
+/* Morphing Button */
+.morph-button {
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  border-radius: 8px;
+}
+
+.morph-button:hover {
+  border-radius: 25px;
+  background: linear-gradient(135deg, #00b4ff 0%, #0075ff 100%);
+  transform: scale(1.05);
+}
+
+/* Scale Animation */
+.scale-in {
+  animation: scaleIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Enhanced Hover Effects */
+.hover-lift {
+  transition: all 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Glow Border Effect */
+.glow-border {
+  position: relative;
+}
+
+.glow-border::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, #0075ff, #00b4ff, #0075ff);
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: -1;
+  animation: rotate-border 3s linear infinite;
+}
+
+.glow-border:hover::before {
+  opacity: 1;
+}
+
+@keyframes rotate-border {
+  0% {
+    background: linear-gradient(45deg, #0075ff, #00b4ff, #0075ff);
+  }
+  25% {
+    background: linear-gradient(135deg, #00b4ff, #0075ff, #00b4ff);
+  }
+  50% {
+    background: linear-gradient(225deg, #0075ff, #00b4ff, #0075ff);
+  }
+  75% {
+    background: linear-gradient(315deg, #00b4ff, #0075ff, #00b4ff);
+  }
+  100% {
+    background: linear-gradient(45deg, #0075ff, #00b4ff, #0075ff);
+  }
+}
+
+/* Enhanced Progress Bar */
+.progress-bar {
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-image: linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.2) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.2) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 30px 30px;
+  animation: move-stripes 1s linear infinite;
+}
+
+@keyframes move-stripes {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 30px 0;
+  }
+}
+
+/* Typing Animation */
+.typing::after {
+  content: "|";
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Particle Effect */
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #0075ff;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: particle-float 3s ease-out infinite;
+}
+
+@keyframes particle-float {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px) scale(0);
+    opacity: 0;
+  }
+}
+
+/* Enhanced Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #0075ff, #00b4ff);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #00b4ff, #0075ff);
+  box-shadow: 0 0 10px rgba(0, 117, 255, 0.5);
+}
+
+/* Selection Highlight */
+::selection {
+  background: rgba(0, 117, 255, 0.3);
+  color: white;
+}
+
+::-moz-selection {
+  background: rgba(0, 117, 255, 0.3);
+  color: white;
+}
+
+/* Enhanced Focus States */
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #0075ff;
+  box-shadow:
+    0 0 0 3px rgba(0, 117, 255, 0.2),
+    0 0 10px rgba(0, 117, 255, 0.3);
+  transform: scale(1.02);
+  transition: all 0.3s ease;
+}
+
+/* Shimmer Effect */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.1) 25%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.1) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Bounce Animation */
+.bounce-in {
+  animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Elastic Animation */
+.elastic {
+  animation: elastic 0.8s ease-out;
+}
+
+@keyframes elastic {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  75% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Slide Up Animation */
+.slide-up {
+  animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Enhancements */
+@media (max-width: 768px) {
+  .glass-card {
+    backdrop-filter: blur(20px);
+    margin: 0.5rem;
+  }
+
+  .floating-orb {
+    animation-duration: 4s;
+    opacity: 0.2;
+  }
+
+  .primary-button:hover {
+    transform: none;
+  }
+
+  .hover-lift:hover {
+    transform: none;
+  }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .floating-orb {
+    animation: none;
+  }
+}
+
+/* Dark mode enhancements */
+@media (prefers-color-scheme: dark) {
+  .glass-card {
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+  }
+}
+
+/* Print optimizations */
+@media print {
+  .glass-card,
+  .glass-button {
+    background: white;
+    border: 1px solid #ccc;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  .gradient-text {
+    background: none;
+    color: black;
+  }
+
+  .floating-orb {
+    display: none;
+  }
+}
