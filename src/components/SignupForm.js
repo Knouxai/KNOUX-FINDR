@@ -447,6 +447,13 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
                       <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#0075FF] group-hover:w-full transition-all duration-300"></div>
                     </span>
                   </div>
+
+                  {/* Prof Sadek ELgazar Signature */}
+                  <div className="text-center mt-8 opacity-60">
+                    <div className="text-[#A0AEC0] text-[10px] font-light italic tracking-wider">
+                      Prof Sadek ELgazar
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
