@@ -40,7 +40,7 @@ const PowerOps = () => {
       category: "Work",
       encrypted: false,
       hidden: false,
-      modified: Date.now() - 86400000, // يوم واحد
+      modified: Date.now() - 86400000, // يوم واح��
       created: Date.now() - 604800000, // أسبوع
       accessed: Date.now() - 3600000, // ساعة
       hash: "a1b2c3d4e5f6",
@@ -267,6 +267,104 @@ const PowerOps = () => {
     { id: "System", name: "نظام", icon: "⚙️", color: "gray" },
   ];
 
+  // قوائم مفلترة ومرتبة
+  const filteredAndSortedFiles = useMemo(() => {
+    let filtered = fileList.filter((file) => {
+      // فلتر حسب النوع
+      if (filterCriteria.type !== "all" && file.type !== filterCriteria.type) {
+        return false;
+      }
+
+      // فلتر حسب الفئة
+      if (
+        filterCriteria.category !== "all" &&
+        file.category !== filterCriteria.category
+      ) {
+        return false;
+      }
+
+      // فلتر حسب الحجم
+      if (filterCriteria.size !== "all") {
+        const sizeInMB = file.size / (1024 * 1024);
+        switch (filterCriteria.size) {
+          case "small":
+            if (sizeInMB >= 10) return false;
+            break;
+          case "medium":
+            if (sizeInMB < 10 || sizeInMB >= 100) return false;
+            break;
+          case "large":
+            if (sizeInMB < 100) return false;
+            break;
+        }
+      }
+
+      // فلتر حسب التاريخ
+      if (filterCriteria.date !== "all") {
+        const daysDiff = (Date.now() - file.modified) / (1000 * 60 * 60 * 24);
+        switch (filterCriteria.date) {
+          case "today":
+            if (daysDiff >= 1) return false;
+            break;
+          case "week":
+            if (daysDiff >= 7) return false;
+            break;
+          case "month":
+            if (daysDiff >= 30) return false;
+            break;
+          case "older":
+            if (daysDiff < 30) return false;
+            break;
+        }
+      }
+
+      return true;
+    });
+
+    // ترتيب النتائج
+    filtered.sort((a, b) => {
+      let comparison = 0;
+
+      switch (sortBy) {
+        case "name":
+          comparison = a.name.localeCompare(b.name);
+          break;
+        case "size":
+          comparison = a.size - b.size;
+          break;
+        case "modified":
+          comparison = a.modified - b.modified;
+          break;
+        case "type":
+          comparison = a.type.localeCompare(b.type);
+          break;
+        case "category":
+          comparison = a.category.localeCompare(b.category);
+          break;
+        default:
+          comparison = a.modified - b.modified;
+      }
+
+      return sortOrder === "desc" ? -comparison : comparison;
+    });
+
+    return filtered;
+  }, [fileList, filterCriteria, sortBy, sortOrder]);
+
+  // الملفات المكررة
+  const duplicateFiles = useMemo(() => {
+    const duplicates = {};
+    fileList.forEach((file) => {
+      if (file.duplicateGroup) {
+        if (!duplicates[file.duplicateGroup]) {
+          duplicates[file.duplicateGroup] = [];
+        }
+        duplicates[file.duplicateGroup].push(file);
+      }
+    });
+    return duplicates;
+  }, [fileList]);
+
   // معالجة تحديد الملفات
   const handleFileSelect = (fileId) => {
     setSelectedFiles((prev) => {
@@ -344,7 +442,7 @@ const PowerOps = () => {
 
   // تنسيق حجم الملف
   const formatFileSize = (bytes) => {
-    const sizes = ["بايت", "كيلو بايت", "ميجا بايت", "جيجا بايت"];
+    const sizes = ["بايت", "كيلو باي��", "ميجا بايت", "جيجا بايت"];
     if (bytes === 0) return "0 بايت";
     const i = Math.floor(Math.log(bytes) / Math.log(1024));
     return Math.round((bytes / Math.pow(1024, i)) * 100) / 100 + " " + sizes[i];
@@ -542,7 +640,7 @@ const PowerOps = () => {
 
                   <select className="glass-button px-3 py-2 rounded-lg text-sm">
                     <option>ترتيب حسب الاسم</option>
-                    <option>ترتيب ح��ب الحجم</option>
+                    <option>ترتيب حسب الحجم</option>
                     <option>ترتيب حسب التاريخ</option>
                   </select>
                 </div>
