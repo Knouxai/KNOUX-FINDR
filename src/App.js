@@ -3,6 +3,10 @@ import SignupForm from "./components/SignupForm";
 import Dashboard from "./components/Dashboard";
 import DesktopApp from "./components/DesktopApp";
 import InstantSearch from "./components/InstantSearch";
+import Timeline from "./components/Timeline";
+import Stats from "./components/Stats";
+import NaturalQueryProcessor from "./components/NaturalQueryProcessor";
+import PowerOps from "./components/PowerOps";
 
 function App() {
   const [currentPage, setCurrentPage] = useState("signup");
