@@ -39,9 +39,9 @@ function App() {
     setCurrentPage("signup");
   };
 
-  // If running in Electron, show instant search directly
+  // If running in Electron, show desktop app directly
   if (isElectron && currentPage === "desktop") {
-    return <InstantSearch user={user} onLogout={handleLogout} />;
+    return <DesktopApp user={user} onLogout={handleLogout} />;
   }
 
   return (
