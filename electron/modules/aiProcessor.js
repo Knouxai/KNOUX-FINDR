@@ -5,17 +5,56 @@ const fs = require("fs-extra");
 const path = require("path");
 const mammoth = require("mammoth");
 const pdf = require("pdf-parse");
+const crypto = require("crypto");
+const IntelligentCategorizer = require("./intelligentCategorizer");
+const AdvancedDuplicateDetector = require("./advancedDuplicateDetector");
 
 class AIProcessor {
-  constructor() {
+  constructor(database, contentExtractor) {
     this.nlpManager = null;
     this.isInitialized = false;
     this.categories = new Map();
     this.keywordPatterns = new Map();
     this.documentClassifier = null;
+    this.database = database;
+    this.contentExtractor = contentExtractor;
+
+    // محركات الذكاء الاصطناعي المتقدمة
+    this.intelligentCategorizer = new IntelligentCategorizer(
+      this,
+      contentExtractor,
+    );
+    this.duplicateDetector = new AdvancedDuplicateDetector(
+      database,
+      contentExtractor,
+    );
+
+    // محرك التحليل الدلالي المتقدم
+    this.semanticAnalyzer = {
+      vectorCache: new Map(),
+      similarityMatrix: new Map(),
+      conceptExtractor: new Map(),
+      contextAnalyzer: new Map(),
+    };
+
+    // نظام التعلم العميق المبسط
+    this.deepLearning = {
+      patterns: new Map(),
+      weights: new Map(),
+      biases: new Map(),
+      activationHistory: new Map(),
+    };
+
+    // معالج المشاعر والسياق
+    this.emotionAnalyzer = {
+      emotionPatterns: new Map(),
+      contextualClues: new Map(),
+      sentimentHistory: new Map(),
+    };
 
     // Initialize category patterns
     this.initializeCategoryPatterns();
+    this.initializeAdvancedFeatures();
   }
 
   async initialize() {
