@@ -29,7 +29,7 @@ const PowerOps = () => {
     duplicate_scan: false,
   });
 
-  // قائمة الملفات المحسنة مع ب��انات إضافية
+  // قائمة الملفات المحسنة مع بيانات إضافية
   const [fileList, setFileList] = useState([
     {
       id: 1,
@@ -159,56 +159,112 @@ const PowerOps = () => {
     },
   ]);
 
-  // العمليات المتاحة
+  // العمليات المتاحة المحسنة
   const operations = [
     {
-      id: "bulk_delete",
-      name: "حذف جماعي",
-      description: "حذف عدة ملفات مع إمكانية الاستعادة",
-      icon: "🗑️",
-      color: "red",
-      dangerous: true,
+      id: "smart_organize",
+      name: "تنظيم ذكي",
+      description: "تنظيم تلقائي للملفات حسب النوع والمحتوى",
+      icon: "🧠",
+      color: "blue",
+      dangerous: false,
+      category: "organize",
+    },
+    {
+      id: "auto_categorize",
+      name: "تصنيف تلقائي",
+      description: "تصنيف الملفات بالذكاء الاصطناعي",
+      icon: "🏷️",
+      color: "purple",
+      dangerous: false,
+      category: "organize",
+    },
+    {
+      id: "advanced_duplicate_scan",
+      name: "فحص متقدم للتكرارات",
+      description: "كشف ذكي للملفات المكررة والمشابهة",
+      icon: "🔍",
+      color: "orange",
+      dangerous: false,
+      category: "duplicates",
+    },
+    {
+      id: "similarity_clustering",
+      name: "تجميع متشابه",
+      description: "تجميع الملفات المتشابهة في المحتوى",
+      icon: "🔗",
+      color: "teal",
+      dangerous: false,
+      category: "organize",
     },
     {
       id: "bulk_move",
       name: "نقل جماعي",
-      description: "نقل الملفات إلى مجلد آخر",
+      description: "نقل الملفات إلى مجلد آخر بذكاء",
       icon: "📂",
       color: "blue",
       dangerous: false,
+      category: "manage",
+    },
+    {
+      id: "bulk_rename",
+      name: "إعادة تسمية ذكية",
+      description: "إعادة تسمية الملفات حسب قواعد ذكية",
+      icon: "✏️",
+      color: "green",
+      dangerous: false,
+      category: "manage",
     },
     {
       id: "bulk_encrypt",
-      name: "تشفير جماعي",
-      description: "تشفير الملفات الحساسة",
+      name: "تشفير محسن",
+      description: "تشفير متقدم للملفات الحساسة",
       icon: "🔒",
-      color: "green",
+      color: "red",
       dangerous: false,
+      category: "security",
     },
     {
       id: "bulk_compress",
-      name: "ضغط جماعي",
-      description: "ضغط الملفات لتوفير المساحة",
+      name: "ضغط ذكي",
+      description: "ضغط الملفات بأفضل خوارزمية",
       icon: "📦",
       color: "purple",
       dangerous: false,
+      category: "optimize",
     },
     {
-      id: "bulk_hide",
-      name: "إخفاء جماعي",
-      description: "إخفاء الملفات من النظام",
-      icon: "👁️",
+      id: "space_analyzer",
+      name: "محلل المساحة",
+      description: "تحليل استخدام المساحة واقتراح التحسينات",
+      icon: "💾",
       color: "yellow",
       dangerous: false,
+      category: "analytics",
     },
     {
-      id: "duplicate_finder",
-      name: "كاشف التكرار",
-      description: "البحث عن الملفات المكررة وحذفها",
-      icon: "🔍",
-      color: "orange",
-      dangerous: false,
+      id: "bulk_delete",
+      name: "حذف آمن",
+      description: "حذف آمن مع إمكانية الاستعادة الكاملة",
+      icon: "🗑️",
+      color: "red",
+      dangerous: true,
+      category: "manage",
     },
+  ];
+
+  // التصنيفات الذكية المتاحة
+  const smartCategories = [
+    { id: "Work", name: "عمل", icon: "💼", color: "blue" },
+    { id: "Personal", name: "شخصي", icon: "👤", color: "green" },
+    { id: "Finance", name: "مالي", icon: "💰", color: "yellow" },
+    { id: "Education", name: "تعليمي", icon: "📚", color: "purple" },
+    { id: "Health", name: "صحي", icon: "🏥", color: "red" },
+    { id: "Legal", name: "قانوني", icon: "⚖️", color: "gray" },
+    { id: "Development", name: "تطوير", icon: "💻", color: "teal" },
+    { id: "Media", name: "وسائط", icon: "🎬", color: "pink" },
+    { id: "Archive", name: "أرشيف", icon: "📦", color: "brown" },
+    { id: "System", name: "نظام", icon: "⚙️", color: "gray" },
   ];
 
   // معالجة تحديد الملفات
@@ -486,7 +542,7 @@ const PowerOps = () => {
 
                   <select className="glass-button px-3 py-2 rounded-lg text-sm">
                     <option>ترتيب حسب الاسم</option>
-                    <option>ترتيب حسب الحجم</option>
+                    <option>ترتيب ح��ب الحجم</option>
                     <option>ترتيب حسب التاريخ</option>
                   </select>
                 </div>
@@ -616,7 +672,7 @@ const PowerOps = () => {
 
               <div className="glass-button p-3 rounded-lg">
                 <div className="text-purple-400 font-medium mb-1">
-                  📝 تسجيل ��لعمليات
+                  📝 تسجيل العمليات
                 </div>
                 <div className="text-gray-400">
                   حفظ سجل مفصل لجميع الإجراءات
