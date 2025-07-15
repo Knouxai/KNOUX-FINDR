@@ -1,64 +1,161 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 
 const PowerOps = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [currentOperation, setCurrentOperation] = useState(null);
   const [operationProgress, setOperationProgress] = useState(0);
   const [securityMode, setSecurityMode] = useState(false);
+  const [activeTab, setActiveTab] = useState("organize"); // organize, duplicates, analytics
+  const [duplicateResults, setDuplicateResults] = useState(null);
+  const [isScanning, setIsScanning] = useState(false);
+  const [scanProgress, setScanProgress] = useState(0);
+  const [organizeMode, setOrganizeMode] = useState("smart"); // smart, manual, rules
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [filterCriteria, setFilterCriteria] = useState({
+    type: "all",
+    size: "all",
+    date: "all",
+    category: "all",
+  });
+  const [sortBy, setSortBy] = useState("modified");
+  const [sortOrder, setSortOrder] = useState("desc");
   const [bulkOperations, setBulkOperations] = useState({
     move: false,
     copy: false,
     delete: false,
     encrypt: false,
     compress: false,
+    categorize: false,
+    duplicate_scan: false,
   });
 
-  // محاكاة قائمة الملفات
+  // قائمة الملفات المحسنة مع ب��انات إضافية
   const [fileList, setFileList] = useState([
     {
       id: 1,
       name: "مشروع_العمل.docx",
-      path: "/Documents/",
+      path: "/Documents/Work/",
       size: 2500000,
       type: "docx",
+      category: "Work",
       encrypted: false,
       hidden: false,
+      modified: Date.now() - 86400000, // يوم واحد
+      created: Date.now() - 604800000, // أسبوع
+      accessed: Date.now() - 3600000, // ساعة
+      hash: "a1b2c3d4e5f6",
+      tags: ["عمل", "مشروع", "مستند"],
+      duplicateGroup: null,
+      autoCategory: true,
+      confidence: 0.95,
     },
     {
       id: 2,
       name: "صور_العطلة.zip",
-      path: "/Pictures/",
+      path: "/Pictures/Vacation/",
       size: 125000000,
       type: "zip",
+      category: "Personal",
       encrypted: false,
       hidden: false,
+      modified: Date.now() - 2592000000, // شهر
+      created: Date.now() - 2592000000,
+      accessed: Date.now() - 86400000,
+      hash: "f6e5d4c3b2a1",
+      tags: ["صور", "عطلة", "أرشيف"],
+      duplicateGroup: null,
+      autoCategory: true,
+      confidence: 0.88,
     },
     {
       id: 3,
       name: "تقرير_سري.pdf",
-      path: "/Documents/",
+      path: "/Documents/Confidential/",
       size: 8500000,
       type: "pdf",
+      category: "Finance",
       encrypted: true,
       hidden: false,
+      modified: Date.now() - 172800000, // يومين
+      created: Date.now() - 259200000, // ثلاثة أيام
+      accessed: Date.now() - 7200000, // ساعتين
+      hash: "x1y2z3w4v5u6",
+      tags: ["تقرير", "سري", "مالي"],
+      duplicateGroup: null,
+      autoCategory: false,
+      confidence: 0.75,
     },
     {
       id: 4,
       name: "نسخة_احتياطية.db",
-      path: "/Backup/",
+      path: "/Backup/System/",
       size: 450000000,
       type: "db",
+      category: "System",
       encrypted: false,
       hidden: true,
+      modified: Date.now() - 7200000,
+      created: Date.now() - 1209600000, // أسبوعين
+      accessed: Date.now() - 3600000,
+      hash: "b1a2c3k4u5p6",
+      tags: ["نسخة احتياطية", "قاعدة بيانات", "نظام"],
+      duplicateGroup: null,
+      autoCategory: true,
+      confidence: 0.92,
     },
     {
       id: 5,
       name: "كود_المشروع.zip",
-      path: "/Development/",
+      path: "/Development/Projects/",
       size: 15000000,
       type: "zip",
+      category: "Development",
       encrypted: false,
       hidden: false,
+      modified: Date.now() - 43200000, // 12 ساعة
+      created: Date.now() - 518400000, // 6 أيام
+      accessed: Date.now() - 1800000, // 30 دقيقة
+      hash: "c0d3p4r5o6j7",
+      tags: ["كود", "مشروع", "تطوير"],
+      duplicateGroup: null,
+      autoCategory: true,
+      confidence: 0.97,
+    },
+    {
+      id: 6,
+      name: "مشروع_العمل_نسخة.docx",
+      path: "/Downloads/",
+      size: 2500000,
+      type: "docx",
+      category: "Work",
+      encrypted: false,
+      hidden: false,
+      modified: Date.now() - 86400000,
+      created: Date.now() - 604800000,
+      accessed: Date.now() - 7200000,
+      hash: "a1b2c3d4e5f6", // نفس hash الملف الأول
+      tags: ["عمل", "مشروع", "نسخة"],
+      duplicateGroup: "dup_1",
+      autoCategory: true,
+      confidence: 0.95,
+    },
+    {
+      id: 7,
+      name: "صور_العطلة_backup.zip",
+      path: "/Backup/Personal/",
+      size: 125000000,
+      type: "zip",
+      category: "Personal",
+      encrypted: false,
+      hidden: false,
+      modified: Date.now() - 2592000000,
+      created: Date.now() - 2592000000,
+      accessed: Date.now() - 172800000,
+      hash: "f6e5d4c3b2a1", // نفس hash الملف الثاني
+      tags: ["صور", "عطلة", "نسخة احتياطية"],
+      duplicateGroup: "dup_2",
+      autoCategory: true,
+      confidence: 0.88,
     },
   ]);
 
@@ -519,7 +616,7 @@ const PowerOps = () => {
 
               <div className="glass-button p-3 rounded-lg">
                 <div className="text-purple-400 font-medium mb-1">
-                  📝 تسجيل العمليات
+                  📝 تسجيل ��لعمليات
                 </div>
                 <div className="text-gray-400">
                   حفظ سجل مفصل لجميع الإجراءات
