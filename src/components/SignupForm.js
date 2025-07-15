@@ -35,40 +35,71 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
   return (
     <div className="flex justify-center items-center h-screen w-screen">
       <div className="flex w-full h-full max-w-[1920px] max-h-[1300px]">
-        {/* Left Side - Background */}
+        {/* Left Side - Enhanced Background */}
         <div className="flex-1 relative max-lg:hidden slide-in-left">
-          <img
-            src="https://placehold.co/960x1300/1a1a2e/ffffff?text=KNOUX+FINDR+SEARCH+ENGINE"
-            className="w-full h-full object-cover"
-            alt="KNOUX FINDR Background"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0F123B]/80 to-transparent">
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-              <div className="text-[#A0AEC0] text-[20px] font-normal tracking-[3.6px] mb-[16px] fade-in">
-                INSPIRED BY THE FUTURE:
-              </div>
-              <div className="text-[36px] font-bold tracking-[6.48px] gradient-text fade-in">
-                KNOUX FINDR SEARCH
+          <div className="w-full h-full bg-gradient-to-br from-[#0F123B] via-[#1a1f4d] to-[#020515] relative overflow-hidden">
+            {/* Floating Orbs */}
+            <div
+              className="floating-orb w-96 h-96 top-10 -left-20"
+              style={{ animationDelay: "0s" }}
+            ></div>
+            <div
+              className="floating-orb w-64 h-64 bottom-20 -right-10"
+              style={{ animationDelay: "2s" }}
+            ></div>
+            <div
+              className="floating-orb w-32 h-32 top-1/3 right-1/4"
+              style={{ animationDelay: "4s" }}
+            ></div>
+
+            {/* Grid Pattern */}
+            <div className="absolute inset-0 opacity-10">
+              <div
+                className="w-full h-full"
+                style={{
+                  backgroundImage:
+                    "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0)",
+                  backgroundSize: "40px 40px",
+                }}
+              ></div>
+            </div>
+
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0F123B]/60 to-transparent">
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
+                <div className="text-[#A0AEC0] text-[20px] font-normal tracking-[3.6px] mb-[16px] fade-in">
+                  INSPIRED BY THE FUTURE:
+                </div>
+                <div className="text-[36px] font-bold tracking-[6.48px] gradient-text fade-in relative">
+                  KNOUX FINDR SEARCH
+                  <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-[#0075FF] to-transparent"></div>
+                </div>
+                <div
+                  className="mt-8 text-[#A0AEC0] text-[14px] max-w-md mx-auto fade-in"
+                  style={{ animationDelay: "0.5s" }}
+                >
+                  The most powerful local file search engine with AI-powered
+                  organization
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Right Side - Form */}
+        {/* Right Side - Enhanced Form */}
         <div className="flex-1 flex items-center justify-center p-[24px] max-lg:w-full slide-in-right">
           <div className="w-full max-w-[453px]">
-            {/* Header */}
+            {/* Enhanced Header */}
             <div className="mb-[24px] max-lg:text-center fade-in">
               <div className="text-[14px] font-normal tracking-[2.52px] gradient-text mb-[26px]">
                 KNOUX FINDR
               </div>
 
-              {/* Navigation Tabs */}
+              {/* Enhanced Navigation Tabs */}
               <div className="flex justify-between items-center mb-[70px] max-lg:justify-center max-lg:gap-[20px]">
-                <div className="flex gap-[20px] max-lg:flex-wrap max-lg:justify-center">
-                  <div className="flex items-center justify-center gap-[4px] h-[22px] px-[8px] rounded-[12px] glass-button cursor-pointer">
+                <div className="flex gap-[12px] max-lg:flex-wrap max-lg:justify-center p-2 glass-card rounded-2xl">
+                  <div className="nav-tab flex items-center justify-center gap-[6px] h-[32px] px-[12px] rounded-[14px] glass-button cursor-pointer group">
                     <svg
-                      className="w-[11px] h-[11px]"
+                      className="w-[12px] h-[12px] group-hover:scale-110 transition-transform"
                       viewBox="0 0 12 12"
                       fill="none"
                     >
@@ -97,14 +128,14 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
                         </clipPath>
                       </defs>
                     </svg>
-                    <div className="text-white text-[10px] font-bold">
+                    <div className="text-white text-[11px] font-bold group-hover:text-[#0075FF] transition-colors">
                       DASHBOARD
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-center gap-[4px] h-[22px] px-[8px] rounded-[12px] glass-button cursor-pointer">
+                  <div className="nav-tab flex items-center justify-center gap-[6px] h-[32px] px-[12px] rounded-[14px] glass-button cursor-pointer group">
                     <svg
-                      className="w-[11px] h-[11px]"
+                      className="w-[12px] h-[12px] group-hover:scale-110 transition-transform"
                       viewBox="0 0 12 12"
                       fill="none"
                     >
@@ -129,14 +160,15 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
                         </clipPath>
                       </defs>
                     </svg>
-                    <div className="text-white text-[10px] font-bold">
+                    <div className="text-white text-[11px] font-bold group-hover:text-[#0075FF] transition-colors">
                       PROFILE
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-center gap-[4px] h-[22px] px-[8px] rounded-[12px] primary-button pulse-glow">
+                  <div className="nav-tab flex items-center justify-center gap-[6px] h-[32px] px-[12px] rounded-[14px] primary-button pulse-glow relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
                     <svg
-                      className="w-[11px] h-[11px]"
+                      className="w-[12px] h-[12px] relative z-10"
                       viewBox="0 0 12 12"
                       fill="none"
                     >
@@ -145,17 +177,17 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
                         fill="white"
                       />
                     </svg>
-                    <div className="text-white text-[10px] font-bold">
+                    <div className="text-white text-[11px] font-bold relative z-10">
                       SIGN UP
                     </div>
                   </div>
 
                   <div
-                    className="flex items-center justify-center gap-[4px] h-[22px] px-[8px] rounded-[12px] glass-button cursor-pointer"
+                    className="nav-tab flex items-center justify-center gap-[6px] h-[32px] px-[12px] rounded-[14px] glass-button cursor-pointer group"
                     onClick={onSignIn}
                   >
                     <svg
-                      className="w-[11px] h-[11px]"
+                      className="w-[12px] h-[12px] group-hover:scale-110 transition-transform"
                       viewBox="0 0 12 12"
                       fill="none"
                     >
@@ -164,24 +196,29 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
                         fill="white"
                       />
                     </svg>
-                    <div className="text-white text-[10px] font-bold">
+                    <div className="text-white text-[11px] font-bold group-hover:text-[#0075FF] transition-colors">
                       SIGN IN
                     </div>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-center w-[150px] h-[35px] px-[8px] rounded-[12px] primary-button max-lg:w-[120px] cursor-pointer">
-                  <div className="text-white text-[10px] font-bold">
+                <div className="flex items-center justify-center w-[160px] h-[40px] px-[12px] rounded-[16px] primary-button max-lg:w-[130px] cursor-pointer group relative overflow-hidden form-glow">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+                  <div className="text-white text-[11px] font-bold relative z-10 group-hover:scale-105 transition-transform">
                     Free Download
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Form Container */}
+            {/* Enhanced Form Container */}
             <div className="w-full max-w-[453px] h-[714px] relative fade-in">
-              <div className="absolute inset-0 rounded-[32px] glass-card">
-                <div className="relative p-[48px] h-full flex flex-col">
+              <div className="absolute inset-0 rounded-[32px] glass-card form-glow">
+                {/* Decorative Elements */}
+                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-gradient-to-br from-[#0075FF]/30 to-transparent rounded-full blur-xl"></div>
+                <div className="absolute bottom-0 right-0 transform translate-x-1/2 translate-y-1/2 w-24 h-24 bg-gradient-to-tl from-[#0075FF]/20 to-transparent rounded-full blur-2xl"></div>
+
+                <div className="relative p-[48px] h-full flex flex-col z-10">
                   {/* Welcome Header */}
                   <div className="text-center mb-[48px]">
                     <div className="text-white text-[30px] font-bold mb-[12px]">
@@ -193,7 +230,7 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
                     </div>
                   </div>
 
-                  {/* Social Registration */}
+                  {/* Enhanced Social Registration */}
                   <div className="mb-[48px]">
                     <div className="text-center mb-[24px]">
                       <div className="text-white text-[18px] font-bold mb-[47px]">
@@ -201,11 +238,12 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
                       </div>
                       <div className="flex justify-center gap-[15px] mb-[47px]">
                         <div
-                          className="w-[75px] h-[75px] rounded-[20px] glass-button flex items-center justify-center cursor-pointer"
+                          className="w-[75px] h-[75px] rounded-[20px] glass-button flex items-center justify-center cursor-pointer group relative overflow-hidden"
                           onClick={() => socialSignup("Facebook")}
                         >
+                          <div className="absolute inset-0 bg-gradient-to-br from-[#1877F2]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                           <svg
-                            className="w-[31px] h-[31px]"
+                            className="w-[31px] h-[31px] group-hover:scale-110 transition-transform relative z-10"
                             viewBox="0 0 31 32"
                             fill="none"
                           >
@@ -229,11 +267,12 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
                         </div>
 
                         <div
-                          className="w-[75px] h-[75px] rounded-[20px] glass-button flex items-center justify-center cursor-pointer"
+                          className="w-[75px] h-[75px] rounded-[20px] glass-button flex items-center justify-center cursor-pointer group relative overflow-hidden"
                           onClick={() => socialSignup("Apple")}
                         >
+                          <div className="absolute inset-0 bg-gradient-to-br from-gray-800/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                           <svg
-                            className="w-[31px] h-[31px]"
+                            className="w-[31px] h-[31px] group-hover:scale-110 transition-transform relative z-10"
                             viewBox="0 0 31 32"
                             fill="none"
                           >
@@ -249,11 +288,12 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
                         </div>
 
                         <div
-                          className="w-[75px] h-[75px] rounded-[20px] glass-button flex items-center justify-center cursor-pointer"
+                          className="w-[75px] h-[75px] rounded-[20px] glass-button flex items-center justify-center cursor-pointer group relative overflow-hidden"
                           onClick={() => socialSignup("Google")}
                         >
+                          <div className="absolute inset-0 bg-gradient-to-br from-[#4285F4]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                           <svg
-                            className="w-[24px] h-[24px]"
+                            className="w-[24px] h-[24px] group-hover:scale-110 transition-transform relative z-10"
                             viewBox="0 0 25 24"
                             fill="none"
                           >
@@ -270,7 +310,7 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
                     </div>
                   </div>
 
-                  {/* Form Fields */}
+                  {/* Enhanced Form Fields */}
                   <form
                     onSubmit={handleSubmit}
                     className="space-y-[24px] mb-[24px]"
@@ -285,7 +325,7 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
                         value={formData.name}
                         onChange={handleInputChange}
                         placeholder="Your full name"
-                        className="w-full h-[50px] px-[20px] rounded-[20px] glass-card text-white placeholder-[#A0AEC0] text-[14px] focus:outline-none focus:border-white/40"
+                        className="w-full h-[50px] px-[20px] rounded-[20px] glass-card text-white placeholder-[#A0AEC0] text-[14px] focus:outline-none focus:border-[#0075FF] transition-all duration-300"
                         required
                       />
                     </div>
@@ -300,7 +340,7 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
                         value={formData.email}
                         onChange={handleInputChange}
                         placeholder="Your email address"
-                        className="w-full h-[50px] px-[20px] rounded-[20px] glass-card text-white placeholder-[#A0AEC0] text-[14px] focus:outline-none focus:border-white/40"
+                        className="w-full h-[50px] px-[20px] rounded-[20px] glass-card text-white placeholder-[#A0AEC0] text-[14px] focus:outline-none focus:border-[#0075FF] transition-all duration-300"
                         required
                       />
                     </div>
@@ -316,13 +356,13 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
                           value={formData.password}
                           onChange={handleInputChange}
                           placeholder="Your password"
-                          className="w-full h-[50px] px-[20px] pr-[50px] rounded-[20px] glass-card text-white placeholder-[#A0AEC0] text-[14px] focus:outline-none focus:border-white/40"
+                          className="w-full h-[50px] px-[20px] pr-[50px] rounded-[20px] glass-card text-white placeholder-[#A0AEC0] text-[14px] focus:outline-none focus:border-[#0075FF] transition-all duration-300"
                           required
                         />
                         <button
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-[15px] top-1/2 transform -translate-y-1/2 text-[#A0AEC0]"
+                          className="absolute right-[15px] top-1/2 transform -translate-y-1/2 text-[#A0AEC0] hover:text-white transition-colors"
                         >
                           {!showPassword ? (
                             <svg
@@ -356,19 +396,19 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
                     </div>
                   </form>
 
-                  {/* Remember Me Toggle */}
+                  {/* Enhanced Remember Me Toggle */}
                   <div className="flex items-center gap-[12px] mb-[24px]">
                     <div
                       onClick={() => setRememberMe(!rememberMe)}
-                      className="w-[36px] h-[19px] rounded-full cursor-pointer transition-colors duration-200"
+                      className="w-[36px] h-[19px] rounded-full cursor-pointer transition-all duration-300 relative"
                       style={{ background: rememberMe ? "#0075FF" : "#4A5568" }}
                     >
                       <div
-                        className="w-[13.5px] h-[13.5px] bg-white rounded-full absolute transition-transform duration-200"
+                        className="w-[13.5px] h-[13.5px] bg-white rounded-full absolute transition-all duration-300 shadow-md"
                         style={{
                           transform: rememberMe
-                            ? "translateX(19.75px) translateY(2.75px)"
-                            : "translateX(2.75px) translateY(2.75px)",
+                            ? "translateX(19.75px) translateY(2.75px) scale(1.1)"
+                            : "translateX(2.75px) translateY(2.75px) scale(1)",
                         }}
                       />
                     </div>
@@ -377,30 +417,34 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
                     </div>
                   </div>
 
-                  {/* Submit Button */}
+                  {/* Enhanced Submit Button */}
                   <button
                     onClick={handleSubmit}
                     disabled={isLoading}
-                    className="w-full h-[45px] rounded-[12px] primary-button text-white text-[10px] font-bold tracking-wider flex items-center justify-center gap-[8px] transition-all duration-200"
+                    className="w-full h-[45px] rounded-[12px] primary-button text-white text-[10px] font-bold tracking-wider flex items-center justify-center gap-[8px] transition-all duration-300 relative overflow-hidden group"
                     style={{
                       opacity: isLoading ? 0.7 : 1,
                       cursor: isLoading ? "not-allowed" : "pointer",
                     }}
                   >
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
                     {isLoading && <div className="loading-spinner" />}
-                    <span>{isLoading ? "CREATING ACCOUNT..." : "SIGN UP"}</span>
+                    <span className="relative z-10">
+                      {isLoading ? "CREATING ACCOUNT..." : "SIGN UP"}
+                    </span>
                   </button>
 
-                  {/* Sign In Link */}
+                  {/* Enhanced Sign In Link */}
                   <div className="text-center mt-[24px]">
                     <span className="text-[#A0AEC0] text-[14px] font-normal">
                       Already have an account?{" "}
                     </span>
                     <span
-                      className="text-white text-[14px] font-bold cursor-pointer hover:text-[#0075FF] transition-colors"
+                      className="text-white text-[14px] font-bold cursor-pointer hover:text-[#0075FF] transition-colors relative group"
                       onClick={onSignIn}
                     >
                       Sign in
+                      <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#0075FF] group-hover:w-full transition-all duration-300"></div>
                     </span>
                   </div>
                 </div>
