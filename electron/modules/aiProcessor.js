@@ -20,21 +20,15 @@ class AIProcessor {
     this.contentExtractor = contentExtractor;
 
     // محركات الذكاء الاصطناعي المتقدمة
-    this.intelligentCategorizer = new IntelligentCategorizer(
-      this,
-      contentExtractor,
-    );
-    this.duplicateDetector = new AdvancedDuplicateDetector(
-      database,
-      contentExtractor,
-    );
+    this.intelligentCategorizer = new IntelligentCategorizer(this, contentExtractor);
+    this.duplicateDetector = new AdvancedDuplicateDetector(database, contentExtractor);
 
     // محرك التحليل الدلالي المتقدم
     this.semanticAnalyzer = {
       vectorCache: new Map(),
       similarityMatrix: new Map(),
       conceptExtractor: new Map(),
-      contextAnalyzer: new Map(),
+      contextAnalyzer: new Map()
     };
 
     // نظام التعلم العميق المبسط
@@ -42,14 +36,14 @@ class AIProcessor {
       patterns: new Map(),
       weights: new Map(),
       biases: new Map(),
-      activationHistory: new Map(),
+      activationHistory: new Map()
     };
 
     // معالج المشاعر والسياق
     this.emotionAnalyzer = {
       emotionPatterns: new Map(),
       contextualClues: new Map(),
-      sentimentHistory: new Map(),
+      sentimentHistory: new Map()
     };
 
     // Initialize category patterns
@@ -57,53 +51,33 @@ class AIProcessor {
     this.initializeAdvancedFeatures();
   }
 
-  // تهيئة الميزات المتقدمة
+    // تهيئة الميزات المتقدمة
   initializeAdvancedFeatures() {
     // تهيئة أنماط المشاعر
-    this.emotionAnalyzer.emotionPatterns.set("positive", [
+    this.emotionAnalyzer.emotionPatterns.set('positive', [
       /سعيد|فرح|رائع|ممتاز|جميل|نجاح/gi,
-      /happy|joy|great|excellent|beautiful|success|amazing|wonderful/gi,
+      /happy|joy|great|excellent|beautiful|success|amazing|wonderful/gi
     ]);
 
-    this.emotionAnalyzer.emotionPatterns.set("negative", [
+    this.emotionAnalyzer.emotionPatterns.set('negative', [
       /حزين|زعلان|سيء|فشل|مشكلة|خطأ/gi,
-      /sad|angry|bad|fail|problem|error|terrible|awful/gi,
+      /sad|angry|bad|fail|problem|error|terrible|awful/gi
     ]);
 
-    this.emotionAnalyzer.emotionPatterns.set("neutral", [
+    this.emotionAnalyzer.emotionPatterns.set('neutral', [
       /عادي|طبيعي|مقبول|متوسط/gi,
-      /normal|regular|average|standard|typical/gi,
+      /normal|regular|average|standard|typical/gi
     ]);
 
     // تهيئة معالج المفاهيم
-    this.semanticAnalyzer.conceptExtractor.set("work_concepts", [
-      "عمل",
-      "مشروع",
-      "شركة",
-      "موظف",
-      "راتب",
-      "اجتماع",
-      "work",
-      "project",
-      "company",
-      "employee",
-      "salary",
-      "meeting",
+    this.semanticAnalyzer.conceptExtractor.set('work_concepts', [
+      'عمل', 'مشروع', 'شركة', 'موظف', 'راتب', 'اجتماع',
+      'work', 'project', 'company', 'employee', 'salary', 'meeting'
     ]);
 
-    this.semanticAnalyzer.conceptExtractor.set("personal_concepts", [
-      "شخصي",
-      "عائلة",
-      "صديق",
-      "إجازة",
-      "هواية",
-      "منزل",
-      "personal",
-      "family",
-      "friend",
-      "vacation",
-      "hobby",
-      "home",
+    this.semanticAnalyzer.conceptExtractor.set('personal_concepts', [
+      'شخصي', 'عائلة', 'صديق', 'إجازة', 'هواية', 'منزل',
+      'personal', 'family', 'friend', 'vacation', 'hobby', 'home'
     ]);
   }
 
@@ -116,7 +90,7 @@ class AIProcessor {
         languages: ["ar", "en"],
         forceNER: true,
         nluThreshold: 0.7,
-        autoSave: false,
+        autoSave: false
       });
 
       // Train the model with predefined patterns
@@ -145,17 +119,17 @@ class AIProcessor {
 
     // بناء مصفوفة التشابه الأولية
     const concepts = [
-      { word: "عمل", vector: [0.8, 0.2, 0.1, 0.9, 0.3] },
-      { word: "شخصي", vector: [0.2, 0.9, 0.8, 0.1, 0.7] },
-      { word: "مالي", vector: [0.9, 0.1, 0.2, 0.8, 0.4] },
-      { word: "تعليمي", vector: [0.4, 0.7, 0.9, 0.3, 0.8] },
-      { word: "work", vector: [0.8, 0.2, 0.1, 0.9, 0.3] },
-      { word: "personal", vector: [0.2, 0.9, 0.8, 0.1, 0.7] },
-      { word: "finance", vector: [0.9, 0.1, 0.2, 0.8, 0.4] },
-      { word: "education", vector: [0.4, 0.7, 0.9, 0.3, 0.8] },
+      { word: 'عمل', vector: [0.8, 0.2, 0.1, 0.9, 0.3] },
+      { word: 'شخصي', vector: [0.2, 0.9, 0.8, 0.1, 0.7] },
+      { word: 'مالي', vector: [0.9, 0.1, 0.2, 0.8, 0.4] },
+      { word: 'تعليمي', vector: [0.4, 0.7, 0.9, 0.3, 0.8] },
+      { word: 'work', vector: [0.8, 0.2, 0.1, 0.9, 0.3] },
+      { word: 'personal', vector: [0.2, 0.9, 0.8, 0.1, 0.7] },
+      { word: 'finance', vector: [0.9, 0.1, 0.2, 0.8, 0.4] },
+      { word: 'education', vector: [0.4, 0.7, 0.9, 0.3, 0.8] }
     ];
 
-    concepts.forEach((concept) => {
+    concepts.forEach(concept => {
       this.semanticAnalyzer.vectorCache.set(concept.word, concept.vector);
     });
 
@@ -408,12 +382,15 @@ class AIProcessor {
     }
   }
 
+    // تحليل متقدم لمحتوى الملف
   async analyzeFileContent(filePath) {
     if (!this.isInitialized) {
       throw new Error("AI system not initialized");
     }
 
     try {
+      console.log(`📊 تحليل متقدم للملف: ${path.basename(filePath)}`);
+
       // Extract text content
       const content = await this.extractTextFromFile(filePath);
       if (!content.trim()) {
@@ -424,46 +401,68 @@ class AIProcessor {
           language: "unknown",
           summary: "",
           entities: [],
+          semanticProfile: {},
+          emotionalTone: 'neutral',
+          complexity: 0,
+          topics: []
         };
       }
 
-      // Detect language
-      const language = franc(content, { only: ["ara", "eng"] });
+      // معلومات الملف الأساسية
+      const fileInfo = {
+        name: path.basename(filePath),
+        path: filePath,
+        type: path.extname(filePath).slice(1).toLowerCase(),
+        content: content
+      };
+
+      // Detect language with enhanced accuracy
+      const language = this.detectLanguageEnhanced(content);
       const langCode = language === "ara" ? "ar" : "en";
 
-      // Analyze with NLP
+      // تحليل NLP متقدم
       const analysis = await this.nlpManager.process(langCode, content);
 
-      // Extract keywords using compromise
-      const doc = compromise(content);
-      const keywords = [
-        ...doc.nouns().out("array"),
-        ...doc.adjectives().out("array"),
-        ...doc.verbs().out("array"),
-      ].slice(0, 20); // Top 20 keywords
+      // استخراج الكلمات المفتاحية المحسن
+      const keywords = await this.extractAdvancedKeywords(content, langCode);
 
-      // Generate summary (first few sentences)
-      const sentences = content
-        .split(/[.!?]+/)
-        .filter((s) => s.trim().length > 20);
-      const summary = sentences.slice(0, 3).join(". ").trim();
+      // تحليل المواضيع
+      const topics = await this.extractTopics(content, langCode);
 
-      // Classify category
-      const category = this.classifyContent(content, path.basename(filePath));
+      // تحليل المشاعر
+      const emotionalTone = this.analyzeEmotionalTone(content);
+
+      // حساب تعقيد المحتوى
+      const complexity = this.calculateContentComplexity(content);
+
+      // Generate enhanced summary
+      const summary = await this.generateEnhancedSummary(content, langCode);
+
+      // إنشاء الملف الدلالي
+      const semanticProfile = await this.createSemanticProfile(content, keywords, topics);
+
+      // تصنيف ذكي محسن
+      const categoryResult = await this.intelligentCategorizer.categorizeFile(fileInfo);
 
       return {
-        category: category.name,
-        confidence: category.confidence,
+        category: categoryResult.category,
+        confidence: categoryResult.confidence,
         keywords: keywords,
         language: langCode,
         summary: summary,
         entities: analysis.entities || [],
         sentiment: analysis.sentiment || { score: 0, label: "neutral" },
         wordCount: content.split(/\s+/).length,
-        readingTime: Math.ceil(content.split(/\s+/).length / 200), // Average reading speed
+        readingTime: Math.ceil(content.split(/\s+/).length / 200),
+        semanticProfile: semanticProfile,
+        emotionalTone: emotionalTone,
+        complexity: complexity,
+        topics: topics,
+        reasoning: categoryResult.reasoning,
+        alternativeCategories: categoryResult.alternativeCategories || []
       };
     } catch (error) {
-      console.error("Content analysis error:", error);
+      console.error("❌ خطأ في تحليل المحتوى:", error);
       return {
         category: "Unknown",
         confidence: 0,
@@ -471,8 +470,232 @@ class AIProcessor {
         language: "unknown",
         summary: "",
         entities: [],
+        error: error.message
       };
     }
+  }
+
+  // كشف اللغة المحسن
+  detectLanguageEnhanced(content) {
+    const arabicChars = (content.match(/[\u0600-\u06FF]/g) || []).length;
+    const totalChars = content.replace(/\s/g, '').length;
+
+    if (totalChars === 0) return "unknown";
+
+    const arabicRatio = arabicChars / totalChars;
+
+    // استخدام معايير متعددة للكشف
+    if (arabicRatio > 0.3) {
+      return "ara";
+    } else if (arabicRatio < 0.05) {
+      // استخدام franc كنسخة احتياطية
+      const francResult = franc(content, { only: ["ara", "eng"] });
+      return francResult === "ara" ? "ara" : "eng";
+    } else {
+      return "mixed";
+    }
+  }
+
+  // استخراج كلمات مفتاحية متقدم
+  async extractAdvancedKeywords(content, language) {
+    const keywords = [];
+
+    // استخدام compromise للإنجليزية
+    if (language === 'en') {
+      const doc = compromise(content);
+      const nouns = doc.nouns().out("array");
+      const adjectives = doc.adjectives().out("array");
+      const verbs = doc.verbs().out("array");
+
+      keywords.push(...nouns.slice(0, 10));
+      keywords.push(...adjectives.slice(0, 5));
+      keywords.push(...verbs.slice(0, 5));
+    }
+
+    // استخراج يدوي للعربية
+    const arabicWords = content.match(/[\u0600-\u06FF]{3,}/g) || [];
+    const englishWords = content.match(/[a-zA-Z]{3,}/g) || [];
+
+    // حساب تكرار الكلمات
+    const wordFreq = new Map();
+
+    [...arabicWords, ...englishWords].forEach(word => {
+      const cleanWord = word.toLowerCase();
+      if (cleanWord.length > 2) {
+        wordFreq.set(cleanWord, (wordFreq.get(cleanWord) || 0) + 1);
+      }
+    });
+
+    // ترتيب حسب التكرار
+    const sortedWords = Array.from(wordFreq.entries())
+      .sort(([,a], [,b]) => b - a)
+      .slice(0, 20)
+      .map(([word]) => word);
+
+    keywords.push(...sortedWords);
+
+    // إزالة التكرارات وإرجاع أفضل 20
+    return [...new Set(keywords)].slice(0, 20);
+  }
+
+  // استخراج المواضيع
+  async extractTopics(content, language) {
+    const topics = [];
+
+    // مواضيع محددة مسبقاً
+    const topicPatterns = {
+      'technology': /تقنية|تكنولوجيا|برمجة|كمبيوتر|technology|programming|computer|software/gi,
+      'business': /عمل|بيزنس|شركة|مال|اقتصاد|business|company|finance|economy|money/gi,
+      'education': /تعليم|دراسة|جامعة|مدرسة|طالب|education|study|university|school|student/gi,
+      'health': /صحة|طب|مرض|علاج|دواء|health|medical|doctor|medicine|treatment/gi,
+      'personal': /شخصي|عائلة|صديق|إجازة|personal|family|friend|vacation|hobby/gi
+    };
+
+    for (const [topic, pattern] of Object.entries(topicPatterns)) {
+      const matches = content.match(pattern);
+      if (matches && matches.length > 2) {
+        topics.push({
+          name: topic,
+          confidence: Math.min(matches.length / 10, 1),
+          keywords: [...new Set(matches.slice(0, 5))]
+        });
+      }
+    }
+
+    return topics.sort((a, b) => b.confidence - a.confidence).slice(0, 5);
+  }
+
+  // تحليل المشاعر
+  analyzeEmotionalTone(content) {
+    let positiveScore = 0;
+    let negativeScore = 0;
+    let neutralScore = 0;
+
+    // فحص المشاعر الإيجابية
+    this.emotionAnalyzer.emotionPatterns.get('positive').forEach(pattern => {
+      const matches = content.match(pattern);
+      if (matches) positiveScore += matches.length;
+    });
+
+    // فحص المشاعر السلبية
+    this.emotionAnalyzer.emotionPatterns.get('negative').forEach(pattern => {
+      const matches = content.match(pattern);
+      if (matches) negativeScore += matches.length;
+    });
+
+    // فحص المشاعر المحايدة
+    this.emotionAnalyzer.emotionPatterns.get('neutral').forEach(pattern => {
+      const matches = content.match(pattern);
+      if (matches) neutralScore += matches.length;
+    });
+
+    const totalScore = positiveScore + negativeScore + neutralScore;
+
+    if (totalScore === 0) return 'neutral';
+
+    if (positiveScore > negativeScore && positiveScore > neutralScore) {
+      return 'positive';
+    } else if (negativeScore > positiveScore && negativeScore > neutralScore) {
+      return 'negative';
+    } else {
+      return 'neutral';
+    }
+  }
+
+  // حساب تعقيد المحتوى
+  calculateContentComplexity(content) {
+    const sentences = content.split(/[.!?]+/).filter(s => s.trim().length > 10);
+    const words = content.split(/\s+/);
+    const avgWordsPerSentence = words.length / sentences.length;
+
+    // حساب نسبة الكلمات الطويلة
+    const longWords = words.filter(w => w.length > 6).length;
+    const longWordRatio = longWords / words.length;
+
+    // حساب تعقيد الجمل
+    let complexityScore = 0;
+
+    if (avgWordsPerSentence > 20) complexityScore += 0.3;
+    if (longWordRatio > 0.3) complexityScore += 0.3;
+    if (sentences.length > 50) complexityScore += 0.2;
+    if (content.length > 5000) complexityScore += 0.2;
+
+    return Math.min(complexityScore, 1.0);
+  }
+
+  // إنشاء ملخص محسن
+  async generateEnhancedSummary(content, language) {
+    const sentences = content.split(/[.!?]+/)
+      .map(s => s.trim())
+      .filter(s => s.length > 20);
+
+    if (sentences.length === 0) return "";
+
+    // اختيار أهم الجمل بناءً على الكلمات المفتاحية
+    const keywords = await this.extractAdvancedKeywords(content, language);
+
+    const sentenceScores = sentences.map(sentence => {
+      let score = 0;
+      keywords.forEach(keyword => {
+        if (sentence.toLowerCase().includes(keyword.toLowerCase())) {
+          score += 1;
+        }
+      });
+      return { sentence, score };
+    });
+
+    // ترتيب حسب النقاط واختيار أفضل 3
+    const topSentences = sentenceScores
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 3)
+      .map(item => item.sentence);
+
+    return topSentences.join(". ");
+  }
+
+  // إنشاء الملف الدلالي
+  async createSemanticProfile(content, keywords, topics) {
+    const profile = {
+      conceptVector: [],
+      semanticDensity: 0,
+      topicalCoherence: 0,
+      abstractionLevel: 0
+    };
+
+    // حساب المتجه المفاهيمي
+    const conceptCounts = new Map();
+
+    this.semanticAnalyzer.conceptExtractor.forEach((concepts, category) => {
+      let count = 0;
+      concepts.forEach(concept => {
+        if (content.toLowerCase().includes(concept.toLowerCase())) {
+          count++;
+        }
+      });
+      conceptCounts.set(category, count);
+    });
+
+    // تحويل إلى متجه
+    profile.conceptVector = Array.from(conceptCounts.values());
+
+    // حساب الكثافة الدلالية
+    const totalWords = content.split(/\s+/).length;
+    const conceptWords = keywords.length;
+    profile.semanticDensity = conceptWords / totalWords;
+
+    // حساب ترابط المواضيع
+    if (topics.length > 0) {
+      const avgConfidence = topics.reduce((sum, topic) => sum + topic.confidence, 0) / topics.length;
+      profile.topicalCoherence = avgConfidence;
+    }
+
+    // حساب مستوى التجريد
+    const abstractWords = keywords.filter(word =>
+      word.length > 6 && !\/[\u0600-\u06FF0-9]/g.test(word)
+    ).length;
+    profile.abstractionLevel = abstractWords / keywords.length;
+
+    return profile;
   }
 
   classifyContent(content, fileName) {
