@@ -40,7 +40,7 @@ const PowerOps = () => {
       category: "Work",
       encrypted: false,
       hidden: false,
-      modified: Date.now() - 86400000, // يوم واح��
+      modified: Date.now() - 86400000, // يوم واحد
       created: Date.now() - 604800000, // أسبوع
       accessed: Date.now() - 3600000, // ساعة
       hash: "a1b2c3d4e5f6",
@@ -245,7 +245,7 @@ const PowerOps = () => {
     {
       id: "bulk_delete",
       name: "حذف آمن",
-      description: "حذف آمن مع إمكانية الاستعادة الكاملة",
+      description: "حذف آ��ن مع إمكانية الاستعادة الكاملة",
       icon: "🗑️",
       color: "red",
       dangerous: true,
@@ -385,25 +385,207 @@ const PowerOps = () => {
     }
   };
 
-  // تنفيذ العملية
-  const executeOperation = async (operationId) => {
-    setCurrentOperation(operationId);
+  // تنفيذ عملية فحص التكرارات المتقدم
+  const startAdvancedDuplicateScan = useCallback(async () => {
+    setIsScanning(true);
+    setScanProgress(0);
+
+    try {
+      // محاكاة عملية الفحص
+      const totalSteps = 5;
+
+      for (let step = 1; step <= totalSteps; step++) {
+        setScanProgress((step / totalSteps) * 100);
+
+        switch (step) {
+          case 1:
+            console.log("🔍 تحليل الملفات...");
+            break;
+          case 2:
+            console.log("🧠 حساب التشابه...");
+            break;
+          case 3:
+            console.log("📊 تحليل المحتوى...");
+            break;
+          case 4:
+            console.log("🏷️ تجميع النتائج...");
+            break;
+          case 5:
+            console.log("✅ اكتمال الفحص");
+            break;
+        }
+
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+
+      // إنشاء نتائج وهمية
+      const mockResults = {
+        groups: [
+          {
+            id: "dup_1",
+            type: "نسخة مطابقة تماماً",
+            files: fileList.filter((f) => f.duplicateGroup === "dup_1"),
+            confidence: 1.0,
+            wastedSpace: 2500000,
+            recommendations: [
+              {
+                type: "delete_oldest",
+                title: "حذف النسخة الأقدم",
+                description: "حذف النسخة من مجلد Downloads",
+                spaceFreed: 2500000,
+              },
+            ],
+          },
+          {
+            id: "dup_2",
+            type: "نسخة مطابقة تماماً",
+            files: fileList.filter((f) => f.duplicateGroup === "dup_2"),
+            confidence: 1.0,
+            wastedSpace: 125000000,
+            recommendations: [
+              {
+                type: "move_to_archive",
+                title: "نقل إلى الأرشيف",
+                description: "نقل النسخة الاحتياطية إلى مجلد منفصل",
+                spaceFreed: 0,
+              },
+            ],
+          },
+        ],
+        summary: {
+          totalGroups: 2,
+          totalDuplicates: 2,
+          totalWastedSpace: 127500000,
+          potentialSavings: 127500000,
+        },
+      };
+
+      setDuplicateResults(mockResults);
+      setActiveTab("duplicates");
+    } catch (error) {
+      console.error("❌ خطأ في فحص التكرارات:", error);
+    } finally {
+      setIsScanning(false);
+      setScanProgress(0);
+    }
+  }, [fileList]);
+
+  // تصنيف ذكي للملفات
+  const performSmartCategorization = useCallback(async () => {
+    setCurrentOperation("auto_categorize");
     setOperationProgress(0);
 
-    // محاكاة تقدم العملية
-    for (let i = 0; i <= 100; i += 10) {
-      setOperationProgress(i);
+    const totalFiles = selectedFiles.length || fileList.length;
+    const filesToProcess =
+      selectedFiles.length > 0
+        ? fileList.filter((f) => selectedFiles.includes(f.id))
+        : fileList;
+
+    for (let i = 0; i < filesToProcess.length; i++) {
+      const file = filesToProcess[i];
+
+      // محاكاة تصنيف ذكي
+      let newCategory = file.category;
+      let confidence = file.confidence;
+
+      // تحسين التصنيف حسب الاسم والمسار
+      if (file.name.includes("مشروع") || file.path.includes("Work")) {
+        newCategory = "Work";
+        confidence = 0.95;
+      } else if (file.name.includes("صور") || file.path.includes("Picture")) {
+        newCategory = "Personal";
+        confidence = 0.88;
+      } else if (file.type === "pdf" && file.name.includes("تقرير")) {
+        newCategory = "Finance";
+        confidence = 0.85;
+      } else if (file.type === "zip" && file.path.includes("Development")) {
+        newCategory = "Development";
+        confidence = 0.97;
+      }
+
+      // تحديث الملف
+      setFileList((prev) =>
+        prev.map((f) =>
+          f.id === file.id
+            ? { ...f, category: newCategory, confidence, autoCategory: true }
+            : f,
+        ),
+      );
+
+      setOperationProgress(((i + 1) / totalFiles) * 100);
       await new Promise((resolve) => setTimeout(resolve, 200));
     }
 
-    // تطبيق العملية على الملفات
+    setCurrentOperation(null);
+    setOperationProgress(0);
+    setSelectedFiles([]);
+  }, [selectedFiles, fileList]);
+
+  // تنظيم ذكي للملفات
+  const performSmartOrganization = useCallback(async () => {
+    setCurrentOperation("smart_organize");
+    setOperationProgress(0);
+
+    // محاكاة عملية التنظيم
+    const organizationSteps = [
+      "📊 تحليل بنية الملفات...",
+      "🏷️ تصنيف بالذكاء الاصطناعي...",
+      "📂 إنشاء هيكل مجلدات محسن...",
+      "➡️ نقل الملفات إلى المواقع المناسبة...",
+      "✅ اكتمال التنظيم",
+    ];
+
+    for (let i = 0; i < organizationSteps.length; i++) {
+      console.log(organizationSteps[i]);
+      setOperationProgress(((i + 1) / organizationSteps.length) * 100);
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+    }
+
+    // تحديث مسارات الملفات حسب التصنيف
+    setFileList((prev) =>
+      prev.map((file) => ({
+        ...file,
+        path: `/Organized/${file.category}/${file.name.split(".")[0]}/`,
+      })),
+    );
+
+    setCurrentOperation(null);
+    setOperationProgress(0);
+  }, []);
+
+  // تنفيذ العملية
+  const executeOperation = async (operationId) => {
     switch (operationId) {
+      case "advanced_duplicate_scan":
+        await startAdvancedDuplicateScan();
+        break;
+      case "auto_categorize":
+        await performSmartCategorization();
+        break;
+      case "smart_organize":
+        await performSmartOrganization();
+        break;
       case "bulk_delete":
+        setCurrentOperation(operationId);
+        setOperationProgress(0);
+        for (let i = 0; i <= 100; i += 10) {
+          setOperationProgress(i);
+          await new Promise((resolve) => setTimeout(resolve, 200));
+        }
         setFileList((prev) =>
           prev.filter((file) => !selectedFiles.includes(file.id)),
         );
+        setSelectedFiles([]);
+        setCurrentOperation(null);
+        setOperationProgress(0);
         break;
       case "bulk_encrypt":
+        setCurrentOperation(operationId);
+        setOperationProgress(0);
+        for (let i = 0; i <= 100; i += 10) {
+          setOperationProgress(i);
+          await new Promise((resolve) => setTimeout(resolve, 150));
+        }
         setFileList((prev) =>
           prev.map((file) =>
             selectedFiles.includes(file.id)
@@ -411,21 +593,22 @@ const PowerOps = () => {
               : file,
           ),
         );
-        break;
-      case "bulk_hide":
-        setFileList((prev) =>
-          prev.map((file) =>
-            selectedFiles.includes(file.id) ? { ...file, hidden: true } : file,
-          ),
-        );
+        setSelectedFiles([]);
+        setCurrentOperation(null);
+        setOperationProgress(0);
         break;
       default:
+        setCurrentOperation(operationId);
+        setOperationProgress(0);
+        for (let i = 0; i <= 100; i += 10) {
+          setOperationProgress(i);
+          await new Promise((resolve) => setTimeout(resolve, 200));
+        }
+        setSelectedFiles([]);
+        setCurrentOperation(null);
+        setOperationProgress(0);
         break;
     }
-
-    setSelectedFiles([]);
-    setCurrentOperation(null);
-    setOperationProgress(0);
   };
 
   // تأكيد العملية الخطيرة
@@ -442,7 +625,7 @@ const PowerOps = () => {
 
   // تنسيق حجم الملف
   const formatFileSize = (bytes) => {
-    const sizes = ["بايت", "كيلو باي��", "ميجا بايت", "جيجا بايت"];
+    const sizes = ["بايت", "كيلو بايت", "ميجا بايت", "جيجا بايت"];
     if (bytes === 0) return "0 بايت";
     const i = Math.floor(Math.log(bytes) / Math.log(1024));
     return Math.round((bytes / Math.pow(1024, i)) * 100) / 100 + " " + sizes[i];
@@ -518,7 +701,7 @@ const PowerOps = () => {
             <div className="mb-4">
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm text-blue-400">
-                  جاري تنفيذ العملية...
+                  ��اري تنفيذ العملية...
                 </span>
                 <span className="text-sm text-gray-400">
                   {operationProgress}%
