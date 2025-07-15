@@ -174,7 +174,7 @@ const PowerOps = () => {
     {
       id: "auto_categorize",
       name: "تصنيف تلقائي",
-      description: "تصنيف الملفات بالذك��ء الاصطناعي",
+      description: "تصنيف الملفات بالذكاء الاصطناعي",
       icon: "🏷️",
       color: "purple",
       dangerous: false,
@@ -218,7 +218,7 @@ const PowerOps = () => {
     },
     {
       id: "bulk_encrypt",
-      name: "تشفير مح��ن",
+      name: "تشفير محسن",
       description: "تشفير متقدم للملفات الحساسة",
       icon: "🔒",
       color: "red",
@@ -464,7 +464,7 @@ const PowerOps = () => {
       setDuplicateResults(mockResults);
       setActiveTab("duplicates");
     } catch (error) {
-      console.error("❌ خطأ في فحص التكرارات:", error);
+      console.error("❌ خطأ ف�� فحص التكرارات:", error);
     } finally {
       setIsScanning(false);
       setScanProgress(0);
@@ -554,7 +554,7 @@ const PowerOps = () => {
     setOperationProgress(0);
   }, []);
 
-  // معالجة حل ا��تكرارات
+  // معالجة حل التكرارات
   const handleDuplicateResolution = useCallback((resolutionData) => {
     console.log("✅ تم حل التكرارات:", resolutionData);
 
@@ -638,7 +638,7 @@ const PowerOps = () => {
   // تأكيد العملية الخطيرة
   const confirmDangerousOperation = (operation) => {
     const confirmed = window.confirm(
-      `هل أنت متأ��د من تنفيذ "${operation.name}" على ${selectedFiles.length} ملف؟\n` +
+      `هل أنت متأكد من تنفيذ "${operation.name}" على ${selectedFiles.length} ملف؟\n` +
         `هذه العملية قد تكون غير قابلة للتراجع!`,
     );
 
@@ -685,7 +685,7 @@ const PowerOps = () => {
   // رندر تبويب التنظيم
   const renderOrganizeTab = () => (
     <div className="space-y-6">
-      {/* أ��وات التنظيم */}
+      {/* أدوات التنظيم */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* العمليات المتاحة */}
         <div className="lg:col-span-1">
@@ -976,144 +976,13 @@ const PowerOps = () => {
         )}
       </div>
 
-      {/* نتائج التكرارات */}
+      {/* مدير التكرارات المتقدم */}
       {duplicateResults && (
-        <div className="space-y-6">
-          {/* ملخص النتائج */}
-          <div className="glass-card rounded-xl p-6">
-            <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-              📊 ملخص النتائج
-            </h3>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="text-center p-4 glass-button rounded-lg">
-                <div className="text-2xl font-bold text-orange-400 mb-1">
-                  {duplicateResults.summary.totalGroups}
-                </div>
-                <div className="text-sm text-gray-400">مجموعات مكررة</div>
-              </div>
-
-              <div className="text-center p-4 glass-button rounded-lg">
-                <div className="text-2xl font-bold text-red-400 mb-1">
-                  {duplicateResults.summary.totalDuplicates}
-                </div>
-                <div className="text-sm text-gray-400">ملفات مكررة</div>
-              </div>
-
-              <div className="text-center p-4 glass-button rounded-lg">
-                <div className="text-2xl font-bold text-yellow-400 mb-1">
-                  {formatFileSize(duplicateResults.summary.totalWastedSpace)}
-                </div>
-                <div className="text-sm text-gray-400">مساحة مهدرة</div>
-              </div>
-
-              <div className="text-center p-4 glass-button rounded-lg">
-                <div className="text-2xl font-bold text-green-400 mb-1">
-                  {formatFileSize(duplicateResults.summary.potentialSavings)}
-                </div>
-                <div className="text-sm text-gray-400">توفير محتمل</div>
-              </div>
-            </div>
-          </div>
-
-          {/* مجموعات التكرار */}
-          <div className="space-y-4">
-            {duplicateResults.groups.map((group, index) => (
-              <div key={group.id} className="glass-card rounded-xl p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h4 className="text-lg font-semibold text-white mb-2 flex items-center gap-2">
-                      🔗 مجموعة {index + 1}: {group.type}
-                    </h4>
-                    <div className="flex gap-4 text-sm text-gray-400">
-                      <span>عدد الملفات: {group.files.length}</span>
-                      <span>الثقة: {Math.round(group.confidence * 100)}%</span>
-                      <span>
-                        المساحة المهدرة: {formatFileSize(group.wastedSpace)}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div
-                    className={`px-3 py-1 rounded-full text-sm ${
-                      group.confidence > 0.9
-                        ? "bg-green-500/20 text-green-400"
-                        : group.confidence > 0.7
-                          ? "bg-yellow-500/20 text-yellow-400"
-                          : "bg-red-500/20 text-red-400"
-                    }`}
-                  >
-                    {group.confidence > 0.9
-                      ? "✅ عالية"
-                      : group.confidence > 0.7
-                        ? "⚠️ متوسطة"
-                        : "❌ منخفضة"}
-                  </div>
-                </div>
-
-                {/* ملفات المجموعة */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  {group.files.map((file, fileIndex) => (
-                    <div
-                      key={file.id}
-                      className={`p-4 rounded-lg border ${
-                        fileIndex === 0
-                          ? "bg-green-500/10 border-green-500/30"
-                          : "bg-red-500/10 border-red-500/30"
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="text-xl">
-                          {getFileIcon(file.type, file.encrypted, file.hidden)}
-                        </div>
-                        <div className="flex-1">
-                          <div className="font-medium text-white flex items-center gap-2">
-                            {file.name}
-                            {fileIndex === 0 && (
-                              <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded-full">
-                                الأصلي
-                              </span>
-                            )}
-                          </div>
-                          <div className="text-sm text-gray-400">
-                            📁 {file.path} • 💾 {formatFileSize(file.size)}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* اقتراحات الحل */}
-                <div className="border-t border-gray-700 pt-4">
-                  <h5 className="font-medium text-white mb-3">
-                    💡 اقتراحات الحل:
-                  </h5>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {group.recommendations.map((rec, recIndex) => (
-                      <button
-                        key={recIndex}
-                        className="glass-button p-3 rounded-lg text-right hover:bg-blue-500/10 transition-colors"
-                      >
-                        <div className="font-medium text-white mb-1">
-                          {rec.title}
-                        </div>
-                        <div className="text-sm text-gray-400 mb-2">
-                          {rec.description}
-                        </div>
-                        {rec.spaceFreed > 0 && (
-                          <div className="text-xs text-green-400">
-                            💾 توفير: {formatFileSize(rec.spaceFreed)}
-                          </div>
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <DuplicateManager
+          duplicateResults={duplicateResults}
+          onResolve={handleDuplicateResolution}
+          onCancel={() => setDuplicateResults(null)}
+        />
       )}
 
       {/* التكرارات الموجودة */}
@@ -1183,7 +1052,7 @@ const PowerOps = () => {
             <div className="text-2xl font-bold text-purple-400 mb-1">
               {smartCategories.length}
             </div>
-            <div className="text-sm text-gray-400">فئات متاحة</div>
+            <div className="text-sm text-gray-400">فئات مت��حة</div>
           </div>
         </div>
       </div>
@@ -1240,7 +1109,7 @@ const PowerOps = () => {
               </div>
 
               <div className="flex flex-col items-end gap-4">
-                {/* وضع الأمان */}
+                {/* وضع ال��مان */}
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-2">
                     <input
