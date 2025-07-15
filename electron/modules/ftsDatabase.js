@@ -1,4 +1,4 @@
-const Database = require("better-sqlite3");
+const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
 const fs = require("fs-extra");
 const { app } = require("electron");
@@ -19,15 +19,14 @@ class FTSDatabase {
 
       this.dbPath = path.join(dbDir, "knoux-findr-fts.db");
 
-      // Initialize database with better-sqlite3
-      this.db = new Database(this.dbPath);
+      // Initialize database
+      this.db = new sqlite3.Database(this.dbPath);
 
-      // Enable Write-Ahead Logging for better performance
-      this.db.pragma("journal_mode = WAL");
-      this.db.pragma("synchronous = NORMAL");
-      this.db.pragma("cache_size = 1000000");
-      this.db.pragma("temp_store = memory");
-      this.db.pragma("mmap_size = 268435456"); // 256MB
+      // Enable performance optimizations
+      await this.executeQuery("PRAGMA journal_mode = WAL");
+      await this.executeQuery("PRAGMA synchronous = NORMAL");
+      await this.executeQuery("PRAGMA cache_size = 1000000");
+      await this.executeQuery("PRAGMA temp_store = memory");
 
       await this.createTables();
       console.log("✅ قاعدة البيانات FTS5 جاهزة");
@@ -38,10 +37,46 @@ class FTSDatabase {
     }
   }
 
+  async executeQuery(sql, params = []) {
+    return new Promise((resolve, reject) => {
+      this.db.run(sql, params, function (err) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(this);
+        }
+      });
+    });
+  }
+
+  async selectQuery(sql, params = []) {
+    return new Promise((resolve, reject) => {
+      this.db.all(sql, params, (err, rows) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+  }
+
+  async selectOne(sql, params = []) {
+    return new Promise((resolve, reject) => {
+      this.db.get(sql, params, (err, row) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(row);
+        }
+      });
+    });
+  }
+
   async createTables() {
     try {
       // إنشاء جدول الملفات الأساسي
-      this.db.exec(`
+      await this.executeQuery(`
         CREATE TABLE IF NOT EXISTS files (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           path TEXT UNIQUE NOT NULL,
@@ -58,11 +93,11 @@ class FTSDatabase {
           tags TEXT,
           indexed_at INTEGER DEFAULT (strftime('%s', 'now')),
           content_extracted BOOLEAN DEFAULT 0
-        );
+        )
       `);
 
       // إنشاء فهرس FTS5 للبحث في المحتوى
-      this.db.exec(`
+      await this.executeQuery(`
         CREATE VIRTUAL TABLE IF NOT EXISTS files_fts 
         USING fts5(
           name, 
@@ -70,13 +105,12 @@ class FTSDatabase {
           tags,
           category,
           content='files', 
-          content_rowid='id',
-          tokenize='porter unicode61'
-        );
+          content_rowid='id'
+        )
       `);
 
-      // إنشاء جدول للمحتوى المستخرج منفصل لتوفير الذاكرة
-      this.db.exec(`
+      // إنشاء جدول للمحتوى المستخرج منفصل
+      await this.executeQuery(`
         CREATE TABLE IF NOT EXISTS file_content (
           file_id INTEGER PRIMARY KEY,
           content TEXT,
@@ -85,21 +119,31 @@ class FTSDatabase {
           keywords TEXT,
           summary TEXT,
           FOREIGN KEY (file_id) REFERENCES files (id) ON DELETE CASCADE
-        );
+        )
       `);
 
       // إنشاء الفهارس للأداء
-      this.db.exec(`
-        CREATE INDEX IF NOT EXISTS idx_files_path ON files(path);
-        CREATE INDEX IF NOT EXISTS idx_files_type ON files(type);
-        CREATE INDEX IF NOT EXISTS idx_files_modified ON files(modified);
-        CREATE INDEX IF NOT EXISTS idx_files_size ON files(size);
-        CREATE INDEX IF NOT EXISTS idx_files_category ON files(category);
-        CREATE INDEX IF NOT EXISTS idx_files_directory ON files(directory);
-      `);
+      await this.executeQuery(
+        "CREATE INDEX IF NOT EXISTS idx_files_path ON files(path)",
+      );
+      await this.executeQuery(
+        "CREATE INDEX IF NOT EXISTS idx_files_type ON files(type)",
+      );
+      await this.executeQuery(
+        "CREATE INDEX IF NOT EXISTS idx_files_modified ON files(modified)",
+      );
+      await this.executeQuery(
+        "CREATE INDEX IF NOT EXISTS idx_files_size ON files(size)",
+      );
+      await this.executeQuery(
+        "CREATE INDEX IF NOT EXISTS idx_files_category ON files(category)",
+      );
+      await this.executeQuery(
+        "CREATE INDEX IF NOT EXISTS idx_files_directory ON files(directory)",
+      );
 
       // إنشاء التريغرز للحفاظ على تزامن FTS
-      this.db.exec(`
+      await this.executeQuery(`
         CREATE TRIGGER IF NOT EXISTS files_ai AFTER INSERT ON files
         BEGIN
           INSERT INTO files_fts(rowid, name, content, tags, category) 
@@ -110,10 +154,10 @@ class FTSDatabase {
             COALESCE(new.tags, ''),
             COALESCE(new.category, '')
           );
-        END;
+        END
       `);
 
-      this.db.exec(`
+      await this.executeQuery(`
         CREATE TRIGGER IF NOT EXISTS files_au AFTER UPDATE ON files
         BEGIN
           UPDATE files_fts SET 
@@ -121,23 +165,23 @@ class FTSDatabase {
             tags = COALESCE(new.tags, ''),
             category = COALESCE(new.category, '')
           WHERE rowid = new.id;
-        END;
+        END
       `);
 
-      this.db.exec(`
+      await this.executeQuery(`
         CREATE TRIGGER IF NOT EXISTS files_ad AFTER DELETE ON files
         BEGIN
           DELETE FROM files_fts WHERE rowid = old.id;
           DELETE FROM file_content WHERE file_id = old.id;
-        END;
+        END
       `);
 
       // تريغر لتحديث المحتوى في FTS عند تغيير file_content
-      this.db.exec(`
+      await this.executeQuery(`
         CREATE TRIGGER IF NOT EXISTS content_au AFTER UPDATE ON file_content
         BEGIN
           UPDATE files_fts SET content = new.content WHERE rowid = new.file_id;
-        END;
+        END
       `);
 
       console.log("✅ تم إنشاء الجداول والفهارس بنجاح");
@@ -148,33 +192,34 @@ class FTSDatabase {
   }
 
   // إضافة ملف جديد للفهرسة
-  insertFile(fileData) {
+  async insertFile(fileData) {
     if (!this.isReady) throw new Error("Database not ready");
 
-    const insert = this.db.prepare(`
-      INSERT OR REPLACE INTO files 
-      (path, name, type, size, modified, created, accessed, hash, mime_type, directory, category, tags, content_extracted)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `);
-
     try {
-      const result = insert.run(
-        fileData.path,
-        fileData.name,
-        fileData.type,
-        fileData.size,
-        fileData.modified,
-        fileData.created,
-        fileData.accessed,
-        fileData.hash,
-        fileData.mimeType,
-        fileData.directory,
-        fileData.category || "Other",
-        JSON.stringify(fileData.tags || []),
-        fileData.contentExtracted ? 1 : 0,
+      const result = await this.executeQuery(
+        `
+        INSERT OR REPLACE INTO files 
+        (path, name, type, size, modified, created, accessed, hash, mime_type, directory, category, tags, content_extracted)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `,
+        [
+          fileData.path,
+          fileData.name,
+          fileData.type,
+          fileData.size,
+          fileData.modified,
+          fileData.created,
+          fileData.accessed,
+          fileData.hash,
+          fileData.mimeType,
+          fileData.directory,
+          fileData.category || "Other",
+          JSON.stringify(fileData.tags || []),
+          fileData.contentExtracted ? 1 : 0,
+        ],
       );
 
-      return result.lastInsertRowid;
+      return result.lastID;
     } catch (error) {
       console.error("❌ خطأ في إدراج الملف:", error);
       throw error;
@@ -182,30 +227,33 @@ class FTSDatabase {
   }
 
   // إضافة محتوى الملف المستخرج
-  insertFileContent(fileId, contentData) {
+  async insertFileContent(fileId, contentData) {
     if (!this.isReady) throw new Error("Database not ready");
 
-    const insert = this.db.prepare(`
-      INSERT OR REPLACE INTO file_content 
-      (file_id, content, content_length, language, keywords, summary)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `);
-
     try {
-      insert.run(
-        fileId,
-        contentData.content,
-        contentData.content?.length || 0,
-        contentData.language,
-        JSON.stringify(contentData.keywords || []),
-        contentData.summary,
+      await this.executeQuery(
+        `
+        INSERT OR REPLACE INTO file_content 
+        (file_id, content, content_length, language, keywords, summary)
+        VALUES (?, ?, ?, ?, ?, ?)
+      `,
+        [
+          fileId,
+          contentData.content,
+          contentData.content?.length || 0,
+          contentData.language,
+          JSON.stringify(contentData.keywords || []),
+          contentData.summary,
+        ],
       );
 
       // تحديث حالة استخراج المحتوى
-      const updateFile = this.db.prepare(`
+      await this.executeQuery(
+        `
         UPDATE files SET content_extracted = 1 WHERE id = ?
-      `);
-      updateFile.run(fileId);
+      `,
+        [fileId],
+      );
 
       console.log(`✅ تم حفظ محتوى الملف ID: ${fileId}`);
     } catch (error) {
@@ -215,7 +263,7 @@ class FTSDatabase {
   }
 
   // البحث الفوري باستخدام FTS5
-  searchFiles(query, options = {}) {
+  async searchFiles(query, options = {}) {
     if (!this.isReady) throw new Error("Database not ready");
 
     const limit = options.limit || 50;
@@ -227,7 +275,7 @@ class FTSDatabase {
     if (searchQuery) {
       // إضافة wildcards للبحث الجزئي
       const terms = searchQuery.split(/\s+/).map((term) => {
-        // إذا كان المصط��ح يحتوي على أحرف عربية
+        // إذا كان المصطلح يحتوي على أحرف عربية
         if (/[\u0600-\u06FF]/.test(term)) {
           return `"${term}"*`;
         }
@@ -237,7 +285,8 @@ class FTSDatabase {
     }
 
     try {
-      const stmt = this.db.prepare(`
+      const results = await this.selectQuery(
+        `
         SELECT 
           f.id,
           f.path,
@@ -251,17 +300,16 @@ class FTSDatabase {
           f.directory,
           fc.content_length,
           fc.language,
-          fts.rank,
-          snippet(files_fts, 1, '<mark>', '</mark>', '...', 32) as snippet
+          fts.rank
         FROM files_fts fts
         JOIN files f ON f.id = fts.rowid
         LEFT JOIN file_content fc ON fc.file_id = f.id
         WHERE files_fts MATCH ?
         ORDER BY fts.rank
         LIMIT ? OFFSET ?
-      `);
-
-      const results = stmt.all(searchQuery, limit, offset);
+      `,
+        [searchQuery, limit, offset],
+      );
 
       // تحويل النتائج وتنسيقها
       return results.map((row) => ({
@@ -278,8 +326,7 @@ class FTSDatabase {
         contentLength: row.content_length,
         language: row.language,
         rank: row.rank,
-        snippet: row.snippet,
-        relevanceScore: Math.abs(row.rank), // تحويل النتيجة السالبة إلى موجبة
+        relevanceScore: Math.abs(row.rank || 0),
       }));
     } catch (error) {
       console.error("❌ خطأ في البحث:", error);
@@ -288,7 +335,7 @@ class FTSDatabase {
   }
 
   // البحث المتقدم مع فلاتر
-  advancedSearch(query, filters = {}) {
+  async advancedSearch(query, filters = {}) {
     if (!this.isReady) throw new Error("Database not ready");
 
     let sql = `
@@ -350,8 +397,7 @@ class FTSDatabase {
     sql += ` LIMIT ${filters.limit || 100}`;
 
     try {
-      const stmt = this.db.prepare(sql);
-      const results = stmt.all(...params);
+      const results = await this.selectQuery(sql, params);
 
       return results.map((row) => ({
         id: row.id,
@@ -374,13 +420,11 @@ class FTSDatabase {
   }
 
   // الحصول على إحصائيات سريعة
-  getStats() {
+  async getStats() {
     if (!this.isReady) throw new Error("Database not ready");
 
     try {
-      const stats = this.db
-        .prepare(
-          `
+      const stats = await this.selectOne(`
         SELECT 
           COUNT(*) as totalFiles,
           SUM(size) as totalSize,
@@ -388,33 +432,23 @@ class FTSDatabase {
           COUNT(CASE WHEN content_extracted = 1 THEN 1 END) as indexedFiles,
           COUNT(DISTINCT category) as totalCategories
         FROM files
-      `,
-        )
-        .get();
+      `);
 
-      const typeStats = this.db
-        .prepare(
-          `
+      const typeStats = await this.selectQuery(`
         SELECT type, COUNT(*) as count, SUM(size) as totalSize
         FROM files 
         WHERE type IS NOT NULL 
         GROUP BY type 
         ORDER BY count DESC 
         LIMIT 10
-      `,
-        )
-        .all();
+      `);
 
-      const categoryStats = this.db
-        .prepare(
-          `
+      const categoryStats = await this.selectQuery(`
         SELECT category, COUNT(*) as count 
         FROM files 
         GROUP BY category 
         ORDER BY count DESC
-      `,
-        )
-        .all();
+      `);
 
       return {
         ...stats,
@@ -429,13 +463,11 @@ class FTSDatabase {
   }
 
   // البحث عن الملفات المكررة
-  findDuplicates() {
+  async findDuplicates() {
     if (!this.isReady) throw new Error("Database not ready");
 
     try {
-      const duplicates = this.db
-        .prepare(
-          `
+      const duplicates = await this.selectQuery(`
         SELECT hash, COUNT(*) as count, 
                GROUP_CONCAT(path, '|||') as paths,
                GROUP_CONCAT(size, '|||') as sizes,
@@ -445,9 +477,7 @@ class FTSDatabase {
         GROUP BY hash 
         HAVING count > 1
         ORDER BY count DESC
-      `,
-        )
-        .all();
+      `);
 
       return duplicates.map((dup) => ({
         hash: dup.hash,
@@ -465,12 +495,14 @@ class FTSDatabase {
   }
 
   // حذف ملف من الفهرسة
-  deleteFile(filePath) {
+  async deleteFile(filePath) {
     if (!this.isReady) throw new Error("Database not ready");
 
     try {
-      const stmt = this.db.prepare("DELETE FROM files WHERE path = ?");
-      const result = stmt.run(filePath);
+      const result = await this.executeQuery(
+        "DELETE FROM files WHERE path = ?",
+        [filePath],
+      );
       return result.changes > 0;
     } catch (error) {
       console.error("❌ خطأ في حذف الملف:", error);
@@ -479,16 +511,18 @@ class FTSDatabase {
   }
 
   // تحديث تصنيف الملف
-  updateFileCategory(fileId, category, tags = []) {
+  async updateFileCategory(fileId, category, tags = []) {
     if (!this.isReady) throw new Error("Database not ready");
 
     try {
-      const stmt = this.db.prepare(`
+      const result = await this.executeQuery(
+        `
         UPDATE files 
         SET category = ?, tags = ? 
         WHERE id = ?
-      `);
-      const result = stmt.run(category, JSON.stringify(tags), fileId);
+      `,
+        [category, JSON.stringify(tags), fileId],
+      );
       return result.changes > 0;
     } catch (error) {
       console.error("❌ خطأ في تحديث التصنيف:", error);
@@ -497,26 +531,30 @@ class FTSDatabase {
   }
 
   // إعادة بناء فهرس FTS
-  rebuildFTSIndex() {
+  async rebuildFTSIndex() {
     if (!this.isReady) throw new Error("Database not ready");
 
     try {
-      this.db.exec("INSERT INTO files_fts(files_fts) VALUES('rebuild');");
+      await this.executeQuery(
+        "INSERT INTO files_fts(files_fts) VALUES('rebuild')",
+      );
       console.log("✅ تم إعادة بناء فهرس FTS بنجاح");
     } catch (error) {
-      console.error("❌ خطأ في إعادة بناء الفهرس:", error);
+      console.error("❌ خطأ في إعادة بناء الف��رس:", error);
     }
   }
 
   // تحسين قاعدة البيانات
-  optimize() {
+  async optimize() {
     if (!this.isReady) throw new Error("Database not ready");
 
     try {
-      this.db.exec("VACUUM;");
-      this.db.exec("ANALYZE;");
-      this.db.exec("INSERT INTO files_fts(files_fts) VALUES('optimize');");
-      console.log("✅ تم تحسين قاعدة البيانات ب��جاح");
+      await this.executeQuery("VACUUM");
+      await this.executeQuery("ANALYZE");
+      await this.executeQuery(
+        "INSERT INTO files_fts(files_fts) VALUES('optimize')",
+      );
+      console.log("✅ تم تحسين قاعدة البيانات بنجاح");
     } catch (error) {
       console.error("❌ خطأ في تحسين قاعدة البيانات:", error);
     }
@@ -526,8 +564,13 @@ class FTSDatabase {
   close() {
     if (this.db) {
       try {
-        this.db.close();
-        console.log("✅ تم إغلاق قاعدة البيانات");
+        this.db.close((err) => {
+          if (err) {
+            console.error("❌ خطأ في إغلاق قاعدة البيانات:", err);
+          } else {
+            console.log("✅ تم إغلاق قاعدة البيانات");
+          }
+        });
       } catch (error) {
         console.error("❌ خطأ في إغلاق قاعدة البيانات:", error);
       }
@@ -539,17 +582,13 @@ class FTSDatabase {
     if (!this.isReady) return null;
 
     try {
-      const info = this.db
-        .prepare("SELECT name FROM sqlite_master WHERE type='table'")
-        .all();
       const size = require("fs").statSync(this.dbPath).size;
 
       return {
         path: this.dbPath,
         size: size,
-        tables: info.map((t) => t.name),
         isReady: this.isReady,
-        version: "2.0-FTS5",
+        version: "2.0-FTS5-SQLite3",
       };
     } catch (error) {
       console.error("❌ خطأ في جلب معلومات قاعدة البيانات:", error);
