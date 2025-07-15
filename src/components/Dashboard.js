@@ -168,8 +168,10 @@ const Dashboard = ({ user, onLogout }) => {
             <div className="space-y-2 relative z-10">
               {[
                 { id: "search", name: "Search Files", icon: "🔍" },
-                { id: "recent", name: "Recent Files", icon: "⏰" },
-                { id: "analytics", name: "Analytics", icon: "📊" },
+                { id: "timeline", name: "Timeline", icon: "📅" },
+                { id: "stats", name: "Statistics", icon: "📊" },
+                { id: "natural", name: "Smart Search", icon: "🧠" },
+                { id: "powerops", name: "PowerOps", icon: "⚡" },
                 { id: "settings", name: "Settings", icon: "⚙️" },
               ].map((item) => (
                 <button
