@@ -5,20 +5,20 @@ const PowerOps = () => {
   const [currentOperation, setCurrentOperation] = useState(null);
   const [operationProgress, setOperationProgress] = useState(0);
   const [securityMode, setSecurityMode] = useState(false);
-  const [activeTab, setActiveTab] = useState("organize"); // organize, duplicates, analytics
+  const [activeTab, setActiveTab] = useState('organize'); // organize, duplicates, analytics
   const [duplicateResults, setDuplicateResults] = useState(null);
   const [isScanning, setIsScanning] = useState(false);
   const [scanProgress, setScanProgress] = useState(0);
-  const [organizeMode, setOrganizeMode] = useState("smart"); // smart, manual, rules
+  const [organizeMode, setOrganizeMode] = useState('smart'); // smart, manual, rules
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [filterCriteria, setFilterCriteria] = useState({
-    type: "all",
-    size: "all",
-    date: "all",
-    category: "all",
+    type: 'all',
+    size: 'all',
+    date: 'all',
+    category: 'all'
   });
-  const [sortBy, setSortBy] = useState("modified");
-  const [sortOrder, setSortOrder] = useState("desc");
+  const [sortBy, setSortBy] = useState('modified');
+  const [sortOrder, setSortOrder] = useState('desc');
   const [bulkOperations, setBulkOperations] = useState({
     move: false,
     copy: false,
@@ -26,10 +26,10 @@ const PowerOps = () => {
     encrypt: false,
     compress: false,
     categorize: false,
-    duplicate_scan: false,
+    duplicate_scan: false
   });
 
-  // قائمة الملفات المحسنة مع بيانات إضافية
+    // قائمة الملفات المحسنة مع بيانات إضافية
   const [fileList, setFileList] = useState([
     {
       id: 1,
@@ -47,7 +47,7 @@ const PowerOps = () => {
       tags: ["عمل", "مشروع", "مستند"],
       duplicateGroup: null,
       autoCategory: true,
-      confidence: 0.95,
+      confidence: 0.95
     },
     {
       id: 2,
@@ -65,7 +65,7 @@ const PowerOps = () => {
       tags: ["صور", "عطلة", "أرشيف"],
       duplicateGroup: null,
       autoCategory: true,
-      confidence: 0.88,
+      confidence: 0.88
     },
     {
       id: 3,
@@ -83,7 +83,7 @@ const PowerOps = () => {
       tags: ["تقرير", "سري", "مالي"],
       duplicateGroup: null,
       autoCategory: false,
-      confidence: 0.75,
+      confidence: 0.75
     },
     {
       id: 4,
@@ -101,7 +101,7 @@ const PowerOps = () => {
       tags: ["نسخة احتياطية", "قاعدة بيانات", "نظام"],
       duplicateGroup: null,
       autoCategory: true,
-      confidence: 0.92,
+      confidence: 0.92
     },
     {
       id: 5,
@@ -119,7 +119,7 @@ const PowerOps = () => {
       tags: ["كود", "مشروع", "تطوير"],
       duplicateGroup: null,
       autoCategory: true,
-      confidence: 0.97,
+      confidence: 0.97
     },
     {
       id: 6,
@@ -137,7 +137,7 @@ const PowerOps = () => {
       tags: ["عمل", "مشروع", "نسخة"],
       duplicateGroup: "dup_1",
       autoCategory: true,
-      confidence: 0.95,
+      confidence: 0.95
     },
     {
       id: 7,
@@ -155,11 +155,11 @@ const PowerOps = () => {
       tags: ["صور", "عطلة", "نسخة احتياطية"],
       duplicateGroup: "dup_2",
       autoCategory: true,
-      confidence: 0.88,
-    },
+      confidence: 0.88
+    }
   ]);
 
-  // العمليات المتاحة المحسنة
+    // العمليات المتاحة المحسنة
   const operations = [
     {
       id: "smart_organize",
@@ -168,7 +168,7 @@ const PowerOps = () => {
       icon: "🧠",
       color: "blue",
       dangerous: false,
-      category: "organize",
+      category: "organize"
     },
     {
       id: "auto_categorize",
@@ -177,7 +177,7 @@ const PowerOps = () => {
       icon: "🏷️",
       color: "purple",
       dangerous: false,
-      category: "organize",
+      category: "organize"
     },
     {
       id: "advanced_duplicate_scan",
@@ -186,7 +186,7 @@ const PowerOps = () => {
       icon: "🔍",
       color: "orange",
       dangerous: false,
-      category: "duplicates",
+      category: "duplicates"
     },
     {
       id: "similarity_clustering",
@@ -195,7 +195,7 @@ const PowerOps = () => {
       icon: "🔗",
       color: "teal",
       dangerous: false,
-      category: "organize",
+      category: "organize"
     },
     {
       id: "bulk_move",
@@ -204,7 +204,7 @@ const PowerOps = () => {
       icon: "📂",
       color: "blue",
       dangerous: false,
-      category: "manage",
+      category: "manage"
     },
     {
       id: "bulk_rename",
@@ -213,7 +213,7 @@ const PowerOps = () => {
       icon: "✏️",
       color: "green",
       dangerous: false,
-      category: "manage",
+      category: "manage"
     },
     {
       id: "bulk_encrypt",
@@ -222,7 +222,7 @@ const PowerOps = () => {
       icon: "🔒",
       color: "red",
       dangerous: false,
-      category: "security",
+      category: "security"
     },
     {
       id: "bulk_compress",
@@ -231,7 +231,7 @@ const PowerOps = () => {
       icon: "📦",
       color: "purple",
       dangerous: false,
-      category: "optimize",
+      category: "optimize"
     },
     {
       id: "space_analyzer",
@@ -240,17 +240,17 @@ const PowerOps = () => {
       icon: "💾",
       color: "yellow",
       dangerous: false,
-      category: "analytics",
+      category: "analytics"
     },
     {
       id: "bulk_delete",
       name: "حذف آمن",
-      description: "حذف آ��ن مع إمكانية الاستعادة الكاملة",
+      description: "حذف آمن مع إمكانية الاستعادة الكاملة",
       icon: "🗑️",
       color: "red",
       dangerous: true,
-      category: "manage",
-    },
+      category: "manage"
+    }
   ];
 
   // التصنيفات الذكية المتاحة
@@ -264,57 +264,40 @@ const PowerOps = () => {
     { id: "Development", name: "تطوير", icon: "💻", color: "teal" },
     { id: "Media", name: "وسائط", icon: "🎬", color: "pink" },
     { id: "Archive", name: "أرشيف", icon: "📦", color: "brown" },
-    { id: "System", name: "نظام", icon: "⚙️", color: "gray" },
+    { id: "System", name: "نظام", icon: "⚙️", color: "gray" }
   ];
 
-  // قوائم مفلترة ومرتبة
+    // قوائم مفلترة ومرتبة
   const filteredAndSortedFiles = useMemo(() => {
-    let filtered = fileList.filter((file) => {
+    let filtered = fileList.filter(file => {
       // فلتر حسب النوع
-      if (filterCriteria.type !== "all" && file.type !== filterCriteria.type) {
+      if (filterCriteria.type !== 'all' && file.type !== filterCriteria.type) {
         return false;
       }
 
       // فلتر حسب الفئة
-      if (
-        filterCriteria.category !== "all" &&
-        file.category !== filterCriteria.category
-      ) {
+      if (filterCriteria.category !== 'all' && file.category !== filterCriteria.category) {
         return false;
       }
 
       // فلتر حسب الحجم
-      if (filterCriteria.size !== "all") {
+      if (filterCriteria.size !== 'all') {
         const sizeInMB = file.size / (1024 * 1024);
         switch (filterCriteria.size) {
-          case "small":
-            if (sizeInMB >= 10) return false;
-            break;
-          case "medium":
-            if (sizeInMB < 10 || sizeInMB >= 100) return false;
-            break;
-          case "large":
-            if (sizeInMB < 100) return false;
-            break;
+          case 'small': if (sizeInMB >= 10) return false; break;
+          case 'medium': if (sizeInMB < 10 || sizeInMB >= 100) return false; break;
+          case 'large': if (sizeInMB < 100) return false; break;
         }
       }
 
       // فلتر حسب التاريخ
-      if (filterCriteria.date !== "all") {
+      if (filterCriteria.date !== 'all') {
         const daysDiff = (Date.now() - file.modified) / (1000 * 60 * 60 * 24);
         switch (filterCriteria.date) {
-          case "today":
-            if (daysDiff >= 1) return false;
-            break;
-          case "week":
-            if (daysDiff >= 7) return false;
-            break;
-          case "month":
-            if (daysDiff >= 30) return false;
-            break;
-          case "older":
-            if (daysDiff < 30) return false;
-            break;
+          case 'today': if (daysDiff >= 1) return false; break;
+          case 'week': if (daysDiff >= 7) return false; break;
+          case 'month': if (daysDiff >= 30) return false; break;
+          case 'older': if (daysDiff < 30) return false; break;
         }
       }
 
@@ -326,26 +309,26 @@ const PowerOps = () => {
       let comparison = 0;
 
       switch (sortBy) {
-        case "name":
+        case 'name':
           comparison = a.name.localeCompare(b.name);
           break;
-        case "size":
+        case 'size':
           comparison = a.size - b.size;
           break;
-        case "modified":
+        case 'modified':
           comparison = a.modified - b.modified;
           break;
-        case "type":
+        case 'type':
           comparison = a.type.localeCompare(b.type);
           break;
-        case "category":
+        case 'category':
           comparison = a.category.localeCompare(b.category);
           break;
         default:
           comparison = a.modified - b.modified;
       }
 
-      return sortOrder === "desc" ? -comparison : comparison;
+      return sortOrder === 'desc' ? -comparison : comparison;
     });
 
     return filtered;
@@ -354,7 +337,7 @@ const PowerOps = () => {
   // الملفات المكررة
   const duplicateFiles = useMemo(() => {
     const duplicates = {};
-    fileList.forEach((file) => {
+    fileList.forEach(file => {
       if (file.duplicateGroup) {
         if (!duplicates[file.duplicateGroup]) {
           duplicates[file.duplicateGroup] = [];
@@ -385,7 +368,7 @@ const PowerOps = () => {
     }
   };
 
-  // تنفيذ عملية فحص التكرارات المتقدم
+    // تنفيذ عملية فحص التكرارات المتقدم
   const startAdvancedDuplicateScan = useCallback(async () => {
     setIsScanning(true);
     setScanProgress(0);
@@ -415,7 +398,7 @@ const PowerOps = () => {
             break;
         }
 
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 1000));
       }
 
       // إنشاء نتائج وهمية
@@ -424,7 +407,7 @@ const PowerOps = () => {
           {
             id: "dup_1",
             type: "نسخة مطابقة تماماً",
-            files: fileList.filter((f) => f.duplicateGroup === "dup_1"),
+            files: fileList.filter(f => f.duplicateGroup === "dup_1"),
             confidence: 1.0,
             wastedSpace: 2500000,
             recommendations: [
@@ -432,14 +415,14 @@ const PowerOps = () => {
                 type: "delete_oldest",
                 title: "حذف النسخة الأقدم",
                 description: "حذف النسخة من مجلد Downloads",
-                spaceFreed: 2500000,
-              },
-            ],
+                spaceFreed: 2500000
+              }
+            ]
           },
           {
             id: "dup_2",
             type: "نسخة مطابقة تماماً",
-            files: fileList.filter((f) => f.duplicateGroup === "dup_2"),
+            files: fileList.filter(f => f.duplicateGroup === "dup_2"),
             confidence: 1.0,
             wastedSpace: 125000000,
             recommendations: [
@@ -447,21 +430,22 @@ const PowerOps = () => {
                 type: "move_to_archive",
                 title: "نقل إلى الأرشيف",
                 description: "نقل النسخة الاحتياطية إلى مجلد منفصل",
-                spaceFreed: 0,
-              },
-            ],
-          },
+                spaceFreed: 0
+              }
+            ]
+          }
         ],
         summary: {
           totalGroups: 2,
           totalDuplicates: 2,
           totalWastedSpace: 127500000,
-          potentialSavings: 127500000,
-        },
+          potentialSavings: 127500000
+        }
       };
 
       setDuplicateResults(mockResults);
-      setActiveTab("duplicates");
+      setActiveTab('duplicates');
+
     } catch (error) {
       console.error("❌ خطأ في فحص التكرارات:", error);
     } finally {
@@ -476,10 +460,9 @@ const PowerOps = () => {
     setOperationProgress(0);
 
     const totalFiles = selectedFiles.length || fileList.length;
-    const filesToProcess =
-      selectedFiles.length > 0
-        ? fileList.filter((f) => selectedFiles.includes(f.id))
-        : fileList;
+    const filesToProcess = selectedFiles.length > 0
+      ? fileList.filter(f => selectedFiles.includes(f.id))
+      : fileList;
 
     for (let i = 0; i < filesToProcess.length; i++) {
       const file = filesToProcess[i];
@@ -504,16 +487,14 @@ const PowerOps = () => {
       }
 
       // تحديث الملف
-      setFileList((prev) =>
-        prev.map((f) =>
-          f.id === file.id
-            ? { ...f, category: newCategory, confidence, autoCategory: true }
-            : f,
-        ),
-      );
+      setFileList(prev => prev.map(f =>
+        f.id === file.id
+          ? { ...f, category: newCategory, confidence, autoCategory: true }
+          : f
+      ));
 
       setOperationProgress(((i + 1) / totalFiles) * 100);
-      await new Promise((resolve) => setTimeout(resolve, 200));
+      await new Promise(resolve => setTimeout(resolve, 200));
     }
 
     setCurrentOperation(null);
@@ -532,22 +513,20 @@ const PowerOps = () => {
       "🏷️ تصنيف بالذكاء الاصطناعي...",
       "📂 إنشاء هيكل مجلدات محسن...",
       "➡️ نقل الملفات إلى المواقع المناسبة...",
-      "✅ اكتمال التنظيم",
+      "✅ اكتمال التنظيم"
     ];
 
     for (let i = 0; i < organizationSteps.length; i++) {
       console.log(organizationSteps[i]);
       setOperationProgress(((i + 1) / organizationSteps.length) * 100);
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      await new Promise(resolve => setTimeout(resolve, 1500));
     }
 
     // تحديث مسارات الملفات حسب التصنيف
-    setFileList((prev) =>
-      prev.map((file) => ({
-        ...file,
-        path: `/Organized/${file.category}/${file.name.split(".")[0]}/`,
-      })),
-    );
+    setFileList(prev => prev.map(file => ({
+      ...file,
+      path: `/Organized/${file.category}/${file.name.split('.')[0]}/`
+    })));
 
     setCurrentOperation(null);
     setOperationProgress(0);
@@ -658,50 +637,117 @@ const PowerOps = () => {
     return icon;
   };
 
-  return (
+    return (
     <div
       className="min-h-screen bg-gradient-to-br from-[#0F123B] via-[#090D2E] to-[#020515] font-jakarta text-white p-6"
       dir="rtl"
     >
       <div className="max-w-7xl mx-auto">
-        {/* العنوان والتحكم */}
-        <div className="glass-card rounded-2xl p-6 mb-6">
-          <div className="flex justify-between items-center mb-4">
-            <div>
-              <h1 className="text-3xl font-bold gradient-text mb-2">
-                ⚡ PowerOps - إدارة متقدمة للملفات
-              </h1>
-              <p className="text-gray-400">
-                عمليات متقدمة وآمنة لإدارة ملفاتك بكفاءة
-              </p>
-            </div>
+        {/* العنوان والتحكم المحسن */}
+        <div className="glass-card rounded-2xl p-6 mb-6 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-teal-500/5"></div>
 
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="security-mode"
-                  checked={securityMode}
-                  onChange={(e) => setSecurityMode(e.target.checked)}
-                  className="rounded"
-                />
-                <label htmlFor="security-mode" className="text-sm">
-                  🛡️ الوضع الآمن
-                </label>
+          <div className="relative z-10">
+            <div className="flex justify-between items-start mb-6">
+              <div>
+                <h1 className="text-4xl font-bold gradient-text mb-3 flex items-center gap-3">
+                  ⚡ PowerOps
+                  <span className="text-lg font-normal text-blue-400">إدارة ذكية متقدمة</span>
+                </h1>
+                <p className="text-gray-300 text-lg mb-4">
+                  أدوات متقدمة لتنظيم وإدارة ملفاتك بذكاء وكفاءة عالية
+                </p>
+
+                {/* إحصائيات سريعة */}
+                <div className="flex gap-6 text-sm">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                    <span className="text-gray-400">ملفات مفهرسة:</span>
+                    <span className="text-white font-semibold">{fileList.length}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></span>
+                    <span className="text-gray-400">مكررات:</span>
+                    <span className="text-white font-semibold">{Object.keys(duplicateFiles).length}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></span>
+                    <span className="text-gray-400">محدد:</span>
+                    <span className="text-white font-semibold">{selectedFiles.length}</span>
+                  </div>
+                </div>
               </div>
 
-              <div className="text-sm text-gray-400">
-                {selectedFiles.length} من {fileList.length} محدد
+              <div className="flex flex-col items-end gap-4">
+                {/* وضع الأمان */}
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="security-mode"
+                      checked={securityMode}
+                      onChange={(e) => setSecurityMode(e.target.checked)}
+                      className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
+                    />
+                    <label htmlFor="security-mode" className="text-sm font-medium flex items-center gap-2">
+                      🛡️ الوضع الآمن
+                    </label>
+                  </div>
+
+                  {securityMode && (
+                    <div className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded-full flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
+                      نشط
+                    </div>
+                  )}
+                </div>
+
+                {/* أزرار سريعة */}
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setSelectedFiles(fileList.map(f => f.id))}
+                    className="glass-button px-4 py-2 rounded-lg text-sm hover:bg-blue-500/20 transition-all"
+                  >
+                    ✅ تحديد الكل
+                  </button>
+                  <button
+                    onClick={() => setSelectedFiles([])}
+                    className="glass-button px-4 py-2 rounded-lg text-sm hover:bg-red-500/20 transition-all"
+                  >
+                    ❌ إلغاء التحديد
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+
+            {/* علامات التبويب */}
+            <div className="flex gap-2 mb-4">
+              {[
+                { id: 'organize', name: '🗂️ تنظيم ذكي', color: 'blue' },
+                { id: 'duplicates', name: '🔍 التكرارات', color: 'orange' },
+                { id: 'analytics', name: '📊 التحليلات', color: 'purple' }
+              ].map(tab => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 relative overflow-hidden group ${
+                    activeTab === tab.id
+                      ? `bg-${tab.color}-500/20 text-${tab.color}-300 border border-${tab.color}-500/40 shadow-lg shadow-${tab.color}-500/20`
+                      : 'glass-button text-gray-400 hover:text-white hover:bg-white/10'
+                  }`}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+                  <span className="relative z-10">{tab.name}</span>
+                </button>
+              ))}
+            </div>
 
           {/* شريط التقدم للعمليات */}
           {currentOperation && (
             <div className="mb-4">
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm text-blue-400">
-                  ��اري تنفيذ العملية...
+                  جاري تنفيذ العملية...
                 </span>
                 <span className="text-sm text-gray-400">
                   {operationProgress}%
