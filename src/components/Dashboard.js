@@ -166,7 +166,7 @@ const Dashboard = ({ user, onLogout }) => {
               🧭 Navigation
             </h3>
             <div className="space-y-2 relative z-10">
-              {[
+                            {[
                 { id: "search", name: "Search Files", icon: "🔍" },
                 { id: "timeline", name: "Timeline", icon: "📅" },
                 { id: "stats", name: "Statistics", icon: "📊" },
@@ -258,8 +258,10 @@ const Dashboard = ({ user, onLogout }) => {
           </div>
         </aside>
 
-        {/* Enhanced Main Content */}
+                {/* Enhanced Main Content */}
         <main className="flex-1 space-y-6">
+          {currentView === "search" && (
+          <>
           {/* Enhanced Search Bar */}
           <div className="glass-card rounded-2xl p-6 fade-in relative overflow-hidden">
             {/* Background Pattern */}
