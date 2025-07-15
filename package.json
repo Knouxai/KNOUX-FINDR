@@ -1,28 +1,70 @@
 {
   "name": "knoux-findr",
   "version": "1.0.0",
-  "description": "KNOUX FINDR - Local File Search Engine",
-  "main": "server.js",
+  "description": "KNOUX FINDR - Desktop AI-Powered File Search Engine",
+  "main": "electron/main.js",
   "scripts": {
     "start": "node server.js",
     "dev": "concurrently \"npm run server\" \"npm run build:watch\"",
     "server": "node server.js",
     "build": "webpack --mode production",
     "build:watch": "webpack --mode development --watch",
+    "electron": "electron .",
+    "electron-dev": "concurrently \"npm run build:watch\" \"wait-on dist/index.html && electron .\"",
+    "electron-build": "npm run build && electron .",
+    "package": "electron-builder",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "search",
     "files",
     "local",
-    "react"
+    "react",
+    "electron",
+    "ai",
+    "desktop"
   ],
-  "author": "",
+  "author": "KNOUX FINDR Team",
   "license": "ISC",
+  "build": {
+    "appId": "com.knouxfindr.app",
+    "productName": "KNOUX FINDR",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "node_modules/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  },
   "dependencies": {
     "express": "^4.21.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "electron": "^22.0.0",
+    "chokidar": "^3.5.3",
+    "fuse.js": "^6.6.2",
+    "mammoth": "^1.5.1",
+    "pdf-parse": "^1.1.1",
+    "node-nlp": "^4.27.0",
+    "compromise": "^14.10.0",
+    "franc": "^6.1.0",
+    "sharp": "^0.32.6",
+    "sqlite3": "^5.1.6",
+    "uuid": "^9.0.0",
+    "mime-types": "^2.1.35",
+    "fs-extra": "^11.1.1",
+    "date-fns": "^2.30.0"
   },
   "devDependencies": {
     "@babel/core": "^7.22.0",
@@ -34,6 +76,8 @@
     "html-webpack-plugin": "^5.5.0",
     "style-loader": "^3.3.0",
     "webpack": "^5.88.0",
-    "webpack-cli": "^5.1.0"
+    "webpack-cli": "^5.1.0",
+    "electron-builder": "^24.6.4",
+    "wait-on": "^7.0.1"
   }
 }
