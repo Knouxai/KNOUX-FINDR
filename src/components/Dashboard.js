@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from "react";
+import Timeline from "./Timeline";
+import Stats from "./Stats";
+import NaturalQueryProcessor from "./NaturalQueryProcessor";
+import PowerOps from "./PowerOps";
 
 const Dashboard = ({ user, onLogout }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -105,6 +109,255 @@ const Dashboard = ({ user, onLogout }) => {
     ? filterFiles(searchResults)
     : filterFiles(mockFiles.slice(0, 8));
 
+  // Render different views based on currentView
+  const renderMainContent = () => {
+    switch (currentView) {
+      case "timeline":
+        return <Timeline />;
+      case "stats":
+        return <Stats />;
+      case "natural":
+        return <NaturalQueryProcessor />;
+      case "powerops":
+        return <PowerOps />;
+      default:
+        return renderSearchView();
+    }
+  };
+
+  const renderSearchView = () => (
+    <>
+      {/* Enhanced Search Bar */}
+      <div className="glass-card rounded-2xl p-6 fade-in relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div
+            className="w-full h-full"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 2px 2px, rgba(0,117,255,0.3) 1px, transparent 0)",
+              backgroundSize: "30px 30px",
+            }}
+          ></div>
+        </div>
+
+        <div className="relative z-10">
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0075FF]/20 via-transparent to-[#0075FF]/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="🔍 Search for files, content, or keywords..."
+              className="w-full h-[60px] px-6 pr-16 rounded-2xl glass-card text-white placeholder-[#A0AEC0] text-[16px] focus:outline-none focus:border-[#0075FF] focus:shadow-lg focus:shadow-[#0075FF]/20 transition-all duration-300 relative z-10"
+            />
+            <div className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20">
+              {isSearching ? (
+                <div className="loading-spinner" />
+              ) : (
+                <svg
+                  className="w-[24px] h-[24px] text-[#A0AEC0] group-hover:text-[#0075FF] transition-colors"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+              )}
+            </div>
+          </div>
+
+          {searchQuery && (
+            <div className="mt-4 flex items-center justify-between fade-in">
+              <div className="text-[#A0AEC0] text-[14px]">
+                Found{" "}
+                <span className="text-[#0075FF] font-semibold">
+                  {displayedFiles.length}
+                </span>{" "}
+                result{displayedFiles.length !== 1 ? "s" : ""} for "
+                {searchQuery}"
+              </div>
+              <div className="flex gap-2">
+                <div className="text-[10px] text-[#A0AEC0] bg-white/5 px-2 py-1 rounded-full">
+                  ⚡ Instant
+                </div>
+                <div className="text-[10px] text-[#A0AEC0] bg-white/5 px-2 py-1 rounded-full">
+                  🎯 Accurate
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Enhanced Results */}
+      <div className="glass-card rounded-2xl p-6 fade-in relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-[#0075FF]/5 to-transparent rounded-full blur-2xl"></div>
+
+        <div className="flex justify-between items-center mb-6 relative z-10">
+          <h2 className="text-white text-[20px] font-bold flex items-center gap-2">
+            {searchQuery ? "🔍 Search Results" : "📁 Recent Files"}
+          </h2>
+          <div className="flex gap-2">
+            <button className="glass-button p-2 rounded-lg group">
+              <svg
+                className="w-[20px] h-[20px] text-white group-hover:text-[#0075FF] transition-colors"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 10h16M4 14h16M4 18h16"
+                />
+              </svg>
+            </button>
+            <button className="glass-button p-2 rounded-lg group">
+              <svg
+                className="w-[20px] h-[20px] text-white group-hover:text-[#0075FF] transition-colors"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        {displayedFiles.length === 0 ? (
+          <div className="text-center py-12 relative z-10">
+            <div className="text-[48px] mb-4">🔍</div>
+            <div className="text-[#A0AEC0] text-[16px]">
+              {searchQuery
+                ? "No files found matching your search"
+                : "No files to display"}
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 relative z-10">
+            {displayedFiles.map((file, index) => (
+              <div
+                key={file.id}
+                className="glass-button rounded-xl p-4 cursor-pointer group hover:scale-105 transition-all duration-300 relative overflow-hidden fade-in"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                {/* Hover Effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-[#0075FF]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                <div className="relative z-10">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="text-[32px] group-hover:scale-110 transition-transform duration-300">
+                      {getFileIcon(file.type)}
+                    </div>
+                    <div className="text-[10px] text-[#A0AEC0] bg-white/10 px-2 py-1 rounded-full group-hover:bg-[#0075FF]/20 group-hover:text-white transition-all">
+                      {file.type}
+                    </div>
+                  </div>
+
+                  <div className="text-white text-[14px] font-semibold mb-2 truncate group-hover:text-[#0075FF] transition-colors">
+                    {file.name}
+                  </div>
+
+                  <div className="text-[#A0AEC0] text-[12px] mb-2 truncate group-hover:text-white/80 transition-colors">
+                    📁 {file.path}
+                  </div>
+
+                  <div className="flex justify-between items-center text-[10px] text-[#A0AEC0] group-hover:text-white/70 transition-colors">
+                    <span className="flex items-center gap-1">
+                      💾 {file.size}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      🕒 {file.modified}
+                    </span>
+                  </div>
+
+                  {/* Progress Bar */}
+                  <div className="mt-3 w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-[#0075FF] to-[#00A6FF] rounded-full transition-all duration-1000 group-hover:w-full"
+                      style={{ width: `${Math.random() * 100}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Enhanced Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 fade-in">
+        <div className="glass-card rounded-2xl p-6 relative overflow-hidden group">
+          <div className="absolute top-0 left-0 w-16 h-16 bg-gradient-to-br from-blue-500/10 to-transparent rounded-full blur-xl group-hover:scale-150 transition-transform duration-500"></div>
+          <div className="flex items-center justify-between relative z-10">
+            <div>
+              <div className="text-[#A0AEC0] text-[12px] mb-1">Total Files</div>
+              <div className="text-white text-[24px] font-bold group-hover:text-[#0075FF] transition-colors">
+                2,847
+              </div>
+              <div className="text-[10px] text-green-400">+12% this week</div>
+            </div>
+            <div className="text-[32px] group-hover:scale-110 transition-transform">
+              📁
+            </div>
+          </div>
+        </div>
+
+        <div className="glass-card rounded-2xl p-6 relative overflow-hidden group">
+          <div className="absolute top-0 left-0 w-16 h-16 bg-gradient-to-br from-purple-500/10 to-transparent rounded-full blur-xl group-hover:scale-150 transition-transform duration-500"></div>
+          <div className="flex items-center justify-between relative z-10">
+            <div>
+              <div className="text-[#A0AEC0] text-[12px] mb-1">
+                Storage Used
+              </div>
+              <div className="text-white text-[24px] font-bold group-hover:text-[#0075FF] transition-colors">
+                156 GB
+              </div>
+              <div className="text-[10px] text-orange-400">78% capacity</div>
+            </div>
+            <div className="text-[32px] group-hover:scale-110 transition-transform">
+              💾
+            </div>
+          </div>
+        </div>
+
+        <div className="glass-card rounded-2xl p-6 relative overflow-hidden group">
+          <div className="absolute top-0 left-0 w-16 h-16 bg-gradient-to-br from-green-500/10 to-transparent rounded-full blur-xl group-hover:scale-150 transition-transform duration-500"></div>
+          <div className="flex items-center justify-between relative z-10">
+            <div>
+              <div className="text-[#A0AEC0] text-[12px] mb-1">Last Scan</div>
+              <div className="text-white text-[24px] font-bold group-hover:text-[#0075FF] transition-colors">
+                2 min ago
+              </div>
+              <div className="text-[10px] text-green-400">System healthy</div>
+            </div>
+            <div className="text-[32px] group-hover:scale-110 transition-transform">
+              ⚡
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+
+  // If we're not in search view, render the component full-screen
+  if (currentView !== "search") {
+    return renderMainContent();
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0F123B] via-[#090D2E] to-[#020515] font-jakarta relative overflow-hidden">
       {/* Background Elements */}
@@ -168,8 +421,10 @@ const Dashboard = ({ user, onLogout }) => {
             <div className="space-y-2 relative z-10">
               {[
                 { id: "search", name: "Search Files", icon: "🔍" },
-                { id: "recent", name: "Recent Files", icon: "⏰" },
-                { id: "analytics", name: "Analytics", icon: "📊" },
+                { id: "timeline", name: "Timeline", icon: "📅" },
+                { id: "stats", name: "Statistics", icon: "📊" },
+                { id: "natural", name: "Smart Search", icon: "🧠" },
+                { id: "powerops", name: "PowerOps", icon: "⚡" },
                 { id: "settings", name: "Settings", icon: "⚙️" },
               ].map((item) => (
                 <button
@@ -257,241 +512,7 @@ const Dashboard = ({ user, onLogout }) => {
         </aside>
 
         {/* Enhanced Main Content */}
-        <main className="flex-1 space-y-6">
-          {/* Enhanced Search Bar */}
-          <div className="glass-card rounded-2xl p-6 fade-in relative overflow-hidden">
-            {/* Background Pattern */}
-            <div className="absolute inset-0 opacity-5">
-              <div
-                className="w-full h-full"
-                style={{
-                  backgroundImage:
-                    "radial-gradient(circle at 2px 2px, rgba(0,117,255,0.3) 1px, transparent 0)",
-                  backgroundSize: "30px 30px",
-                }}
-              ></div>
-            </div>
-
-            <div className="relative z-10">
-              <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#0075FF]/20 via-transparent to-[#0075FF]/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="🔍 Search for files, content, or keywords..."
-                  className="w-full h-[60px] px-6 pr-16 rounded-2xl glass-card text-white placeholder-[#A0AEC0] text-[16px] focus:outline-none focus:border-[#0075FF] focus:shadow-lg focus:shadow-[#0075FF]/20 transition-all duration-300 relative z-10"
-                />
-                <div className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20">
-                  {isSearching ? (
-                    <div className="loading-spinner" />
-                  ) : (
-                    <svg
-                      className="w-[24px] h-[24px] text-[#A0AEC0] group-hover:text-[#0075FF] transition-colors"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                      />
-                    </svg>
-                  )}
-                </div>
-              </div>
-
-              {searchQuery && (
-                <div className="mt-4 flex items-center justify-between fade-in">
-                  <div className="text-[#A0AEC0] text-[14px]">
-                    Found{" "}
-                    <span className="text-[#0075FF] font-semibold">
-                      {displayedFiles.length}
-                    </span>{" "}
-                    result{displayedFiles.length !== 1 ? "s" : ""} for "
-                    {searchQuery}"
-                  </div>
-                  <div className="flex gap-2">
-                    <div className="text-[10px] text-[#A0AEC0] bg-white/5 px-2 py-1 rounded-full">
-                      ⚡ Instant
-                    </div>
-                    <div className="text-[10px] text-[#A0AEC0] bg-white/5 px-2 py-1 rounded-full">
-                      🎯 Accurate
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Enhanced Results */}
-          <div className="glass-card rounded-2xl p-6 fade-in relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-[#0075FF]/5 to-transparent rounded-full blur-2xl"></div>
-
-            <div className="flex justify-between items-center mb-6 relative z-10">
-              <h2 className="text-white text-[20px] font-bold flex items-center gap-2">
-                {searchQuery ? "🔍 Search Results" : "📁 Recent Files"}
-              </h2>
-              <div className="flex gap-2">
-                <button className="glass-button p-2 rounded-lg group">
-                  <svg
-                    className="w-[20px] h-[20px] text-white group-hover:text-[#0075FF] transition-colors"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 6h16M4 10h16M4 14h16M4 18h16"
-                    />
-                  </svg>
-                </button>
-                <button className="glass-button p-2 rounded-lg group">
-                  <svg
-                    className="w-[20px] h-[20px] text-white group-hover:text-[#0075FF] transition-colors"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            {displayedFiles.length === 0 ? (
-              <div className="text-center py-12 relative z-10">
-                <div className="text-[48px] mb-4">🔍</div>
-                <div className="text-[#A0AEC0] text-[16px]">
-                  {searchQuery
-                    ? "No files found matching your search"
-                    : "No files to display"}
-                </div>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 relative z-10">
-                {displayedFiles.map((file, index) => (
-                  <div
-                    key={file.id}
-                    className="glass-button rounded-xl p-4 cursor-pointer group hover:scale-105 transition-all duration-300 relative overflow-hidden fade-in"
-                    style={{ animationDelay: `${index * 0.1}s` }}
-                  >
-                    {/* Hover Effect */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#0075FF]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-                    <div className="relative z-10">
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="text-[32px] group-hover:scale-110 transition-transform duration-300">
-                          {getFileIcon(file.type)}
-                        </div>
-                        <div className="text-[10px] text-[#A0AEC0] bg-white/10 px-2 py-1 rounded-full group-hover:bg-[#0075FF]/20 group-hover:text-white transition-all">
-                          {file.type}
-                        </div>
-                      </div>
-
-                      <div className="text-white text-[14px] font-semibold mb-2 truncate group-hover:text-[#0075FF] transition-colors">
-                        {file.name}
-                      </div>
-
-                      <div className="text-[#A0AEC0] text-[12px] mb-2 truncate group-hover:text-white/80 transition-colors">
-                        📁 {file.path}
-                      </div>
-
-                      <div className="flex justify-between items-center text-[10px] text-[#A0AEC0] group-hover:text-white/70 transition-colors">
-                        <span className="flex items-center gap-1">
-                          💾 {file.size}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          🕒 {file.modified}
-                        </span>
-                      </div>
-
-                      {/* Progress Bar */}
-                      <div className="mt-3 w-full h-1 bg-white/10 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-gradient-to-r from-[#0075FF] to-[#00A6FF] rounded-full transition-all duration-1000 group-hover:w-full"
-                          style={{ width: `${Math.random() * 100}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Enhanced Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 fade-in">
-            <div className="glass-card rounded-2xl p-6 relative overflow-hidden group">
-              <div className="absolute top-0 left-0 w-16 h-16 bg-gradient-to-br from-blue-500/10 to-transparent rounded-full blur-xl group-hover:scale-150 transition-transform duration-500"></div>
-              <div className="flex items-center justify-between relative z-10">
-                <div>
-                  <div className="text-[#A0AEC0] text-[12px] mb-1">
-                    Total Files
-                  </div>
-                  <div className="text-white text-[24px] font-bold group-hover:text-[#0075FF] transition-colors">
-                    2,847
-                  </div>
-                  <div className="text-[10px] text-green-400">
-                    +12% this week
-                  </div>
-                </div>
-                <div className="text-[32px] group-hover:scale-110 transition-transform">
-                  📁
-                </div>
-              </div>
-            </div>
-
-            <div className="glass-card rounded-2xl p-6 relative overflow-hidden group">
-              <div className="absolute top-0 left-0 w-16 h-16 bg-gradient-to-br from-purple-500/10 to-transparent rounded-full blur-xl group-hover:scale-150 transition-transform duration-500"></div>
-              <div className="flex items-center justify-between relative z-10">
-                <div>
-                  <div className="text-[#A0AEC0] text-[12px] mb-1">
-                    Storage Used
-                  </div>
-                  <div className="text-white text-[24px] font-bold group-hover:text-[#0075FF] transition-colors">
-                    156 GB
-                  </div>
-                  <div className="text-[10px] text-orange-400">
-                    78% capacity
-                  </div>
-                </div>
-                <div className="text-[32px] group-hover:scale-110 transition-transform">
-                  💾
-                </div>
-              </div>
-            </div>
-
-            <div className="glass-card rounded-2xl p-6 relative overflow-hidden group">
-              <div className="absolute top-0 left-0 w-16 h-16 bg-gradient-to-br from-green-500/10 to-transparent rounded-full blur-xl group-hover:scale-150 transition-transform duration-500"></div>
-              <div className="flex items-center justify-between relative z-10">
-                <div>
-                  <div className="text-[#A0AEC0] text-[12px] mb-1">
-                    Last Scan
-                  </div>
-                  <div className="text-white text-[24px] font-bold group-hover:text-[#0075FF] transition-colors">
-                    2 min ago
-                  </div>
-                  <div className="text-[10px] text-green-400">
-                    System healthy
-                  </div>
-                </div>
-                <div className="text-[32px] group-hover:scale-110 transition-transform">
-                  ⚡
-                </div>
-              </div>
-            </div>
-          </div>
-        </main>
+        <main className="flex-1 space-y-6">{renderMainContent()}</main>
       </div>
     </div>
   );
