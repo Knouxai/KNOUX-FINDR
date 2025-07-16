@@ -68,6 +68,15 @@ function App() {
   };
 
   const handleNavigate = (page) => {
+    // BUILDER.IO REQUIREMENT: Check authentication before navigating to protected routes
+    const protectedRoutes = ["dashboard", "timeline", "search"];
+
+    if (protectedRoutes.includes(page) && !user && !isElectron) {
+      console.log(`Access denied to ${page} - redirecting to login`);
+      setCurrentPage("login");
+      return;
+    }
+
     setCurrentPage(page);
   };
 
