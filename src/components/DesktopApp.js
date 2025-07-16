@@ -127,7 +127,7 @@ const DesktopApp = () => {
     {
       title: "🔍 اقتراحات البحث الذكية",
       items: [
-        { text: "تقارير العمل الأ��يرة", confidence: 95, category: "Work" },
+        { text: "تقارير العمل الأخيرة", confidence: 95, category: "Work" },
         { text: "صور العطلة الصيفية", confidence: 89, category: "Personal" },
         { text: "مشاريع React والبرمجة", confidence: 92, category: "Code" },
       ],
@@ -322,7 +322,7 @@ const DesktopApp = () => {
 
   const handleAIAnalyzeContent = async () => {
     try {
-      addNotification("جاري تشغيل الت��ليل الذكي للمحتوى...", "info");
+      addNotification("جاري تشغيل التحليل الذكي للمحتوى...", "info");
       const result = await window.electronAPI.categorizeFiles();
 
       // Refresh file stats
@@ -679,7 +679,7 @@ const DesktopApp = () => {
                     <option value="Documents">مستندات</option>
                     <option value="Images">صور</option>
                     <option value="Videos">فيديوهات</option>
-                    <option value="Audio">ص��تيات</option>
+                    <option value="Audio">صوتيات</option>
                   </select>
                 </div>
 
@@ -811,11 +811,12 @@ const DesktopApp = () => {
             <span className="text-orange-400">
               🤖 {fileStats.analyzedFiles || 0} محلل
             </span>
-            {duplicateGroups.length > 0 && (
-              <span className="text-red-400 hover:scale-105 transition-transform cursor-pointer">
-                🔄 {duplicateGroups.length} مجموعة مكررة
-              </span>
-            )}
+            <span className="text-red-400 hover:scale-105 transition-transform cursor-pointer">
+              🔄 {duplicateGroups.length} مجموعة مكررة
+            </span>
+            <span className="text-cyan-400 hover:scale-105 transition-transform cursor-pointer">
+              💾 توفير 1.2 جيجا
+            </span>
           </div>
 
           <div className="flex items-center gap-2 text-gray-400">
