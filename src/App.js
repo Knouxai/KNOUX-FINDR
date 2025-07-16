@@ -162,7 +162,7 @@ function App() {
 
   // إظهار شاشة التحميل أثناء التنقل بين الصفحات المحمية
   if (isTransitioning && user && !isElectron) {
-    return <TransitionScreen message="Loading section..." />;
+    return <TransitionScreen message={transitionMessage} />;
   }
 
   return (
