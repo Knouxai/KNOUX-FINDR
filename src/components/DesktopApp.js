@@ -89,7 +89,7 @@ const DesktopApp = () => {
     },
     {
       id: "search_6",
-      name: "��اعدة بيانات العملاء المحدثة.xlsx",
+      name: "قاعدة بيانات العملاء المحدثة.xlsx",
       path: "/Users/Desktop/Data/Customer_Database_Updated_2024.xlsx",
       size: 2847293,
       modified_at: "2024-01-11T13:45:00Z",
@@ -530,7 +530,7 @@ const DesktopApp = () => {
       );
     } catch (error) {
       console.error("Duplicate analysis failed:", error);
-      addNotification("فشل في تحليل الملفات الم��ررة", "error");
+      addNotification("فشل في تحليل ��لملفات الم��ررة", "error");
     } finally {
       setIsDuplicateAnalysisRunning(false);
     }
@@ -645,7 +645,7 @@ const DesktopApp = () => {
                 </li>
                 <li className="flex items-center gap-3">
                   <span>🔍</span>
-                  <span>كشف متقدم للملفات المكررة</span>
+                  <span>كشف م��قدم للملفات المكررة</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <span>📁</span>
@@ -741,7 +741,7 @@ const DesktopApp = () => {
                   تحليل...
                 </div>
               ) : (
-                "🔍 كشف المكررات"
+                "🔍 كشف ال��كررات"
               )}
             </button>
             <button
@@ -901,60 +901,95 @@ const DesktopApp = () => {
 
                 {/* Search Results */}
                 <div className="space-y-3">
-                  {searchResults.length === 0 ? (
-                    <div className="text-center py-12 text-gray-400">
-                      {searchQuery
-                        ? "لم يتم العثور على نتائج"
-                        : "أدخل كلمة للبحث"}
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-xl font-bold">
+                      🔍 النتائج ({searchResults.length})
+                    </h3>
+                    <div className="text-sm text-gray-400">
+                      وجد في 0.23 ثانية • مرتب حسب الصلة
                     </div>
-                  ) : (
-                    <>
-                      <h3 className="text-xl font-bold mb-4">
-                        النتائج ({searchResults.length})
-                      </h3>
-                      {searchResults.map((file, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center gap-4 p-4 glass-button rounded-lg hover:scale-[1.02] transition-transform group"
-                        >
-                          <div className="text-3xl">
-                            {getFileIcon(file.extension, file.mime_type)}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="font-semibold text-lg truncate group-hover:text-blue-400 transition-colors">
-                              {file.name}
-                            </div>
-                            <div className="text-sm text-gray-400 truncate">
-                              📁 {file.path}
-                            </div>
-                            <div className="flex gap-4 text-xs text-gray-500 mt-2">
-                              <span>💾 {formatFileSize(file.size)}</span>
-                              <span>
-                                📅{" "}
-                                {new Date(file.modified_at).toLocaleDateString(
-                                  "ar",
-                                )}
-                              </span>
-                              {file.category && <span>🏷️ {file.category}</span>}
-                              {file.aiRelevanceScore && (
-                                <span className="text-blue-400">
-                                  🤖 {Math.round(file.aiRelevanceScore * 100)}%
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                          <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button className="px-3 py-2 bg-blue-500/20 hover:bg-blue-500/40 rounded text-sm transition-colors">
-                              📂 فتح
-                            </button>
-                            <button className="px-3 py-2 bg-red-500/20 hover:bg-red-500/40 rounded text-sm transition-colors">
-                              🗑️ حذف
-                            </button>
-                          </div>
+                  </div>
+
+                  {searchResults.map((file, index) => (
+                    <div
+                      key={file.id}
+                      className="flex items-center gap-4 p-4 glass-button rounded-lg hover:scale-[1.01] transition-all duration-200 group border border-white/5 hover:border-blue-500/30"
+                      style={{ animationDelay: `${index * 50}ms` }}
+                    >
+                      <div className="text-3xl transform group-hover:scale-110 transition-transform">
+                        {getFileIcon(file.extension, file.mime_type)}
+                      </div>
+
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-lg truncate group-hover:text-blue-400 transition-colors">
+                          {file.name}
                         </div>
-                      ))}
-                    </>
-                  )}
+                        <div className="text-sm text-gray-400 truncate">
+                          📁 {file.path}
+                        </div>
+
+                        {file.content_preview && (
+                          <div className="text-xs text-gray-500 mt-1 opacity-75">
+                            {file.content_preview}
+                          </div>
+                        )}
+
+                        <div className="flex gap-4 text-xs text-gray-500 mt-2">
+                          <span className="bg-gray-500/20 px-2 py-1 rounded">
+                            💾 {formatFileSize(file.size)}
+                          </span>
+                          <span className="bg-gray-500/20 px-2 py-1 rounded">
+                            📅{" "}
+                            {new Date(file.modified_at).toLocaleDateString(
+                              "ar",
+                            )}
+                          </span>
+                          {file.category && (
+                            <span className="bg-blue-500/20 px-2 py-1 rounded text-blue-300">
+                              🏷️ {file.category}
+                            </span>
+                          )}
+                          {file.aiRelevanceScore && (
+                            <span className="bg-purple-500/20 px-2 py-1 rounded text-purple-300">
+                              🤖 صلة {Math.round(file.aiRelevanceScore * 100)}%
+                            </span>
+                          )}
+                        </div>
+
+                        {file.highlights && (
+                          <div className="flex gap-2 mt-2">
+                            {file.highlights.map((highlight, i) => (
+                              <span
+                                key={i}
+                                className="text-xs bg-yellow-500/20 text-yellow-300 px-2 py-1 rounded"
+                              >
+                                {highlight}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button className="px-3 py-2 bg-blue-500/20 hover:bg-blue-500/40 rounded text-sm transition-colors hover:scale-105">
+                          📂 فتح
+                        </button>
+                        <button className="px-3 py-2 bg-green-500/20 hover:bg-green-500/40 rounded text-sm transition-colors hover:scale-105">
+                          ⭐ مفضل
+                        </button>
+                        <button className="px-3 py-2 bg-red-500/20 hover:bg-red-500/40 rounded text-sm transition-colors hover:scale-105">
+                          🗑️ حذف
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+
+                  {/* Load More Button */}
+                  <div className="text-center pt-4">
+                    <button className="glass-button px-6 py-3 rounded-lg hover:scale-105 transition-transform">
+                      تحميل المزيد من النتائج... (عرض 6 من 1,247)
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
