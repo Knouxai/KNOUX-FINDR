@@ -42,19 +42,8 @@ function App() {
   // Always show DesktopApp for both web and electron
   return <DesktopApp user={user} onLogout={handleLogout} />;
 
-  return (
-    <div className="min-h-screen w-screen bg-gradient-to-br from-[#0F123B] via-[#090D2E] to-[#020515] font-jakarta">
-      {currentPage === "signup" && (
-        <SignupForm
-          onSignupSuccess={handleSignupSuccess}
-          onSignIn={handleSignIn}
-        />
-      )}
-      {currentPage === "dashboard" && (
-        <Dashboard user={user} onLogout={handleLogout} />
-      )}
-    </div>
-  );
+  // This section is now handled by DesktopApp
+  // return null;
 }
 
 export default App;
