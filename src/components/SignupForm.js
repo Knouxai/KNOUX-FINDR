@@ -95,94 +95,9 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
                 KNOUX FINDR
               </div>
 
-              {/* Professor Attribution */}
-              <div className="glass-card rounded-lg p-3 mb-4 border border-amber-500/30 bg-amber-500/5">
-                <div
-                  className="text-amber-400 font-bold tracking-wider"
-                  style={{
-                    fontFamily: '"Playfair Display", serif',
-                    fontStyle: "italic",
-                    fontSize: "14px",
-                  }}
-                >
-                  Powered by Prof. Sadek Elgazar
-                </div>
-                <div className="text-xs text-amber-300/80 mt-1">
-                  AI Research Director & Project Supervisor
-                </div>
-              </div>
-
-              {/* Enhanced Navigation Tabs */}
-              <div className="flex justify-between items-center mb-[70px] max-lg:justify-center max-lg:gap-[20px]">
+              {/* Enhanced Navigation Tabs - Removed Dashboard and Profile buttons for auth pages */}
+              <div className="flex justify-center items-center mb-[70px] max-lg:justify-center max-lg:gap-[20px]">
                 <div className="flex gap-[12px] max-lg:flex-wrap max-lg:justify-center p-2 glass-card rounded-2xl">
-                  <div className="nav-tab flex items-center justify-center gap-[6px] h-[32px] px-[12px] rounded-[14px] glass-button cursor-pointer group">
-                    <svg
-                      className="w-[12px] h-[12px] group-hover:scale-110 transition-transform"
-                      viewBox="0 0 12 12"
-                      fill="none"
-                    >
-                      <g clipPath="url(#clip0)">
-                        <path
-                          d="M10.2225 3.6231C10.2354 3.61554 10.2462 3.6047 10.2537 3.59168C10.2612 3.57865 10.2651 3.56389 10.2651 3.54888C10.2651 3.53386 10.2612 3.5191 10.2537 3.50608C10.2462 3.49305 10.2354 3.48221 10.2225 3.47465L6.94095 1.56812C6.73098 1.44642 6.4926 1.38232 6.24991 1.38232C6.00722 1.38232 5.76883 1.44642 5.55886 1.56812L2.27798 3.47465C2.26501 3.48221 2.25425 3.49305 2.24677 3.50608C2.23929 3.5191 2.23535 3.53386 2.23535 3.54888C2.23535 3.56389 2.23929 3.57865 2.24677 3.59168C2.25425 3.6047 2.26501 3.61554 2.27798 3.6231L6.20704 5.93439C6.22026 5.94218 6.23532 5.94628 6.25066 5.94628C6.266 5.94628 6.28105 5.94218 6.29427 5.93439L10.2225 3.6231Z"
-                          fill="white"
-                        />
-                        <path
-                          d="M1.91016 4.20738C1.89705 4.19981 1.88218 4.19584 1.86705 4.19586C1.85192 4.19589 1.83706 4.19991 1.82398 4.20751C1.8109 4.21512 1.80006 4.22605 1.79256 4.23919C1.78505 4.25233 1.78115 4.26722 1.78125 4.28236V8.01827C1.78158 8.19831 1.82903 8.37512 1.91888 8.53112C2.00874 8.68713 2.13787 8.81689 2.29344 8.90751L5.77735 10.9964C5.7904 11.004 5.80521 11.0079 5.82029 11.0079C5.83537 11.008 5.85018 11.004 5.86325 10.9965C5.87631 10.9889 5.88716 10.9781 5.89471 10.965C5.90225 10.952 5.90624 10.9372 5.90625 10.9221V6.58763C5.90624 6.57256 5.90226 6.55776 5.89472 6.54471C5.88717 6.53166 5.87633 6.52083 5.86328 6.51329L1.91016 4.20738Z"
-                          fill="white"
-                        />
-                        <path
-                          d="M6.59375 6.60272V10.9211C6.59377 10.9362 6.59775 10.951 6.6053 10.964C6.61285 10.9771 6.6237 10.9879 6.63676 10.9954C6.64982 11.003 6.66463 11.0069 6.67971 11.0069C6.69479 11.0069 6.7096 11.003 6.72266 10.9954L10.2063 8.90649C10.3618 8.81599 10.4909 8.68641 10.5808 8.53061C10.6706 8.37481 10.7182 8.1982 10.7187 8.01833V4.28241C10.7187 4.26735 10.7147 4.25257 10.7071 4.23955C10.6996 4.22653 10.6887 4.21572 10.6756 4.20822C10.6626 4.20071 10.6478 4.19676 10.6327 4.19678C10.6177 4.19679 10.6029 4.20076 10.5898 4.20829L6.63672 6.5286C6.6237 6.53612 6.61288 6.54692 6.60534 6.55993C6.5978 6.57293 6.5938 6.58769 6.59375 6.60272Z"
-                          fill="white"
-                        />
-                      </g>
-                      <defs>
-                        <clipPath id="clip0">
-                          <rect
-                            width="11"
-                            height="11"
-                            fill="white"
-                            transform="translate(0.75 0.695251)"
-                          />
-                        </clipPath>
-                      </defs>
-                    </svg>
-                    <div className="text-white text-[11px] font-bold group-hover:text-[#0075FF] transition-colors">
-                      DASHBOARD
-                    </div>
-                  </div>
-
-                  <div className="nav-tab flex items-center justify-center gap-[6px] h-[32px] px-[12px] rounded-[14px] glass-button cursor-pointer group">
-                    <svg
-                      className="w-[12px] h-[12px] group-hover:scale-110 transition-transform"
-                      viewBox="0 0 12 12"
-                      fill="none"
-                    >
-                      <g clipPath="url(#clip1)">
-                        <path
-                          d="M7.89658 2.08253C7.4785 1.63114 6.89455 1.38257 6.25002 1.38257C5.60205 1.38257 5.01617 1.62964 4.60002 2.07823C4.17936 2.53177 3.9744 3.14815 4.02252 3.81374C4.11791 5.12686 5.11715 6.19507 6.25002 6.19507C7.38289 6.19507 8.38041 5.12708 8.47731 3.81417C8.52607 3.1546 8.31982 2.5395 7.89658 2.08253Z"
-                          fill="white"
-                        />
-                        <path
-                          d="M10.0314 11.0071H2.46887C2.36989 11.0084 2.27186 10.9876 2.18192 10.9462C2.09198 10.9048 2.01239 10.8439 1.94895 10.768C1.8093 10.601 1.75301 10.3731 1.79469 10.1425C1.97602 9.13665 2.54192 8.29167 3.43137 7.69849C4.22157 7.1719 5.22252 6.88208 6.25012 6.88208C7.27772 6.88208 8.27867 7.17212 9.06887 7.69849C9.95832 8.29145 10.5242 9.13643 10.7055 10.1423C10.7472 10.3729 10.6909 10.6008 10.5513 10.7677C10.4879 10.8438 10.4083 10.9047 10.3184 10.9461C10.2284 10.9875 10.1304 11.0083 10.0314 11.0071Z"
-                          fill="white"
-                        />
-                      </g>
-                      <defs>
-                        <clipPath id="clip1">
-                          <rect
-                            width="11"
-                            height="11"
-                            fill="white"
-                            transform="translate(0.75 0.695251)"
-                          />
-                        </clipPath>
-                      </defs>
-                    </svg>
-                    <div className="text-white text-[11px] font-bold group-hover:text-[#0075FF] transition-colors">
-                      PROFILE
-                    </div>
-                  </div>
-
                   <div className="nav-tab flex items-center justify-center gap-[6px] h-[32px] px-[12px] rounded-[14px] primary-button pulse-glow relative overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
                     <svg
@@ -481,10 +396,20 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
                     </span>
                   </div>
 
-                  {/* Prof Sadek ELgazar Signature */}
-                  <div className="text-center mt-8 opacity-60">
-                    <div className="text-[#A0AEC0] text-[10px] font-light italic tracking-wider">
-                      Prof Sadek ELgazar
+                  {/* Professor Attribution - Moved to bottom */}
+                  <div className="glass-card rounded-lg p-3 mt-8 border border-amber-500/30 bg-amber-500/5">
+                    <div
+                      className="text-amber-400 font-bold tracking-wider text-center"
+                      style={{
+                        fontFamily: '"Playfair Display", serif',
+                        fontStyle: "italic",
+                        fontSize: "14px",
+                      }}
+                    >
+                      Powered by Prof. Sadek Elgazar
+                    </div>
+                    <div className="text-xs text-amber-300/80 mt-1 text-center">
+                      AI Research Director & Project Supervisor
                     </div>
                   </div>
                 </div>
