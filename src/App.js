@@ -25,6 +25,23 @@ function App() {
       setUser({ name: "Desktop User", email: "desktop@knoux.com" });
       setCurrentPage("desktop");
     } else {
+      // Check for OAuth redirect with user data
+      const urlParams = new URLSearchParams(window.location.search);
+      const userParam = urlParams.get("user");
+
+      if (userParam) {
+        try {
+          const userData = JSON.parse(decodeURIComponent(userParam));
+          setUser(userData);
+          setCurrentPage("dashboard");
+          // Clean up URL
+          window.history.replaceState({}, document.title, "/dashboard");
+          return;
+        } catch (error) {
+          console.error("Failed to parse user data from URL:", error);
+        }
+      }
+
       // Check authentication status for web app
       checkAuthStatus();
     }
