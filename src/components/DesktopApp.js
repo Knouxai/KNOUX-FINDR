@@ -19,20 +19,131 @@ import DuplicateManager from "./DuplicateManager";
 
 const DesktopApp = () => {
   const [isElectron, setIsElectron] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("تقارير العمل");
+  const [searchResults, setSearchResults] = useState([
+    {
+      id: "search_1",
+      name: "تقرير المبيعات الربعي 2024.pdf",
+      path: "/Users/Desktop/Reports/Q4_Sales_Report_2024.pdf",
+      size: 3847293,
+      modified_at: "2024-01-15T10:30:00Z",
+      extension: ".pdf",
+      mime_type: "application/pdf",
+      category: "Work",
+      aiRelevanceScore: 0.95,
+    },
+    {
+      id: "search_2",
+      name: "عرض تقديمي - استراتيجية المنتج.pptx",
+      path: "/Users/Documents/Presentations/Product_Strategy_2024.pptx",
+      size: 18472938,
+      modified_at: "2024-01-14T16:45:00Z",
+      extension: ".pptx",
+      mime_type:
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+      category: "Work",
+      aiRelevanceScore: 0.89,
+    },
+    {
+      id: "search_3",
+      name: "صور_مؤتمر_التقنية_2024",
+      path: "/Users/Pictures/Conference/Tech_Conference_2024/IMG_0847.jpg",
+      size: 6293847,
+      modified_at: "2024-01-13T14:22:00Z",
+      extension: ".jpg",
+      mime_type: "image/jpeg",
+      category: "Work",
+      aiRelevanceScore: 0.82,
+    },
+  ]);
   const [isSearching, setIsSearching] = useState(false);
   const [fileStats, setFileStats] = useState({
-    totalFiles: 0,
-    totalSize: 0,
-    totalTypes: 0,
-    analyzedFiles: 0,
-    categories: {},
+    totalFiles: 147832,
+    totalSize: 2847291840000,
+    totalTypes: 67,
+    analyzedFiles: 139284,
+    categories: {
+      Documents: 45231,
+      Images: 32847,
+      Videos: 8934,
+      Audio: 12847,
+      Code: 15983,
+      Archives: 4821,
+      Work: 18472,
+      Personal: 22631,
+    },
   });
-  const [recentFiles, setRecentFiles] = useState([]);
-  const [indexingStatus, setIndexingStatus] = useState(null);
+  const [recentFiles, setRecentFiles] = useState([
+    {
+      id: 1,
+      name: "تقرير المبيعات Q4 2024.pdf",
+      path: "/Users/Desktop/Reports/تقرير المبيعات Q4 2024.pdf",
+      size: 2847293,
+      modified_at: "2024-01-15T10:30:00Z",
+      extension: ".pdf",
+      mime_type: "application/pdf",
+      category: "Work",
+    },
+    {
+      id: 2,
+      name: "عرض تقديمي - استراتيجية التسويق.pptx",
+      path: "/Users/Documents/Presentations/عرض تقديمي - استراتيجية التسويق.pptx",
+      size: 15847293,
+      modified_at: "2024-01-14T16:45:00Z",
+      extension: ".pptx",
+      mime_type:
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+      category: "Work",
+    },
+    {
+      id: 3,
+      name: "صور العطلة الصيفية",
+      path: "/Users/Pictures/Summer_2024/IMG_001.jpg",
+      size: 4293847,
+      modified_at: "2024-01-13T14:22:00Z",
+      extension: ".jpg",
+      mime_type: "image/jpeg",
+      category: "Personal",
+    },
+    {
+      id: 4,
+      name: "مشروع React النهائي",
+      path: "/Users/Dev/Projects/knoux-findr/src/App.js",
+      size: 23847,
+      modified_at: "2024-01-13T09:15:00Z",
+      extension: ".js",
+      mime_type: "text/javascript",
+      category: "Code",
+    },
+  ]);
+  const [indexingStatus, setIndexingStatus] = useState({
+    status: "completed",
+    message: "تم فهرسة 147,832 ملف بنجاح",
+    filesProcessed: 147832,
+    totalFiles: 147832,
+  });
   const [indexingProgress, setIndexingProgress] = useState(null);
-  const [aiSuggestions, setAiSuggestions] = useState([]);
+  const [aiSuggestions, setAiSuggestions] = useState([
+    {
+      title: "🔍 اقتراحات البحث الذكية",
+      items: [
+        { text: "تقارير العمل الأ��يرة", confidence: 95, category: "Work" },
+        { text: "صور العطلة الصيفية", confidence: 89, category: "Personal" },
+        { text: "مشاريع React والبرمجة", confidence: 92, category: "Code" },
+      ],
+    },
+    {
+      title: "📁 تصنيفات مقترحة",
+      items: [
+        {
+          text: "ملفات التصميم غير المصنفة",
+          confidence: 94,
+          category: "Design",
+        },
+        { text: "مقاطع فيديو الاجتماعات", confidence: 91, category: "Work" },
+      ],
+    },
+  ]);
   const [activeView, setActiveView] = useState("search");
   const [searchFilters, setSearchFilters] = useState({
     useAI: true,
@@ -41,10 +152,72 @@ const DesktopApp = () => {
     dateTo: "",
     fileType: "all",
   });
-  const [duplicateGroups, setDuplicateGroups] = useState([]);
+  const [duplicateGroups, setDuplicateGroups] = useState([
+    {
+      id: "dup_1",
+      algorithm: "exactHash",
+      confidence: 100,
+      files: [
+        {
+          path: "/Users/Downloads/document.pdf",
+          size: 2847293,
+          hash: "a1b2c3d4",
+          modified_at: "2024-01-15T10:30:00Z",
+        },
+        {
+          path: "/Users/Desktop/document.pdf",
+          size: 2847293,
+          hash: "a1b2c3d4",
+          modified_at: "2024-01-15T10:30:00Z",
+        },
+        {
+          path: "/Users/Backup/document.pdf",
+          size: 2847293,
+          hash: "a1b2c3d4",
+          modified_at: "2024-01-15T10:30:00Z",
+        },
+      ],
+      totalSize: 8541879,
+      potentialSavings: 5694586,
+    },
+    {
+      id: "dup_2",
+      algorithm: "fuzzyHash",
+      confidence: 95,
+      files: [
+        {
+          path: "/Users/Pictures/vacation_photo_1.jpg",
+          size: 4293847,
+          hash: "e5f6g7h8",
+          modified_at: "2024-01-10T14:22:00Z",
+        },
+        {
+          path: "/Users/Pictures/vacation_photo_1_edited.jpg",
+          size: 4298473,
+          hash: "e5f6g7h9",
+          modified_at: "2024-01-11T16:30:00Z",
+        },
+      ],
+      totalSize: 8592320,
+      potentialSavings: 4293847,
+    },
+  ]);
   const [isDuplicateAnalysisRunning, setIsDuplicateAnalysisRunning] =
     useState(false);
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState([
+    {
+      id: 1,
+      message: "تم اكتشاف 2 مجموعة من الملفات المكررة",
+      type: "info",
+      timestamp: new Date(Date.now() - 30000),
+    },
+    {
+      id: 2,
+      message: "تم تصنيف 1,247 ملف جديد بالذكاء الاصطناعي",
+      type: "success",
+      timestamp: new Date(Date.now() - 120000),
+    },
+  ]);
 
   useEffect(() => {
     if (window.electronAPI) {
@@ -149,7 +322,7 @@ const DesktopApp = () => {
 
   const handleAIAnalyzeContent = async () => {
     try {
-      addNotification("جاري تشغيل التحليل الذكي للمحتوى...", "info");
+      addNotification("جاري تشغيل الت��ليل الذكي للمحتوى...", "info");
       const result = await window.electronAPI.categorizeFiles();
 
       // Refresh file stats
@@ -506,7 +679,7 @@ const DesktopApp = () => {
                     <option value="Documents">مستندات</option>
                     <option value="Images">صور</option>
                     <option value="Videos">فيديوهات</option>
-                    <option value="Audio">صوتيات</option>
+                    <option value="Audio">ص��تيات</option>
                   </select>
                 </div>
 
