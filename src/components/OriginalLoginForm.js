@@ -262,7 +262,7 @@ const OriginalLoginForm = ({ onSignupSuccess, onSignIn }) => {
               </form>
             </div>
 
-            {/* 🔒 Prof Signature Tag - LOCKED - DO NOT MOVE OR MODIFY */}
+            {/* Prof Signature Tag - LOCKED - DO NOT MOVE OR MODIFY */}
             {/* Card Footer with Prof Signature - BUILDER.IO REQUIREMENT */}
             <div className="auth-card-footer prof-signature-locked">
               <p
