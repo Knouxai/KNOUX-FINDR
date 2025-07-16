@@ -162,7 +162,7 @@ const DesktopApp = () => {
       );
     } catch (error) {
       console.error("AI analysis failed:", error);
-      addNotification("فشل في التحليل الذكي", "error");
+      addNotification("فشل في التحليل ال��كي", "error");
     }
   };
 
@@ -274,7 +274,7 @@ const DesktopApp = () => {
             </div>
 
             <p className="text-gray-500 mt-6 text-sm">
-              يرجى تشغيل التطبيق من Electron للوصول للميزات الكاملة
+              يرجى ت��غيل التطبيق من Electron للوصول للميزات الكاملة
             </p>
           </div>
         </div>
@@ -298,6 +298,16 @@ const DesktopApp = () => {
           className="floating-orb absolute bottom-20 left-1/3 w-20 h-20 bg-green-500/10 rounded-full blur-md"
           style={{ animationDelay: "4s" }}
         ></div>
+        <div className="absolute inset-0 opacity-10">
+          <div
+            className="w-full h-full"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.15) 1px, transparent 0)",
+              backgroundSize: "40px 40px",
+            }}
+          ></div>
+        </div>
       </div>
 
       {/* Header */}
