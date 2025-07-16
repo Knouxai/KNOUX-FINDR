@@ -109,7 +109,7 @@ const DesktopApp = () => {
     },
     {
       id: 4,
-      name: "مشرو�� React النهائي",
+      name: "مشروع React النهائي",
       path: "/Users/Dev/Projects/knoux-findr/src/App.js",
       size: 23847,
       modified_at: "2024-01-13T09:15:00Z",
@@ -544,8 +544,13 @@ const DesktopApp = () => {
         </div>
 
         {/* Version Info */}
-        <div className="mt-6 text-xs text-gray-500">
-          KNOUX FINDR Desktop v1.0.0 • Powered by AI • Made with ❤️
+        <div className="mt-6 space-y-2">
+          <div className="text-sm font-bold text-amber-400 tracking-wider">
+            Prof S adek Elgazar
+          </div>
+          <div className="text-xs text-gray-500">
+            KNOUX FINDR Desktop v1.0.0 • Powered by AI • Made with ❤️
+          </div>
         </div>
       </div>
     </div>
@@ -931,7 +936,7 @@ const DesktopApp = () => {
               📁 {fileStats.totalFiles?.toLocaleString() || 0} ملف
             </span>
             <span className="text-green-400">
-              💾 {formatFileSize(fileStats.totalSize || 0)}
+              ��� {formatFileSize(fileStats.totalSize || 0)}
             </span>
             <span className="text-purple-400">
               🏷️ {fileStats.totalTypes || 0} نوع
