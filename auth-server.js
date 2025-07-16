@@ -181,12 +181,12 @@ app.get(
 app.get(
   "/auth/facebook/callback",
   passport.authenticate("facebook", {
-    failureRedirect: "/login?error=facebook",
+    failureRedirect: "http://localhost:3000/login?error=facebook",
   }),
   (req, res) => {
     // Successful authentication
     res.redirect(
-      `/dashboard?user=${encodeURIComponent(JSON.stringify(req.user))}`,
+      `http://localhost:3000/dashboard?user=${encodeURIComponent(JSON.stringify(req.user))}`,
     );
   },
 );
