@@ -5,6 +5,7 @@ import Stats from "./Stats";
 import Timeline from "./Timeline";
 import DuplicateManager from "./DuplicateManager";
 import SocialLogin from "./SocialLogin";
+import ProfessionalAuthScreen from "./ProfessionalAuthScreen";
 import ProfessionalDashboard from "./ProfessionalDashboard";
 import DatabaseManager from "./DatabaseManager";
 import LanguageManager from "./LanguageManager";
@@ -574,7 +575,7 @@ const DesktopApp = () => {
               onClick={handleQuickStart}
               className="w-full py-3 px-6 glass-button rounded-xl text-lg font-semibold hover:scale-105 transition-all duration-200"
             >
-              🚀 ابدأ الاستخدا�� فوراً
+              🚀 ابدأ الاستخدام فوراً
             </button>
 
             <div className="flex gap-3">
@@ -839,7 +840,7 @@ const DesktopApp = () => {
             <div className="space-y-6 fade-in">
               <div className="glass-card rounded-xl p-6">
                 <h2 className="text-2xl font-bold mb-4 gradient-text">
-                  🔍 البحث الفوري
+                  🔍 البحث الفور��
                 </h2>
 
                 {/* Search Input */}
