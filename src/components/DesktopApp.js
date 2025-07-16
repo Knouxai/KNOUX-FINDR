@@ -20,7 +20,88 @@ import DuplicateManager from "./DuplicateManager";
 const DesktopApp = () => {
   const [isElectron, setIsElectron] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState([
+    {
+      id: "search_1",
+      name: "تقرير المبيعات الربعي 2024.pdf",
+      path: "/Users/Desktop/Reports/Q4_Sales_Report_2024.pdf",
+      size: 3847293,
+      modified_at: "2024-01-15T10:30:00Z",
+      extension: ".pdf",
+      mime_type: "application/pdf",
+      category: "Work",
+      aiRelevanceScore: 0.95,
+      highlights: ["تقرير", "مبيعات", "2024"],
+      content_preview: "ملخص نتائج المبيعات للربع الأخير من عام 2024...",
+    },
+    {
+      id: "search_2",
+      name: "عرض تقديمي - استراتيجية المنتج.pptx",
+      path: "/Users/Documents/Presentations/Product_Strategy_2024.pptx",
+      size: 18472938,
+      modified_at: "2024-01-14T16:45:00Z",
+      extension: ".pptx",
+      mime_type:
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+      category: "Work",
+      aiRelevanceScore: 0.89,
+      highlights: ["استراتيجية", "منتج", "تقديمي"],
+      content_preview: "خطة تطوير المنتجات للعام القادم مع التركيز على...",
+    },
+    {
+      id: "search_3",
+      name: "صور_مؤتمر_التقنية_2024",
+      path: "/Users/Pictures/Conference/Tech_Conference_2024/IMG_0847.jpg",
+      size: 6293847,
+      modified_at: "2024-01-13T14:22:00Z",
+      extension: ".jpg",
+      mime_type: "image/jpeg",
+      category: "Work",
+      aiRelevanceScore: 0.82,
+      highlights: ["مؤتمر", "تقنية", "2024"],
+      content_preview: "صور من فعاليات مؤتمر التقنية السنوي",
+    },
+    {
+      id: "search_4",
+      name: "مشروع تطبيق البحث - التحديث الأخير",
+      path: "/Users/Dev/Projects/search-app/src/components/SearchEngine.js",
+      size: 45293,
+      modified_at: "2024-01-13T09:15:00Z",
+      extension: ".js",
+      mime_type: "text/javascript",
+      category: "Code",
+      aiRelevanceScore: 0.91,
+      highlights: ["مشروع", "تطبيق", "بحث"],
+      content_preview: "مكون البحث الرئيسي مع خوارزميات الذكاء الاصطناعي...",
+    },
+    {
+      id: "search_5",
+      name: "فيديو تدريبي - إدارة المشاريع.mp4",
+      path: "/Users/Videos/Training/Project_Management_Course.mp4",
+      size: 847293847,
+      modified_at: "2024-01-12T11:30:00Z",
+      extension: ".mp4",
+      mime_type: "video/mp4",
+      category: "Training",
+      aiRelevanceScore: 0.78,
+      highlights: ["تدريبي", "إدارة", "مشاريع"],
+      content_preview: "دورة شاملة في إدارة المشاريع والفرق",
+    },
+    {
+      id: "search_6",
+      name: "قاعدة بيانات العملاء المحدثة.xlsx",
+      path: "/Users/Desktop/Data/Customer_Database_Updated_2024.xlsx",
+      size: 2847293,
+      modified_at: "2024-01-11T13:45:00Z",
+      extension: ".xlsx",
+      mime_type:
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      category: "Data",
+      aiRelevanceScore: 0.85,
+      highlights: ["قاعدة", "بيانات", "عملاء"],
+      content_preview: "قائمة محدثة بمعلومات العملاء وبيانات التواصل...",
+    },
+  ]);
   const [isSearching, setIsSearching] = useState(false);
   const [fileStats, setFileStats] = useState({
     totalFiles: 147832,
@@ -41,7 +122,7 @@ const DesktopApp = () => {
     },
     recentSearches: [
       "تقارير العمل",
-      "صور العطلة",
+      "صور ال��طلة",
       "المشاريع القديمة",
       "مقاطع فيديو",
       "ملفات التصميم",
@@ -91,7 +172,7 @@ const DesktopApp = () => {
     },
     {
       id: 5,
-      name: "فيديو اجتماع الفريق.mp4",
+      name: "فيديو اجتماع الف��يق.mp4",
       path: "/Users/Videos/Meetings/team_meeting_2024_01_12.mp4",
       size: 284739200,
       modified_at: "2024-01-12T11:30:00Z",
@@ -101,7 +182,7 @@ const DesktopApp = () => {
     },
     {
       id: 6,
-      name: "قا��دة بيانات العملاء.xlsx",
+      name: "قاعدة بيانات العملاء.xlsx",
       path: "/Users/Desktop/Data/customer_database_2024.xlsx",
       size: 1847293,
       modified_at: "2024-01-11T13:45:00Z",
