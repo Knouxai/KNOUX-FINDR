@@ -27,7 +27,10 @@ function App() {
   );
 
   // هوك شاشة التحميل للتنقل
-  const { isTransitioning } = useNavigationSplash(currentPage, 1500);
+  const { isTransitioning, transitionMessage } = useNavigationSplash(
+    currentPage,
+    1500,
+  );
 
   useEffect(() => {
     // Check if running in Electron environment
@@ -58,7 +61,7 @@ function App() {
       checkAuthStatus();
     }
 
-    // تعيين أن ا��تطبيق جاهز بعد التحميل الأولي
+    // تعيين أن التطبيق جاهز بعد التحميل الأولي
     const readyTimer = setTimeout(() => {
       setIsAppReady(true);
     }, 1000);
