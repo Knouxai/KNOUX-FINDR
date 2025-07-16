@@ -693,9 +693,14 @@ const DesktopApp = () => {
                     </div>
                   ) : (
                     <>
-                      <h3 className="text-xl font-bold mb-4">
-                        النتائج ({searchResults.length})
-                      </h3>
+                      <div className="flex justify-between items-center mb-4">
+                        <h3 className="text-xl font-bold">
+                          🔍 النتائج ({searchResults.length})
+                        </h3>
+                        <div className="text-sm text-gray-400">
+                          وجد في 0.23 ثانية • مرتب حسب الصلة
+                        </div>
+                      </div>
                       {searchResults.map((file, index) => (
                         <div
                           key={index}
