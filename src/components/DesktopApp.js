@@ -32,7 +32,7 @@ const DesktopApp = () => {
       category: "Work",
       aiRelevanceScore: 0.95,
       highlights: ["تقرير", "مبيعات", "2024"],
-      content_preview: "ملخص نتائج المبيعات ��لربع الأخير من عام 2024...",
+      content_preview: "ملخص نتائج المبيعات للربع الأخير من عام 2024...",
     },
     {
       id: "search_2",
@@ -89,7 +89,7 @@ const DesktopApp = () => {
     },
     {
       id: "search_6",
-      name: "قاعدة بيانات العملاء المحدثة.xlsx",
+      name: "��اعدة بيانات العملاء المحدثة.xlsx",
       path: "/Users/Desktop/Data/Customer_Database_Updated_2024.xlsx",
       size: 2847293,
       modified_at: "2024-01-11T13:45:00Z",
@@ -414,7 +414,26 @@ const DesktopApp = () => {
   ]);
   const [isDuplicateAnalysisRunning, setIsDuplicateAnalysisRunning] =
     useState(false);
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState([
+    {
+      id: 1,
+      message: "تم اكتشاف 5 مجموعات من الملفات المكررة",
+      type: "info",
+      timestamp: new Date(Date.now() - 30000),
+    },
+    {
+      id: 2,
+      message: "تم تصنيف 1,247 ملف جديد بالذكاء الاصطناعي",
+      type: "success",
+      timestamp: new Date(Date.now() - 120000),
+    },
+    {
+      id: 3,
+      message: "تم توفير 1.2 جيجابايت من المساحة",
+      type: "success",
+      timestamp: new Date(Date.now() - 300000),
+    },
+  ]);
 
   useEffect(() => {
     if (window.electronAPI) {
@@ -872,7 +891,7 @@ const DesktopApp = () => {
                     }
                     className="bg-white/10 border border-white/20 rounded-lg px-4 py-2"
                   >
-                    <option value="all">��ميع التصنيفات</option>
+                    <option value="all">جميع التصنيفات</option>
                     <option value="Documents">مستندات</option>
                     <option value="Images">صور</option>
                     <option value="Videos">فيديوهات</option>
