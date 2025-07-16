@@ -125,7 +125,7 @@ const DesktopApp = () => {
   const [indexingProgress, setIndexingProgress] = useState(null);
   const [aiSuggestions, setAiSuggestions] = useState([
     {
-      title: "🔍 اقتراحات الب��ث الذكية",
+      title: "🔍 اقتراحات البحث الذكية",
       items: [
         { text: "تقارير العمل الأخيرة", confidence: 95, category: "Work" },
         { text: "صور العطلة الصيفية", confidence: 89, category: "Personal" },
@@ -213,7 +213,7 @@ const DesktopApp = () => {
     },
     {
       id: 2,
-      message: "تم تصنيف 1,247 مل�� جديد بالذكاء الاصطناعي",
+      message: "تم تصنيف 1,247 ملف جديد بالذكاء الاصطناعي",
       type: "success",
       timestamp: new Date(Date.now() - 120000),
     },
@@ -753,6 +753,17 @@ const DesktopApp = () => {
                           </div>
                         </div>
                       ))}
+
+                      {/* Load More Section */}
+                      <div className="text-center pt-4 border-t border-white/10 mt-6">
+                        <div className="text-sm text-gray-400 mb-3">
+                          عرض 3 من 1,247 نتيجة • البحث في{" "}
+                          {fileStats.totalFiles.toLocaleString()} ملف
+                        </div>
+                        <button className="glass-button px-6 py-3 rounded-lg hover:scale-105 transition-transform">
+                          تحميل المزيد من النتائج...
+                        </button>
+                      </div>
                     </>
                   )}
                 </div>
