@@ -8,6 +8,8 @@ import Timeline from "./components/Timeline";
 import Stats from "./components/Stats";
 import NaturalQueryProcessor from "./components/NaturalQueryProcessor";
 import PowerOps from "./components/PowerOps";
+import FileEncryption from "./components/FileEncryption";
+import CloudSync from "./components/CloudSync";
 import "./components/Header.css";
 
 function App() {
@@ -87,7 +89,15 @@ function App() {
 
   // BUILDER.IO REQUIREMENT: Authentication protection for secured routes
   // Redirect unauthenticated users to /login when trying to access protected pages
-  const protectedRoutes = ["dashboard", "timeline", "search"];
+  const protectedRoutes = [
+    "dashboard",
+    "timeline",
+    "search",
+    "stats",
+    "powerops",
+    "encryption",
+    "cloudsync",
+  ];
 
   useEffect(() => {
     // If user is not logged in and trying to access protected route, redirect to login
@@ -125,6 +135,18 @@ function App() {
         )}
         {currentPage === "search" && user && (
           <InstantSearch user={user} onLogout={handleLogout} />
+        )}
+        {currentPage === "stats" && user && (
+          <Stats user={user} onLogout={handleLogout} />
+        )}
+        {currentPage === "powerops" && user && (
+          <PowerOps user={user} onLogout={handleLogout} />
+        )}
+        {currentPage === "encryption" && user && (
+          <FileEncryption user={user} onLogout={handleLogout} />
+        )}
+        {currentPage === "cloudsync" && user && (
+          <CloudSync user={user} onLogout={handleLogout} />
         )}
       </div>
     </div>
