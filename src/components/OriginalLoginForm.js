@@ -262,8 +262,9 @@ const OriginalLoginForm = ({ onSignupSuccess, onSignIn }) => {
               </form>
             </div>
 
-            {/* Card Footer with Prof Signature */}
-            <div className="auth-card-footer">
+            {/* 🔒 Prof Signature Tag - LOCKED - DO NOT MOVE OR MODIFY */}
+            {/* Card Footer with Prof Signature - BUILDER.IO REQUIREMENT */}
+            <div className="auth-card-footer prof-signature-locked">
               <p
                 style={{
                   fontFamily: "'Playfair Display', serif",
@@ -271,6 +272,7 @@ const OriginalLoginForm = ({ onSignupSuccess, onSignIn }) => {
                   textAlign: "center",
                   opacity: "0.7",
                 }}
+                className="prof-signature-text"
               >
                 Powered by Prof. Sadek Elgazar
                 <br />
