@@ -162,7 +162,7 @@ const DesktopApp = () => {
       );
     } catch (error) {
       console.error("AI analysis failed:", error);
-      addNotification("فشل في التحليل ال��كي", "error");
+      addNotification("فشل في التحليل الذكي", "error");
     }
   };
 
@@ -274,7 +274,7 @@ const DesktopApp = () => {
             </div>
 
             <p className="text-gray-500 mt-6 text-sm">
-              يرجى ت��غيل التطبيق من Electron للوصول للميزات الكاملة
+              يرجى تشغيل التطبيق من Electron للوصول للميزات الكاملة
             </p>
           </div>
         </div>
@@ -315,7 +315,7 @@ const DesktopApp = () => {
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-4">
             <div className="text-3xl font-bold gradient-text">KNOUX FINDR</div>
-            <div className="text-xs bg-blue-500/20 px-3 py-1 rounded-full border border-blue-500/30">
+            <div className="text-xs bg-blue-500/20 px-3 py-1 rounded-full border border-blue-500/30 animate-pulse-glow">
               🤖 AI Desktop Search Engine
             </div>
 
