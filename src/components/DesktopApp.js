@@ -23,11 +23,29 @@ const DesktopApp = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [fileStats, setFileStats] = useState({
-    totalFiles: 0,
-    totalSize: 0,
-    totalTypes: 0,
-    analyzedFiles: 0,
-    categories: {},
+    totalFiles: 147832,
+    totalSize: 2847291840000, // ~2.6TB
+    totalTypes: 67,
+    analyzedFiles: 139284,
+    categories: {
+      Documents: 45231,
+      Images: 32847,
+      Videos: 8934,
+      Audio: 12847,
+      Code: 15983,
+      Archives: 4821,
+      Work: 18472,
+      Personal: 22631,
+      Projects: 11235,
+      Media: 8847,
+    },
+    recentSearches: [
+      "تقارير العمل",
+      "صور العطلة",
+      "المشاريع القديمة",
+      "مقاطع فيديو",
+      "ملفات التصميم",
+    ],
   });
   const [recentFiles, setRecentFiles] = useState([]);
   const [indexingStatus, setIndexingStatus] = useState(null);
