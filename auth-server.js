@@ -8,6 +8,9 @@ const FacebookStrategy = require("passport-facebook").Strategy;
 const axios = require("axios");
 const cors = require("cors");
 const path = require("path");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const fs = require("fs");
 
 require("dotenv").config();
 
@@ -126,6 +129,192 @@ passport.use(
   ),
 );
 
+// ✅ Apple OAuth Strategy (Mock implementation - requires Apple Developer setup)
+passport.use("apple-mock", {
+  name: "apple",
+  authenticate: function (req, options) {
+    // Mock Apple authentication - in production, use real Apple OAuth
+    const user = {
+      id: "apple_" + Math.random().toString(36).substring(7),
+      provider: "apple",
+      name: "Apple User",
+      email: "user@privaterelay.appleid.com",
+      avatar: null,
+      accessToken: "mock_apple_token",
+    };
+
+    // Simulate successful authentication
+    req.login(user, (err) => {
+      if (err) {
+        return this.error(err);
+      }
+      return this.success(user);
+    });
+  },
+});
+
+// ✅ Microsoft OAuth Strategy (Mock implementation)
+passport.use("microsoft-mock", {
+  name: "microsoft",
+  authenticate: function (req, options) {
+    // Mock Microsoft authentication - in production, use real Microsoft Graph OAuth
+    const user = {
+      id: "microsoft_" + Math.random().toString(36).substring(7),
+      provider: "microsoft",
+      name: "Microsoft User",
+      email: "user@outlook.com",
+      avatar: null,
+      accessToken: "mock_microsoft_token",
+    };
+
+    // Simulate successful authentication
+    req.login(user, (err) => {
+      if (err) {
+        return this.error(err);
+      }
+      return this.success(user);
+    });
+  },
+});
+
+// 📊 Simple user storage (in production, use proper database)
+const users = [];
+const userSessions = new Map();
+
+// 🔐 JWT Helper Functions
+const generateJWT = (user) => {
+  return jwt.sign(
+    {
+      id: user.id,
+      email: user.email,
+      provider: user.provider,
+    },
+    process.env.JWT_SECRET || "knoux_jwt_secret_key",
+    { expiresIn: "7d" },
+  );
+};
+
+const verifyJWT = (token) => {
+  try {
+    return jwt.verify(token, process.env.JWT_SECRET || "knoux_jwt_secret_key");
+  } catch (err) {
+    return null;
+  }
+};
+
+// 🔒 Local Email/Password Authentication
+app.post("/auth/register", async (req, res) => {
+  const { name, email, password } = req.body;
+
+  if (!name || !email || !password) {
+    return res.status(400).json({
+      success: false,
+      error: "Name, email, and password are required",
+    });
+  }
+
+  // Check if user already exists
+  const existingUser = users.find((u) => u.email === email);
+  if (existingUser) {
+    return res.status(400).json({
+      success: false,
+      error: "User already exists with this email",
+    });
+  }
+
+  try {
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    // Create user
+    const user = {
+      id: "local_" + Math.random().toString(36).substring(7),
+      provider: "local",
+      name,
+      email,
+      password: hashedPassword,
+      avatar: null,
+      createdAt: new Date().toISOString(),
+    };
+
+    users.push(user);
+
+    // Generate JWT
+    const token = generateJWT(user);
+
+    // Remove password from response
+    const { password: _, ...userWithoutPassword } = user;
+
+    res.json({
+      success: true,
+      user: userWithoutPassword,
+      token,
+    });
+  } catch (error) {
+    console.error("Registration error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Registration failed",
+    });
+  }
+});
+
+app.post("/auth/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({
+      success: false,
+      error: "Email and password are required",
+    });
+  }
+
+  try {
+    // Find user
+    const user = users.find((u) => u.email === email && u.provider === "local");
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        error: "Invalid email or password",
+      });
+    }
+
+    // Check password
+    const isValidPassword = await bcrypt.compare(password, user.password);
+    if (!isValidPassword) {
+      return res.status(401).json({
+        success: false,
+        error: "Invalid email or password",
+      });
+    }
+
+    // Generate JWT
+    const token = generateJWT(user);
+
+    // Store session
+    userSessions.set(user.id, {
+      token,
+      loginTime: new Date().toISOString(),
+      userAgent: req.headers["user-agent"],
+    });
+
+    // Remove password from response
+    const { password: _, ...userWithoutPassword } = user;
+
+    res.json({
+      success: true,
+      user: userWithoutPassword,
+      token,
+    });
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Login failed",
+    });
+  }
+});
+
 // 🌐 OAuth Authentication Routes
 
 // Google OAuth
@@ -180,12 +369,80 @@ app.get(
     failureRedirect: "/login?error=facebook",
   }),
   (req, res) => {
+    // Generate JWT and store session
+    const token = generateJWT(req.user);
+    userSessions.set(req.user.id, {
+      token,
+      loginTime: new Date().toISOString(),
+      userAgent: req.headers["user-agent"],
+    });
+
     // Successful authentication
     res.redirect(
-      `/dashboard?user=${encodeURIComponent(JSON.stringify(req.user))}`,
+      `/dashboard?user=${encodeURIComponent(JSON.stringify(req.user))}&token=${token}`,
     );
   },
 );
+
+// Apple OAuth (Mock)
+app.get("/auth/apple", (req, res) => {
+  // In production, redirect to Apple's OAuth URL
+  // For now, simulate the flow
+  const user = {
+    id: "apple_" + Math.random().toString(36).substring(7),
+    provider: "apple",
+    name: "Apple User",
+    email: "user@privaterelay.appleid.com",
+    avatar: null,
+    accessToken: "mock_apple_token",
+  };
+
+  const token = generateJWT(user);
+  userSessions.set(user.id, {
+    token,
+    loginTime: new Date().toISOString(),
+    userAgent: req.headers["user-agent"],
+  });
+
+  res.redirect(
+    `/dashboard?user=${encodeURIComponent(JSON.stringify(user))}&token=${token}`,
+  );
+});
+
+app.get("/auth/apple/callback", (req, res) => {
+  // Mock callback - in production, handle Apple's callback
+  res.redirect("/dashboard");
+});
+
+// Microsoft OAuth (Mock)
+app.get("/auth/microsoft", (req, res) => {
+  // In production, redirect to Microsoft's OAuth URL
+  // For now, simulate the flow
+  const user = {
+    id: "microsoft_" + Math.random().toString(36).substring(7),
+    provider: "microsoft",
+    name: "Microsoft User",
+    email: "user@outlook.com",
+    avatar: null,
+    accessToken: "mock_microsoft_token",
+  };
+
+  const token = generateJWT(user);
+  userSessions.set(user.id, {
+    token,
+    loginTime: new Date().toISOString(),
+    userAgent: req.headers["user-agent"],
+  });
+
+  res.redirect(
+    `/dashboard?user=${encodeURIComponent(JSON.stringify(user))}&token=${token}`,
+  );
+});
+
+app.get("/auth/microsoft/callback", (req, res) => {
+  // Mock callback - in production, handle Microsoft's callback
+  res.redirect("/dashboard");
+});
 
 // 🔄 Facebook Direct Token Login Endpoint
 app.post("/auth/facebook/token", async (req, res) => {
@@ -259,8 +516,19 @@ app.get("/api/user", (req, res) => {
   }
 });
 
-// Logout
+// Enhanced Logout with token revocation
 app.post("/api/logout", (req, res) => {
+  const token =
+    req.headers.authorization?.replace("Bearer ", "") || req.body.token;
+
+  if (token) {
+    const decoded = verifyJWT(token);
+    if (decoded) {
+      // Remove from sessions
+      userSessions.delete(decoded.id);
+    }
+  }
+
   req.logout((err) => {
     if (err) {
       return res.status(500).json({
@@ -283,6 +551,114 @@ app.post("/api/logout", (req, res) => {
   });
 });
 
+// Logout from all devices
+app.post("/api/logout-all", (req, res) => {
+  const token =
+    req.headers.authorization?.replace("Bearer ", "") || req.body.token;
+
+  if (!token) {
+    return res.status(401).json({
+      success: false,
+      error: "Token required",
+    });
+  }
+
+  const decoded = verifyJWT(token);
+  if (!decoded) {
+    return res.status(401).json({
+      success: false,
+      error: "Invalid token",
+    });
+  }
+
+  // Remove all sessions for this user
+  userSessions.delete(decoded.id);
+
+  res.json({
+    success: true,
+    message: "Logged out from all devices",
+  });
+});
+
+// Verify token endpoint
+app.post("/api/verify-token", (req, res) => {
+  const token =
+    req.headers.authorization?.replace("Bearer ", "") || req.body.token;
+
+  if (!token) {
+    return res.status(401).json({
+      success: false,
+      error: "Token required",
+    });
+  }
+
+  const decoded = verifyJWT(token);
+  if (!decoded) {
+    return res.status(401).json({
+      success: false,
+      error: "Invalid or expired token",
+    });
+  }
+
+  // Check if session exists
+  const session = userSessions.get(decoded.id);
+  if (!session) {
+    return res.status(401).json({
+      success: false,
+      error: "Session not found",
+    });
+  }
+
+  res.json({
+    success: true,
+    user: {
+      id: decoded.id,
+      email: decoded.email,
+      provider: decoded.provider,
+    },
+    session: {
+      loginTime: session.loginTime,
+      userAgent: session.userAgent,
+    },
+  });
+});
+
+// Get user sessions
+app.get("/api/sessions", (req, res) => {
+  const token = req.headers.authorization?.replace("Bearer ", "");
+
+  if (!token) {
+    return res.status(401).json({
+      success: false,
+      error: "Token required",
+    });
+  }
+
+  const decoded = verifyJWT(token);
+  if (!decoded) {
+    return res.status(401).json({
+      success: false,
+      error: "Invalid token",
+    });
+  }
+
+  const session = userSessions.get(decoded.id);
+
+  res.json({
+    success: true,
+    sessions: session
+      ? [
+          {
+            id: decoded.id,
+            loginTime: session.loginTime,
+            userAgent: session.userAgent,
+            current: true,
+          },
+        ]
+      : [],
+  });
+});
+
 // Health check
 app.get("/health", (req, res) => {
   res.json({
@@ -297,13 +673,33 @@ app.get("/health", (req, res) => {
 app.get("/", (req, res) => {
   res.json({
     message: "🚀 KNOUX FINDR Authentication Server",
-    version: "1.0.0",
+    version: "2.0.0",
+    features: [
+      "OAuth 2.0 Support",
+      "JWT Authentication",
+      "Session Management",
+      "Local Email/Password Auth",
+      "Token Revocation",
+      "Multi-device Logout",
+    ],
     endpoints: {
+      // OAuth
       google: "/auth/google",
       github: "/auth/github",
       facebook: "/auth/facebook",
+      apple: "/auth/apple",
+      microsoft: "/auth/microsoft",
+
+      // Local Auth
+      register: "/auth/register",
+      login: "/auth/login",
+
+      // API
       user: "/api/user",
       logout: "/api/logout",
+      logoutAll: "/api/logout-all",
+      verifyToken: "/api/verify-token",
+      sessions: "/api/sessions",
       health: "/health",
     },
   });
