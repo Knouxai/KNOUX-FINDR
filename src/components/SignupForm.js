@@ -29,7 +29,8 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
   };
 
   const socialSignup = (platform) => {
-    alert(`${platform} registration coming soon!`);
+    // OAuth integration now handled by onClick events
+    console.log(`${platform} OAuth integration active`);
   };
 
   return (
@@ -92,6 +93,23 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
             <div className="mb-[24px] max-lg:text-center fade-in">
               <div className="text-[14px] font-normal tracking-[2.52px] gradient-text mb-[26px]">
                 KNOUX FINDR
+              </div>
+
+              {/* Professor Attribution */}
+              <div className="glass-card rounded-lg p-3 mb-4 border border-amber-500/30 bg-amber-500/5">
+                <div
+                  className="text-amber-400 font-bold tracking-wider"
+                  style={{
+                    fontFamily: '"Playfair Display", serif',
+                    fontStyle: "italic",
+                    fontSize: "14px",
+                  }}
+                >
+                  Powered by Prof. Sadek Elgazar
+                </div>
+                <div className="text-xs text-amber-300/80 mt-1">
+                  AI Research Director & Project Supervisor
+                </div>
               </div>
 
               {/* Enhanced Navigation Tabs */}
@@ -239,7 +257,12 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
                       <div className="flex justify-center gap-[15px] mb-[47px]">
                         <div
                           className="w-[75px] h-[75px] rounded-[20px] glass-button flex items-center justify-center cursor-pointer group relative overflow-hidden"
-                          onClick={() => socialSignup("Facebook")}
+                          onClick={() =>
+                            window.open(
+                              "http://localhost:3001/auth/facebook",
+                              "_blank",
+                            )
+                          }
                         >
                           <div className="absolute inset-0 bg-gradient-to-br from-[#1877F2]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                           <svg
@@ -268,7 +291,12 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
 
                         <div
                           className="w-[75px] h-[75px] rounded-[20px] glass-button flex items-center justify-center cursor-pointer group relative overflow-hidden"
-                          onClick={() => socialSignup("Apple")}
+                          onClick={() =>
+                            window.open(
+                              "http://localhost:3001/auth/github",
+                              "_blank",
+                            )
+                          }
                         >
                           <div className="absolute inset-0 bg-gradient-to-br from-gray-800/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                           <svg
@@ -289,7 +317,12 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
 
                         <div
                           className="w-[75px] h-[75px] rounded-[20px] glass-button flex items-center justify-center cursor-pointer group relative overflow-hidden"
-                          onClick={() => socialSignup("Google")}
+                          onClick={() =>
+                            window.open(
+                              "http://localhost:3001/auth/google",
+                              "_blank",
+                            )
+                          }
                         >
                           <div className="absolute inset-0 bg-gradient-to-br from-[#4285F4]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                           <svg

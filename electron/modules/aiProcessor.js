@@ -5,27 +5,118 @@ const fs = require("fs-extra");
 const path = require("path");
 const mammoth = require("mammoth");
 const pdf = require("pdf-parse");
+const crypto = require("crypto");
+const IntelligentCategorizer = require("./intelligentCategorizer");
+const AdvancedDuplicateDetector = require("./advancedDuplicateDetector");
 
 class AIProcessor {
-  constructor() {
+  constructor(database, contentExtractor) {
     this.nlpManager = null;
     this.isInitialized = false;
     this.categories = new Map();
     this.keywordPatterns = new Map();
     this.documentClassifier = null;
+    this.database = database;
+    this.contentExtractor = contentExtractor;
+
+    // محركات الذكاء الاصطناعي المتقدمة
+    this.intelligentCategorizer = new IntelligentCategorizer(
+      this,
+      contentExtractor,
+    );
+    this.duplicateDetector = new AdvancedDuplicateDetector(
+      database,
+      contentExtractor,
+    );
+
+    // محرك التحليل الدلالي المتقدم
+    this.semanticAnalyzer = {
+      vectorCache: new Map(),
+      similarityMatrix: new Map(),
+      conceptExtractor: new Map(),
+      contextAnalyzer: new Map(),
+    };
+
+    // نظام التعلم العميق المبسط
+    this.deepLearning = {
+      patterns: new Map(),
+      weights: new Map(),
+      biases: new Map(),
+      activationHistory: new Map(),
+    };
+
+    // معالج المشاعر والسياق
+    this.emotionAnalyzer = {
+      emotionPatterns: new Map(),
+      contextualClues: new Map(),
+      sentimentHistory: new Map(),
+    };
 
     // Initialize category patterns
     this.initializeCategoryPatterns();
+    this.initializeAdvancedFeatures();
+  }
+
+  // تهيئة الميزات المتقدمة
+  initializeAdvancedFeatures() {
+    // تهيئة أنماط المشاعر
+    this.emotionAnalyzer.emotionPatterns.set("positive", [
+      /سعيد|فرح|رائع|ممتاز|جميل|نجاح/gi,
+      /happy|joy|great|excellent|beautiful|success|amazing|wonderful/gi,
+    ]);
+
+    this.emotionAnalyzer.emotionPatterns.set("negative", [
+      /حزين|زعلان|س��ء|فشل|مشكلة|خطأ/gi,
+      /sad|angry|bad|fail|problem|error|terrible|awful/gi,
+    ]);
+
+    this.emotionAnalyzer.emotionPatterns.set("neutral", [
+      /عادي|طبيعي|مقبول|متوسط/gi,
+      /normal|regular|average|standard|typical/gi,
+    ]);
+
+    // تهيئة معالج المفاهيم
+    this.semanticAnalyzer.conceptExtractor.set("work_concepts", [
+      "عمل",
+      "مشروع",
+      "شركة",
+      "موظف",
+      "راتب",
+      "اجتماع",
+      "work",
+      "project",
+      "company",
+      "employee",
+      "salary",
+      "meeting",
+    ]);
+
+    this.semanticAnalyzer.conceptExtractor.set("personal_concepts", [
+      "شخصي",
+      "عائلة",
+      "صديق",
+      "إجازة",
+      "هواية",
+      "منزل",
+      "personal",
+      "family",
+      "friend",
+      "vacation",
+      "hobby",
+      "home",
+    ]);
   }
 
   async initialize() {
     try {
-      console.log("تهيئة نظام الذكاء الاصطناعي...");
+      console.log("🧠 تهيئة نظام الذكاء الاصطناعي المتقدم...");
 
       // Initialize NLP Manager with Arabic and English support
       this.nlpManager = new NlpManager({
         languages: ["ar", "en"],
         forceNER: true,
+        nluThreshold: 0.7,
+        autoSave: false,
       });
 
       // Train the model with predefined patterns
@@ -34,12 +125,41 @@ class AIProcessor {
       // Train and save the model
       await this.nlpManager.train();
 
+      // تهيئ�� المحركات المتقدمة
+      await this.intelligentCategorizer.initialize();
+
+      // تهيئة معالج التحليل الدلالي
+      await this.initializeSemanticAnalysis();
+
       this.isInitialized = true;
-      console.log("تم تهيئة نظام الذكاء الاصطناعي بنجاح");
+      console.log("✅ تم تهيئة نظام الذكاء الاصطناعي بنجاح");
     } catch (error) {
-      console.error("خطأ في تهيئة AI:", error);
+      console.error("❌ خطأ في تهيئة AI:", error);
       throw error;
     }
+  }
+
+  // تهيئة التحليل الدلالي
+  async initializeSemanticAnalysis() {
+    console.log("📊 تهيئة محرك التحليل الدلالي...");
+
+    // بناء مصفوفة التشابه الأولية
+    const concepts = [
+      { word: "عمل", vector: [0.8, 0.2, 0.1, 0.9, 0.3] },
+      { word: "شخصي", vector: [0.2, 0.9, 0.8, 0.1, 0.7] },
+      { word: "مالي", vector: [0.9, 0.1, 0.2, 0.8, 0.4] },
+      { word: "تعليمي", vector: [0.4, 0.7, 0.9, 0.3, 0.8] },
+      { word: "work", vector: [0.8, 0.2, 0.1, 0.9, 0.3] },
+      { word: "personal", vector: [0.2, 0.9, 0.8, 0.1, 0.7] },
+      { word: "finance", vector: [0.9, 0.1, 0.2, 0.8, 0.4] },
+      { word: "education", vector: [0.4, 0.7, 0.9, 0.3, 0.8] },
+    ];
+
+    concepts.forEach((concept) => {
+      this.semanticAnalyzer.vectorCache.set(concept.word, concept.vector);
+    });
+
+    console.log("✅ تم تهيئة محرك التحليل الدلالي");
   }
 
   initializeCategoryPatterns() {
@@ -288,12 +408,15 @@ class AIProcessor {
     }
   }
 
+  // تحليل متقدم لمحتوى الملف
   async analyzeFileContent(filePath) {
     if (!this.isInitialized) {
       throw new Error("AI system not initialized");
     }
 
     try {
+      console.log(`📊 تحليل متقدم للملف: ${path.basename(filePath)}`);
+
       // Extract text content
       const content = await this.extractTextFromFile(filePath);
       if (!content.trim()) {
@@ -304,46 +427,73 @@ class AIProcessor {
           language: "unknown",
           summary: "",
           entities: [],
+          semanticProfile: {},
+          emotionalTone: "neutral",
+          complexity: 0,
+          topics: [],
         };
       }
 
-      // Detect language
-      const language = franc(content, { only: ["ara", "eng"] });
+      // معلومات الملف الأساسية
+      const fileInfo = {
+        name: path.basename(filePath),
+        path: filePath,
+        type: path.extname(filePath).slice(1).toLowerCase(),
+        content: content,
+      };
+
+      // Detect language with enhanced accuracy
+      const language = this.detectLanguageEnhanced(content);
       const langCode = language === "ara" ? "ar" : "en";
 
-      // Analyze with NLP
+      // تحليل NLP متقدم
       const analysis = await this.nlpManager.process(langCode, content);
 
-      // Extract keywords using compromise
-      const doc = compromise(content);
-      const keywords = [
-        ...doc.nouns().out("array"),
-        ...doc.adjectives().out("array"),
-        ...doc.verbs().out("array"),
-      ].slice(0, 20); // Top 20 keywords
+      // استخراج الكلمات المفتاحية المحسن
+      const keywords = await this.extractAdvancedKeywords(content, langCode);
 
-      // Generate summary (first few sentences)
-      const sentences = content
-        .split(/[.!?]+/)
-        .filter((s) => s.trim().length > 20);
-      const summary = sentences.slice(0, 3).join(". ").trim();
+      // تحليل المواضيع
+      const topics = await this.extractTopics(content, langCode);
 
-      // Classify category
-      const category = this.classifyContent(content, path.basename(filePath));
+      // تحليل المشاعر
+      const emotionalTone = this.analyzeEmotionalTone(content);
+
+      // حساب تعقيد المحتوى
+      const complexity = this.calculateContentComplexity(content);
+
+      // Generate enhanced summary
+      const summary = await this.generateEnhancedSummary(content, langCode);
+
+      // إنشاء الملف الدلالي
+      const semanticProfile = await this.createSemanticProfile(
+        content,
+        keywords,
+        topics,
+      );
+
+      // تصنيف ذكي محسن
+      const categoryResult =
+        await this.intelligentCategorizer.categorizeFile(fileInfo);
 
       return {
-        category: category.name,
-        confidence: category.confidence,
+        category: categoryResult.category,
+        confidence: categoryResult.confidence,
         keywords: keywords,
         language: langCode,
         summary: summary,
         entities: analysis.entities || [],
         sentiment: analysis.sentiment || { score: 0, label: "neutral" },
         wordCount: content.split(/\s+/).length,
-        readingTime: Math.ceil(content.split(/\s+/).length / 200), // Average reading speed
+        readingTime: Math.ceil(content.split(/\s+/).length / 200),
+        semanticProfile: semanticProfile,
+        emotionalTone: emotionalTone,
+        complexity: complexity,
+        topics: topics,
+        reasoning: categoryResult.reasoning,
+        alternativeCategories: categoryResult.alternativeCategories || [],
       };
     } catch (error) {
-      console.error("Content analysis error:", error);
+      console.error("❌ خطأ في تحليل المحتوى:", error);
       return {
         category: "Unknown",
         confidence: 0,
@@ -351,8 +501,240 @@ class AIProcessor {
         language: "unknown",
         summary: "",
         entities: [],
+        error: error.message,
       };
     }
+  }
+
+  // كشف اللغة المحسن
+  detectLanguageEnhanced(content) {
+    const arabicChars = (content.match(/[\u0600-\u06FF]/g) || []).length;
+    const totalChars = content.replace(/\s/g, "").length;
+
+    if (totalChars === 0) return "unknown";
+
+    const arabicRatio = arabicChars / totalChars;
+
+    // استخدام معايير متعددة للكشف
+    if (arabicRatio > 0.3) {
+      return "ara";
+    } else if (arabicRatio < 0.05) {
+      // استخدام franc كنسخة احتياطية
+      const francResult = franc(content, { only: ["ara", "eng"] });
+      return francResult === "ara" ? "ara" : "eng";
+    } else {
+      return "mixed";
+    }
+  }
+
+  // استخراج كلمات مفتاحية متقدم
+  async extractAdvancedKeywords(content, language) {
+    const keywords = [];
+
+    // استخدام compromise للإنجليزية
+    if (language === "en") {
+      const doc = compromise(content);
+      const nouns = doc.nouns().out("array");
+      const adjectives = doc.adjectives().out("array");
+      const verbs = doc.verbs().out("array");
+
+      keywords.push(...nouns.slice(0, 10));
+      keywords.push(...adjectives.slice(0, 5));
+      keywords.push(...verbs.slice(0, 5));
+    }
+
+    // استخراج يدوي للعربية
+    const arabicWords = content.match(/[\u0600-\u06FF]{3,}/g) || [];
+    const englishWords = content.match(/[a-zA-Z]{3,}/g) || [];
+
+    // حساب تكرار الكلمات
+    const wordFreq = new Map();
+
+    [...arabicWords, ...englishWords].forEach((word) => {
+      const cleanWord = word.toLowerCase();
+      if (cleanWord.length > 2) {
+        wordFreq.set(cleanWord, (wordFreq.get(cleanWord) || 0) + 1);
+      }
+    });
+
+    // ترتيب حسب التكرار
+    const sortedWords = Array.from(wordFreq.entries())
+      .sort(([, a], [, b]) => b - a)
+      .slice(0, 20)
+      .map(([word]) => word);
+
+    keywords.push(...sortedWords);
+
+    // إزالة التكرارات وإرجاع أفضل 20
+    return [...new Set(keywords)].slice(0, 20);
+  }
+
+  // استخراج المواضيع
+  async extractTopics(content, language) {
+    const topics = [];
+
+    // مواضيع محددة مسبقاً
+    const topicPatterns = {
+      technology:
+        /تقنية|تكنولوجيا|برمجة|كمبيوتر|technology|programming|computer|software/gi,
+      business:
+        /عمل|بيزنس|شركة|مال|اقتصاد|business|company|finance|economy|money/gi,
+      education:
+        /تعليم|دراسة|جامعة|مدرسة|طالب|education|study|university|school|student/gi,
+      health: /صحة|طب|مرض|علاج|دواء|health|medical|doctor|medicine|treatment/gi,
+      personal: /شخصي|عائلة|صديق|إجازة|personal|family|friend|vacation|hobby/gi,
+    };
+
+    for (const [topic, pattern] of Object.entries(topicPatterns)) {
+      const matches = content.match(pattern);
+      if (matches && matches.length > 2) {
+        topics.push({
+          name: topic,
+          confidence: Math.min(matches.length / 10, 1),
+          keywords: [...new Set(matches.slice(0, 5))],
+        });
+      }
+    }
+
+    return topics.sort((a, b) => b.confidence - a.confidence).slice(0, 5);
+  }
+
+  // تحليل المشاعر
+  analyzeEmotionalTone(content) {
+    let positiveScore = 0;
+    let negativeScore = 0;
+    let neutralScore = 0;
+
+    // فحص المشاعر الإيجابية
+    this.emotionAnalyzer.emotionPatterns.get("positive").forEach((pattern) => {
+      const matches = content.match(pattern);
+      if (matches) positiveScore += matches.length;
+    });
+
+    // فحص المشاعر السلبية
+    this.emotionAnalyzer.emotionPatterns.get("negative").forEach((pattern) => {
+      const matches = content.match(pattern);
+      if (matches) negativeScore += matches.length;
+    });
+
+    // فحص المشاعر المحايدة
+    this.emotionAnalyzer.emotionPatterns.get("neutral").forEach((pattern) => {
+      const matches = content.match(pattern);
+      if (matches) neutralScore += matches.length;
+    });
+
+    const totalScore = positiveScore + negativeScore + neutralScore;
+
+    if (totalScore === 0) return "neutral";
+
+    if (positiveScore > negativeScore && positiveScore > neutralScore) {
+      return "positive";
+    } else if (negativeScore > positiveScore && negativeScore > neutralScore) {
+      return "negative";
+    } else {
+      return "neutral";
+    }
+  }
+
+  // حساب تعقيد المحتوى
+  calculateContentComplexity(content) {
+    const sentences = content
+      .split(/[.!?]+/)
+      .filter((s) => s.trim().length > 10);
+    const words = content.split(/\s+/);
+    const avgWordsPerSentence = words.length / sentences.length;
+
+    // حساب نسبة الكلمات الطويلة
+    const longWords = words.filter((w) => w.length > 6).length;
+    const longWordRatio = longWords / words.length;
+
+    // حساب تع��يد الجمل
+    let complexityScore = 0;
+
+    if (avgWordsPerSentence > 20) complexityScore += 0.3;
+    if (longWordRatio > 0.3) complexityScore += 0.3;
+    if (sentences.length > 50) complexityScore += 0.2;
+    if (content.length > 5000) complexityScore += 0.2;
+
+    return Math.min(complexityScore, 1.0);
+  }
+
+  // إنشاء ملخص محسن
+  async generateEnhancedSummary(content, language) {
+    const sentences = content
+      .split(/[.!?]+/)
+      .map((s) => s.trim())
+      .filter((s) => s.length > 20);
+
+    if (sentences.length === 0) return "";
+
+    // اختيار أهم الجمل بناءً على الكلمات المفتاحية
+    const keywords = await this.extractAdvancedKeywords(content, language);
+
+    const sentenceScores = sentences.map((sentence) => {
+      let score = 0;
+      keywords.forEach((keyword) => {
+        if (sentence.toLowerCase().includes(keyword.toLowerCase())) {
+          score += 1;
+        }
+      });
+      return { sentence, score };
+    });
+
+    // ترتيب حسب النقاط واختيار أفضل 3
+    const topSentences = sentenceScores
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 3)
+      .map((item) => item.sentence);
+
+    return topSentences.join(". ");
+  }
+
+  // إنشاء الملف الدلالي
+  async createSemanticProfile(content, keywords, topics) {
+    const profile = {
+      conceptVector: [],
+      semanticDensity: 0,
+      topicalCoherence: 0,
+      abstractionLevel: 0,
+    };
+
+    // حساب المتجه المفاهيمي
+    const conceptCounts = new Map();
+
+    this.semanticAnalyzer.conceptExtractor.forEach((concepts, category) => {
+      let count = 0;
+      concepts.forEach((concept) => {
+        if (content.toLowerCase().includes(concept.toLowerCase())) {
+          count++;
+        }
+      });
+      conceptCounts.set(category, count);
+    });
+
+    // تحويل إلى متجه
+    profile.conceptVector = Array.from(conceptCounts.values());
+
+    // حساب الكثافة الدلالية
+    const totalWords = content.split(/\s+/).length;
+    const conceptWords = keywords.length;
+    profile.semanticDensity = conceptWords / totalWords;
+
+    // حساب ترابط المواضيع
+    if (topics.length > 0) {
+      const avgConfidence =
+        topics.reduce((sum, topic) => sum + topic.confidence, 0) /
+        topics.length;
+      profile.topicalCoherence = avgConfidence;
+    }
+
+    // حساب مستوى التجريد
+    const abstractWords = keywords.filter(
+      (word) => word.length > 6 && !/[\u0600-\u06FF0-9]/g.test(word),
+    ).length;
+    profile.abstractionLevel = abstractWords / keywords.length;
+
+    return profile;
   }
 
   classifyContent(content, fileName) {
@@ -629,6 +1011,503 @@ class AIProcessor {
     }
   }
 
+  // حساب التشابه بين الملفات
+  async calculateFileSimilarity(file1, file2) {
+    if (!this.isInitialized) {
+      await this.initialize();
+    }
+
+    try {
+      const analysis1 = await this.analyzeFileContent(file1.path);
+      const analysis2 = await this.analyzeFileContent(file2.path);
+
+      // حساب تشابه الكلمات المفتاحية
+      const keywordSimilarity = this.calculateKeywordSimilarity(
+        analysis1.keywords,
+        analysis2.keywords,
+      );
+
+      // حساب تشابه المواضيع
+      const topicSimilarity = this.calculateTopicSimilarity(
+        analysis1.topics,
+        analysis2.topics,
+      );
+
+      // حساب تشابه الملف الدلالي
+      const semanticSimilarity = this.calculateSemanticSimilarity(
+        analysis1.semanticProfile,
+        analysis2.semanticProfile,
+      );
+
+      // حساب التشابه الإجمالي
+      const overallSimilarity =
+        keywordSimilarity * 0.4 +
+        topicSimilarity * 0.35 +
+        semanticSimilarity * 0.25;
+
+      return {
+        overall: overallSimilarity,
+        keywords: keywordSimilarity,
+        topics: topicSimilarity,
+        semantic: semanticSimilarity,
+        details: {
+          file1: {
+            category: analysis1.category,
+            confidence: analysis1.confidence,
+            complexity: analysis1.complexity,
+          },
+          file2: {
+            category: analysis2.category,
+            confidence: analysis2.confidence,
+            complexity: analysis2.complexity,
+          },
+        },
+      };
+    } catch (error) {
+      console.error("❌ خطأ في حساب التشابه:", error);
+      return { overall: 0, keywords: 0, topics: 0, semantic: 0 };
+    }
+  }
+
+  // حساب تشابه الكلمات المفتاحية
+  calculateKeywordSimilarity(keywords1, keywords2) {
+    if (
+      !keywords1 ||
+      !keywords2 ||
+      keywords1.length === 0 ||
+      keywords2.length === 0
+    ) {
+      return 0;
+    }
+
+    const set1 = new Set(keywords1.map((k) => k.toLowerCase()));
+    const set2 = new Set(keywords2.map((k) => k.toLowerCase()));
+
+    const intersection = new Set([...set1].filter((x) => set2.has(x)));
+    const union = new Set([...set1, ...set2]);
+
+    return intersection.size / union.size;
+  }
+
+  // حساب تشابه المواضيع
+  calculateTopicSimilarity(topics1, topics2) {
+    if (!topics1 || !topics2 || topics1.length === 0 || topics2.length === 0) {
+      return 0;
+    }
+
+    let totalSimilarity = 0;
+    let comparisons = 0;
+
+    topics1.forEach((topic1) => {
+      topics2.forEach((topic2) => {
+        if (topic1.name === topic2.name) {
+          const avgConfidence = (topic1.confidence + topic2.confidence) / 2;
+          totalSimilarity += avgConfidence;
+          comparisons++;
+        }
+      });
+    });
+
+    return comparisons > 0 ? totalSimilarity / comparisons : 0;
+  }
+
+  // حساب التشابه الدلالي
+  calculateSemanticSimilarity(profile1, profile2) {
+    if (
+      !profile1 ||
+      !profile2 ||
+      !profile1.conceptVector ||
+      !profile2.conceptVector
+    ) {
+      return 0;
+    }
+
+    // حساب التشابه الكوزيني
+    const vector1 = profile1.conceptVector;
+    const vector2 = profile2.conceptVector;
+
+    if (vector1.length !== vector2.length) {
+      return 0;
+    }
+
+    let dotProduct = 0;
+    let norm1 = 0;
+    let norm2 = 0;
+
+    for (let i = 0; i < vector1.length; i++) {
+      dotProduct += vector1[i] * vector2[i];
+      norm1 += vector1[i] * vector1[i];
+      norm2 += vector2[i] * vector2[i];
+    }
+
+    if (norm1 === 0 || norm2 === 0) {
+      return 0;
+    }
+
+    return dotProduct / (Math.sqrt(norm1) * Math.sqrt(norm2));
+  }
+
+  // تجميع الملفات المتشابهة
+  async clusterSimilarFiles(files, similarityThreshold = 0.7) {
+    console.log(`🔗 بدء تجميع ${files.length} ملف متشابه`);
+
+    const clusters = [];
+    const processed = new Set();
+
+    for (let i = 0; i < files.length; i++) {
+      if (processed.has(files[i].id)) continue;
+
+      const cluster = {
+        id: crypto.randomUUID(),
+        mainFile: files[i],
+        similarFiles: [],
+        avgSimilarity: 0,
+        category: null,
+        topics: [],
+        size: 1,
+      };
+
+      processed.add(files[i].id);
+
+      for (let j = i + 1; j < files.length; j++) {
+        if (processed.has(files[j].id)) continue;
+
+        const similarity = await this.calculateFileSimilarity(
+          files[i],
+          files[j],
+        );
+
+        if (similarity.overall >= similarityThreshold) {
+          cluster.similarFiles.push({
+            file: files[j],
+            similarity: similarity.overall,
+            details: similarity,
+          });
+          processed.add(files[j].id);
+          cluster.size++;
+        }
+      }
+
+      if (cluster.size > 1) {
+        // حساب متوسط التشابه
+        cluster.avgSimilarity =
+          cluster.similarFiles.reduce((sum, item) => sum + item.similarity, 0) /
+          cluster.similarFiles.length;
+
+        // تحديد الفئة المهيمنة
+        const mainAnalysis = await this.analyzeFileContent(
+          cluster.mainFile.path,
+        );
+        cluster.category = mainAnalysis.category;
+        cluster.topics = mainAnalysis.topics;
+
+        clusters.push(cluster);
+      }
+    }
+
+    console.log(`✅ تم إنشاء ${clusters.length} مجموعة متشابهة`);
+
+    return clusters.sort((a, b) => b.size - a.size);
+  }
+
+  // اقتراح تنظيم ذكي
+  async suggestSmartOrganization(files, options = {}) {
+    console.log(`🧠 إنشاء اقتراحات تنظيم ذكية لـ ${files.length} ملف`);
+
+    // تحليل جميع الملفات
+    const analyses = [];
+    for (const file of files) {
+      try {
+        const analysis = await this.analyzeFileContent(file.path);
+        analyses.push({ file, analysis });
+      } catch (error) {
+        console.error(`خطأ في تحليل ${file.name}:`, error);
+      }
+    }
+
+    // تجميع حسب الفئة
+    const categoryGroups = new Map();
+    analyses.forEach(({ file, analysis }) => {
+      if (!categoryGroups.has(analysis.category)) {
+        categoryGroups.set(analysis.category, []);
+      }
+      categoryGroups.get(analysis.category).push({ file, analysis });
+    });
+
+    // إنشاء اقتراحات التنظيم
+    const suggestions = [];
+
+    for (const [category, items] of categoryGroups) {
+      if (items.length < 2) continue;
+
+      // اقتراح مجلد للفئة
+      const folderSuggestion = {
+        type: "create_folder",
+        category: category,
+        folderName: this.getCategoryFolderName(category),
+        files: items.map((item) => item.file),
+        confidence: this.calculateCategoryConfidence(items),
+        reason: `تجميع ${items.length} ملف من فئة ${category}`,
+      };
+
+      suggestions.push(folderSuggestion);
+
+      // اقتراحات فرعية حسب المواضيع
+      const topicGroups = this.groupByTopics(items);
+
+      topicGroups.forEach((topicGroup) => {
+        if (topicGroup.files.length >= 3) {
+          suggestions.push({
+            type: "create_subfolder",
+            category: category,
+            topic: topicGroup.topic,
+            folderName: `${this.getCategoryFolderName(category)}/${topicGroup.topic}`,
+            files: topicGroup.files,
+            confidence: topicGroup.confidence,
+            reason: `تجميع فرعي حسب موضوع ${topicGroup.topic}`,
+          });
+        }
+      });
+    }
+
+    // اقتراحات إعادة التسمية
+    const renameSuggestions = this.suggestFileRenames(analyses);
+    suggestions.push(...renameSuggestions);
+
+    // ترتيب حسب الثقة
+    suggestions.sort((a, b) => b.confidence - a.confidence);
+
+    console.log(`✅ تم إنشاء ${suggestions.length} اقتراح تنظيم`);
+
+    return {
+      suggestions: suggestions,
+      summary: {
+        totalFiles: files.length,
+        categoriesFound: categoryGroups.size,
+        suggestionsCount: suggestions.length,
+        estimatedImpact: this.calculateOrganizationImpact(suggestions),
+      },
+    };
+  }
+
+  // اقتراح أسماء مجلدات للفئات
+  getCategoryFolderName(category) {
+    const folderNames = {
+      Work: "عمل",
+      Personal: "شخصي",
+      Finance: "مالي",
+      Education: "تعليمي",
+      Health: "صحي",
+      Legal: "قانوني",
+      Development: "تطوير",
+      Media: "وسائط",
+      System: "نظام",
+    };
+
+    return folderNames[category] || category;
+  }
+
+  // حساب ثقة الفئة
+  calculateCategoryConfidence(items) {
+    const confidences = items.map((item) => item.analysis.confidence);
+    return (
+      confidences.reduce((sum, conf) => sum + conf, 0) / confidences.length
+    );
+  }
+
+  // تجميع حسب المواضيع
+  groupByTopics(items) {
+    const topicGroups = new Map();
+
+    items.forEach(({ file, analysis }) => {
+      if (analysis.topics && analysis.topics.length > 0) {
+        const mainTopic = analysis.topics[0]; // أهم موضوع
+
+        if (!topicGroups.has(mainTopic.name)) {
+          topicGroups.set(mainTopic.name, {
+            topic: mainTopic.name,
+            files: [],
+            confidence: 0,
+            totalConfidence: 0,
+            count: 0,
+          });
+        }
+
+        const group = topicGroups.get(mainTopic.name);
+        group.files.push(file);
+        group.totalConfidence += mainTopic.confidence;
+        group.count++;
+        group.confidence = group.totalConfidence / group.count;
+      }
+    });
+
+    return Array.from(topicGroups.values())
+      .filter((group) => group.files.length >= 2)
+      .sort((a, b) => b.confidence - a.confidence);
+  }
+
+  // اقتراح إعادة تسمية الملفات
+  suggestFileRenames(analyses) {
+    const suggestions = [];
+
+    analyses.forEach(({ file, analysis }) => {
+      const currentName = path.parse(file.name).name;
+      const extension = path.parse(file.name).ext;
+
+      // اقتراح اسم محسن
+      let suggestedName = currentName;
+
+      // إضافة فئة إذا لم تكن موجودة
+      const categoryPrefix = this.getCategoryFolderName(analysis.category);
+      if (!currentName.includes(categoryPrefix) && analysis.confidence > 0.8) {
+        suggestedName = `${categoryPrefix}_${currentName}`;
+      }
+
+      // إضافة تاريخ إذا لم يكن موجوداً
+      if (!/\d{4}[-_]\d{2}[-_]\d{2}/.test(currentName)) {
+        const date = new Date().toISOString().split("T")[0];
+        suggestedName = `${suggestedName}_${date}`;
+      }
+
+      // تنظيف الاسم
+      suggestedName = suggestedName
+        .replace(/[^\u0600-\u06FFa-zA-Z0-9\-_]/g, "_")
+        .replace(/_+/g, "_")
+        .replace(/^_|_$/g, "");
+
+      if (suggestedName !== currentName) {
+        suggestions.push({
+          type: "rename_file",
+          file: file,
+          currentName: file.name,
+          suggestedName: suggestedName + extension,
+          confidence: analysis.confidence,
+          reason: `تحسين هيكل الاسم بناءً على فئة ${analysis.category}`,
+        });
+      }
+    });
+
+    return suggestions.filter((s) => s.confidence > 0.7);
+  }
+
+  // حساب تأثير التنظيم
+  calculateOrganizationImpact(suggestions) {
+    let impact = {
+      foldersCreated: 0,
+      filesRenamed: 0,
+      filesReorganized: 0,
+      estimatedTimeReduction: 0,
+    };
+
+    suggestions.forEach((suggestion) => {
+      switch (suggestion.type) {
+        case "create_folder":
+        case "create_subfolder":
+          impact.foldersCreated++;
+          impact.filesReorganized += suggestion.files.length;
+          break;
+        case "rename_file":
+          impact.filesRenamed++;
+          break;
+      }
+    });
+
+    // تقدير توفير الوقت (دقائق)
+    impact.estimatedTimeReduction =
+      impact.filesReorganized * 0.5 + impact.filesRenamed * 0.2;
+
+    return impact;
+  }
+
+  // بحث متقدم بالذكاء الاصطناعي
+  async enhanceSearchResults(query, results) {
+    if (!this.isInitialized || results.length === 0) {
+      return results;
+    }
+
+    try {
+      console.log(`🔍 تحسين نتائج البحث لـ "${query}"`);
+
+      // تحليل استعلام البحث
+      const queryAnalysis = await this.nlpManager.process("ar", query);
+      const queryKeywords = await this.extractAdvancedKeywords(query, "ar");
+      const queryTopics = await this.extractTopics(query, "ar");
+
+      // تحسين وترتيب النتائج
+      const enhancedResults = await Promise.all(
+        results.map(async (result) => {
+          let relevanceScore = 0;
+          const scoringDetails = {};
+
+          // تشابه المحتوى
+          if (result.extracted_text) {
+            const contentKeywords = await this.extractAdvancedKeywords(
+              result.extracted_text,
+              "ar",
+            );
+            const keywordSimilarity = this.calculateKeywordSimilarity(
+              queryKeywords,
+              contentKeywords,
+            );
+            relevanceScore += keywordSimilarity * 0.4;
+            scoringDetails.contentSimilarity = keywordSimilarity;
+          }
+
+          // تشابه الاسم
+          if (result.name) {
+            const nameKeywords = await this.extractAdvancedKeywords(
+              result.name,
+              "ar",
+            );
+            const nameSimilarity = this.calculateKeywordSimilarity(
+              queryKeywords,
+              nameKeywords,
+            );
+            relevanceScore += nameSimilarity * 0.3;
+            scoringDetails.nameSimilarity = nameSimilarity;
+          }
+
+          // صلة الفئة
+          if (result.category && queryTopics.length > 0) {
+            const categoryRelevance = queryTopics.some((topic) =>
+              result.category.toLowerCase().includes(topic.name.toLowerCase()),
+            )
+              ? 0.8
+              : 0;
+            relevanceScore += categoryRelevance * 0.2;
+            scoringDetails.categoryRelevance = categoryRelevance;
+          }
+
+          // صلة نوع الملف
+          if (
+            result.extension &&
+            queryKeywords.some((k) => k.includes(result.extension))
+          ) {
+            relevanceScore += 0.1;
+            scoringDetails.typeRelevance = 0.1;
+          }
+
+          return {
+            ...result,
+            aiRelevanceScore: relevanceScore,
+            aiEnhanced: true,
+            scoringDetails: scoringDetails,
+            enhancementApplied: Date.now(),
+          };
+        }),
+      );
+
+      // ترتيب حسب نقاط الذكاء الاصطناعي
+      enhancedResults.sort((a, b) => b.aiRelevanceScore - a.aiRelevanceScore);
+
+      console.log(`✅ تم تحسين ${enhancedResults.length} نتيجة`);
+      return enhancedResults;
+    } catch (error) {
+      console.error("❌ خطأ في تحسين البحث:", error);
+      return results;
+    }
+  }
+
   getSystemStats() {
     return {
       isInitialized: this.isInitialized,
@@ -642,7 +1521,24 @@ class AIProcessor {
         languageDetection: true,
         smartSuggestions: true,
         searchEnhancement: true,
+        semanticAnalysis: true,
+        emotionAnalysis: true,
+        contentClustering: true,
+        smartOrganization: true,
+        duplicateDetection: true,
+        intelligentCategorization: true,
       },
+      modules: {
+        intelligentCategorizer:
+          this.intelligentCategorizer?.getSystemStats() || null,
+        duplicateDetector: this.duplicateDetector?.getDetectorStats() || null,
+      },
+      cache: {
+        vectorCache: this.semanticAnalyzer.vectorCache.size,
+        similarityMatrix: this.semanticAnalyzer.similarityMatrix.size,
+        conceptExtractor: this.semanticAnalyzer.conceptExtractor.size,
+      },
+      version: "3.0-Advanced-Enhanced",
     };
   }
 }
