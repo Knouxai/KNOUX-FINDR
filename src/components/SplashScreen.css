@@ -1,0 +1,372 @@
+/* SplashScreen.css - شاشة التحميل الاحترافية لـ KNOUX FINDR */
+
+.splash-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+
+  /* نفس الخلفية المتدرجة المستخدمة في التطبيق الرسمي */
+  background: linear-gradient(135deg, #0f123b 0%, #090d2e 50%, #020515 100%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* تأثيرات الرسوم المتحركة */
+  animation: splashFadeIn 0.8s ease-out;
+}
+
+.splash-container {
+  position: relative;
+  text-align: center;
+  max-width: 400px;
+  padding: 2rem;
+}
+
+/* حاوية الشعار */
+.splash-logo-container {
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.splash-logo {
+  display: inline-block;
+  position: relative;
+}
+
+.logo-icon {
+  display: inline-block;
+  animation: logoFloat 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(0, 180, 255, 0.3));
+}
+
+.knoux-icon {
+  width: 80px;
+  height: 80px;
+}
+
+/* النصوص */
+.splash-brand {
+  margin-bottom: 3rem;
+}
+
+.splash-title {
+  font-family:
+    "Plus Jakarta Sans",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.02em;
+
+  /* تأثير متدرج للنص */
+  background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 50%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  animation: titleGlow 2s ease-in-out infinite alternate;
+}
+
+.splash-subtitle {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #64748b;
+  margin: 0;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* قسم التحميل */
+.splash-loading {
+  position: relative;
+}
+
+.loading-text {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 0.9rem;
+  color: #94a3b8;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.loading-dots {
+  color: #00b4ff;
+  font-weight: 700;
+  display: inline-block;
+  min-width: 24px;
+  text-align: left;
+}
+
+/* شريط التقدم */
+.progress-container {
+  width: 200px;
+  height: 3px;
+  background-color: rgba(100, 116, 139, 0.2);
+  border-radius: 3px;
+  margin: 0 auto 2rem auto;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #00b4ff 0%, #0075ff 50%, #0052d4 100%);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+
+  /* تأثير التوهج */
+  box-shadow: 0 0 10px rgba(0, 180, 255, 0.5);
+
+  /* حركة التموج */
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  animation: progressShimmer 1.5s infinite;
+}
+
+/* العجلة الدوارة */
+.loading-spinner {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  margin: 0 auto;
+}
+
+.spinner-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  animation: spinnerRotate 1.5s linear infinite;
+}
+
+.spinner-ring:nth-child(1) {
+  border-top-color: #00b4ff;
+  animation-delay: 0s;
+}
+
+.spinner-ring:nth-child(2) {
+  border-right-color: #0075ff;
+  animation-delay: -0.5s;
+  width: 80%;
+  height: 80%;
+  top: 10%;
+  left: 10%;
+}
+
+.spinner-ring:nth-child(3) {
+  border-bottom-color: #0052d4;
+  animation-delay: -1s;
+  width: 60%;
+  height: 60%;
+  top: 20%;
+  left: 20%;
+}
+
+.spinner-core {
+  position: absolute;
+  width: 40%;
+  height: 40%;
+  top: 30%;
+  left: 30%;
+  background: radial-gradient(circle, #00b4ff, transparent);
+  border-radius: 50%;
+  animation: coreGlow 2s ease-in-out infinite alternate;
+}
+
+/* خلفية متحركة */
+.splash-background-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.pattern-dot {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(0, 180, 255, 0.1);
+  border-radius: 50%;
+  animation: floatingDots 4s ease-in-out infinite;
+}
+
+.pattern-dot:nth-child(1) {
+  top: 20%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.pattern-dot:nth-child(2) {
+  top: 60%;
+  right: 15%;
+  animation-delay: -1s;
+}
+
+.pattern-dot:nth-child(3) {
+  bottom: 30%;
+  left: 20%;
+  animation-delay: -2s;
+}
+
+.pattern-dot:nth-child(4) {
+  top: 40%;
+  right: 30%;
+  animation-delay: -3s;
+}
+
+.pattern-dot:nth-child(5) {
+  bottom: 60%;
+  right: 10%;
+  animation-delay: -1.5s;
+}
+
+/* الرسوم المتحركة */
+@keyframes splashFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes logoFloat {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes titleGlow {
+  0% {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  }
+  100% {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  }
+}
+
+@keyframes progressShimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes spinnerRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes coreGlow {
+  0% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 0.8;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes floatingDots {
+  0%,
+  100% {
+    transform: translateY(0px) scale(1);
+    opacity: 0.1;
+  }
+  50% {
+    transform: translateY(-20px) scale(1.2);
+    opacity: 0.3;
+  }
+}
+
+/* تأثيرات إضافية للخروج */
+.splash-screen.fade-out {
+  animation: splashFadeOut 0.8s ease-in forwards;
+}
+
+@keyframes splashFadeOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+}
+
+/* استجابة للشاشات الصغيرة */
+@media (max-width: 768px) {
+  .splash-container {
+    padding: 1rem;
+  }
+
+  .splash-title {
+    font-size: 2rem;
+  }
+
+  .knoux-icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .progress-container {
+    width: 150px;
+  }
+
+  .loading-spinner {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+@media (max-height: 600px) {
+  .splash-brand {
+    margin-bottom: 2rem;
+  }
+
+  .splash-logo-container {
+    margin-bottom: 1.5rem;
+  }
+}
