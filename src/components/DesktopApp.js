@@ -764,13 +764,20 @@ const DesktopApp = () => {
 
       {/* Navigation Tabs */}
       <nav className="relative z-10 p-4 pb-0">
-        <div className="flex gap-2">
+        <div className="flex gap-2 overflow-x-auto">
           {[
-            { id: "search", label: "🔍 بحث سريع", icon: "🔍" },
-            { id: "powerops", label: "⚡ عمليات متقدمة", icon: "⚡" },
-            { id: "duplicates", label: "🔄 المكررات", icon: "🔄" },
-            { id: "stats", label: "📊 إحصائيات", icon: "📊" },
-            { id: "timeline", label: "📅 الخط الزمني", icon: "📅" },
+            {
+              id: "professional",
+              label: "🏢 Professional Dashboard",
+              icon: "🏢",
+            },
+            { id: "search", label: "🔍 Intelligent Search", icon: "🔍" },
+            { id: "database", label: "🗄️ Database Management", icon: "🗄️" },
+            { id: "languages", label: "🌐 Language Center", icon: "🌐" },
+            { id: "powerops", label: "⚡ Advanced Operations", icon: "⚡" },
+            { id: "duplicates", label: "🔄 Duplicate Analysis", icon: "🔄" },
+            { id: "analytics", label: "📊 Enterprise Analytics", icon: "📊" },
+            { id: "timeline", label: "📅 Activity Timeline", icon: "📅" },
           ].map((tab) => (
             <button
               key={tab.id}
