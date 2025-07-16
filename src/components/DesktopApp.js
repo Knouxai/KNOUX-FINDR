@@ -47,7 +47,90 @@ const DesktopApp = () => {
       "ملفات التصميم",
     ],
   });
-  const [recentFiles, setRecentFiles] = useState([]);
+  const [recentFiles, setRecentFiles] = useState([
+    {
+      id: 1,
+      name: "تقرير المبيعات Q4 2024.pdf",
+      path: "/Users/Desktop/Reports/تقرير المبيعات Q4 2024.pdf",
+      size: 2847293,
+      modified_at: "2024-01-15T10:30:00Z",
+      extension: ".pdf",
+      mime_type: "application/pdf",
+      category: "Work",
+    },
+    {
+      id: 2,
+      name: "عرض تقديمي - استراتيجية التسويق.pptx",
+      path: "/Users/Documents/Presentations/عرض تقديمي - استراتيجية التسويق.pptx",
+      size: 15847293,
+      modified_at: "2024-01-14T16:45:00Z",
+      extension: ".pptx",
+      mime_type:
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+      category: "Work",
+    },
+    {
+      id: 3,
+      name: "صور العطلة الصيفية",
+      path: "/Users/Pictures/Summer_2024/IMG_001.jpg",
+      size: 4293847,
+      modified_at: "2024-01-13T14:22:00Z",
+      extension: ".jpg",
+      mime_type: "image/jpeg",
+      category: "Personal",
+    },
+    {
+      id: 4,
+      name: "مشروع React النهائي",
+      path: "/Users/Dev/Projects/knoux-findr/src/App.js",
+      size: 23847,
+      modified_at: "2024-01-13T09:15:00Z",
+      extension: ".js",
+      mime_type: "text/javascript",
+      category: "Code",
+    },
+    {
+      id: 5,
+      name: "فيديو اجتماع الفريق.mp4",
+      path: "/Users/Videos/Meetings/team_meeting_2024_01_12.mp4",
+      size: 284739200,
+      modified_at: "2024-01-12T11:30:00Z",
+      extension: ".mp4",
+      mime_type: "video/mp4",
+      category: "Work",
+    },
+    {
+      id: 6,
+      name: "قاعدة بيانات العملاء.xlsx",
+      path: "/Users/Desktop/Data/customer_database_2024.xlsx",
+      size: 1847293,
+      modified_at: "2024-01-11T13:45:00Z",
+      extension: ".xlsx",
+      mime_type:
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      category: "Work",
+    },
+    {
+      id: 7,
+      name: "تصميم الشعار الجديد.ai",
+      path: "/Users/Design/Logos/new_logo_v3.ai",
+      size: 8472938,
+      modified_at: "2024-01-10T16:20:00Z",
+      extension: ".ai",
+      mime_type: "application/illustrator",
+      category: "Design",
+    },
+    {
+      id: 8,
+      name: "أرشيف المشاريع القديمة.zip",
+      path: "/Users/Archives/old_projects_2023.zip",
+      size: 847293847,
+      modified_at: "2024-01-09T12:10:00Z",
+      extension: ".zip",
+      mime_type: "application/zip",
+      category: "Archives",
+    },
+  ]);
   const [indexingStatus, setIndexingStatus] = useState(null);
   const [indexingProgress, setIndexingProgress] = useState(null);
   const [aiSuggestions, setAiSuggestions] = useState([]);
@@ -507,7 +590,7 @@ const DesktopApp = () => {
                       }
                       className="rounded"
                     />
-                    <span>🤖 البحث بالذكاء الاصطناعي</span>
+                    <span>🤖 ا��بحث بالذكاء الاصطناعي</span>
                   </label>
 
                   <select
