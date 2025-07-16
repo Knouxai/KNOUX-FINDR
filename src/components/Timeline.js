@@ -16,11 +16,43 @@ const Timeline = () => {
   const loadTimelineData = async () => {
     setIsLoading(true);
     try {
-      // محاكاة بيانات الخط الزمني (في التطبيق الفعلي، ستأتي من قاعدة البيانات)
-      const mockData = generateTimelineData(selectedPeriod);
-      setTimelineData(mockData);
+      if (window.electronAPI) {
+        // تحميل أحداث حقيقية من Electron backend
+        const realEvents = await window.electronAPI.getTimelineEvents({
+          period: selectedPeriod,
+          groupBy: groupBy,
+          includeFileOperations: true,
+          includeSystemEvents: true,
+          includeUserActions: true,
+        });
+        setTimelineData(realEvents);
+      } else {
+        // تحميل أحداث من web backend
+        const response = await fetch("/api/timeline", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            period: selectedPeriod,
+            groupBy: groupBy,
+            viewMode: viewMode,
+          }),
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          const realEvents = await response.json();
+          setTimelineData(realEvents);
+        } else {
+          // Fallback للبيانات الوهمية
+          const mockData = generateTimelineData(selectedPeriod);
+          setTimelineData(mockData);
+        }
+      }
     } catch (error) {
       console.error("خطأ في تحميل بيانات الخط الزمني:", error);
+      // Fallback للبيانات الوهمية في حالة الخطأ
+      const mockData = generateTimelineData(selectedPeriod);
+      setTimelineData(mockData);
     } finally {
       setIsLoading(false);
     }
