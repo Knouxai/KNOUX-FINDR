@@ -189,6 +189,38 @@ const DesktopApp = () => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
+  const getFileIcon = (extension, mimeType) => {
+    if (mimeType?.startsWith("image/")) return "🖼️";
+    if (mimeType?.startsWith("video/")) return "🎥";
+    if (mimeType?.startsWith("audio/")) return "🎵";
+
+    switch (extension?.toLowerCase()) {
+      case ".pdf":
+        return "📄";
+      case ".doc":
+      case ".docx":
+        return "📝";
+      case ".xls":
+      case ".xlsx":
+        return "📊";
+      case ".ppt":
+      case ".pptx":
+        return "📽️";
+      case ".zip":
+      case ".rar":
+      case ".7z":
+        return "📦";
+      case ".js":
+      case ".html":
+      case ".css":
+      case ".py":
+      case ".java":
+        return "💻";
+      default:
+        return "📄";
+    }
+  };
+
   if (!isElectron) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#0F123B] via-[#090D2E] to-[#020515] font-jakarta flex items-center justify-center">
