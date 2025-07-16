@@ -49,7 +49,8 @@ const OriginalLoginForm = ({ onSignupSuccess, onSignIn }) => {
 
     // BUILDER.IO REQUIREMENT: OAuth endpoints as specified
     // Google: /auth/google, GitHub: /auth/github, Facebook: /auth/facebook, Apple: /auth/apple (placeholder)
-    const authUrl = `/auth/${provider}`;
+    const AUTH_SERVER_URL = "http://localhost:3001";
+    const authUrl = `${AUTH_SERVER_URL}/auth/${provider}`;
 
     // Use window.location.href as requested in requirements
     window.location.href = authUrl;
