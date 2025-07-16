@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import SignupForm from "./components/SignupForm";
+import OriginalLoginForm from "./components/OriginalLoginForm";
 import Dashboard from "./components/Dashboard";
 import DesktopApp from "./components/DesktopApp";
 import InstantSearch from "./components/InstantSearch";
@@ -9,7 +9,7 @@ import NaturalQueryProcessor from "./components/NaturalQueryProcessor";
 import PowerOps from "./components/PowerOps";
 
 function App() {
-  const [currentPage, setCurrentPage] = useState("signup");
+  const [currentPage, setCurrentPage] = useState("login");
   const [user, setUser] = useState(null);
   const [isElectron, setIsElectron] = useState(false);
 
@@ -36,7 +36,7 @@ function App() {
 
   const handleLogout = () => {
     setUser(null);
-    setCurrentPage("signup");
+    setCurrentPage("login");
   };
 
   // If running in Electron, show desktop app directly
@@ -44,16 +44,29 @@ function App() {
     return <DesktopApp user={user} onLogout={handleLogout} />;
   }
 
+  // Authentication protection for secured routes
+  const protectedRoutes = ["dashboard", "timeline", "search"];
+
+  if (!user && protectedRoutes.includes(currentPage)) {
+    setCurrentPage("login");
+  }
+
   return (
     <div className="min-h-screen w-screen bg-gradient-to-br from-[#0F123B] via-[#090D2E] to-[#020515] font-jakarta">
-      {currentPage === "signup" && (
-        <SignupForm
+      {(currentPage === "login" || currentPage === "signup") && (
+        <OriginalLoginForm
           onSignupSuccess={handleSignupSuccess}
           onSignIn={handleSignIn}
         />
       )}
-      {currentPage === "dashboard" && (
+      {currentPage === "dashboard" && user && (
         <Dashboard user={user} onLogout={handleLogout} />
+      )}
+      {currentPage === "timeline" && user && (
+        <Timeline user={user} onLogout={handleLogout} />
+      )}
+      {currentPage === "search" && user && (
+        <InstantSearch user={user} onLogout={handleLogout} />
       )}
     </div>
   );
