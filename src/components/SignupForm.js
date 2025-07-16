@@ -256,7 +256,12 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
                       <div className="flex justify-center gap-[15px] mb-[47px]">
                         <div
                           className="w-[75px] h-[75px] rounded-[20px] glass-button flex items-center justify-center cursor-pointer group relative overflow-hidden"
-                          onClick={() => socialSignup("Facebook")}
+                          onClick={() =>
+                            window.open(
+                              "http://localhost:3001/auth/facebook",
+                              "_blank",
+                            )
+                          }
                         >
                           <div className="absolute inset-0 bg-gradient-to-br from-[#1877F2]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                           <svg
