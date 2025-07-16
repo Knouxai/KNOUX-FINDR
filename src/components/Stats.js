@@ -16,11 +16,38 @@ const Stats = () => {
   const loadStats = async () => {
     setIsLoading(true);
     try {
-      // محاكاة تحميل الإحصائيات (في التطبيق الفعلي، ستأتي من قاعدة البيانات)
-      const mockStats = generateMockStats(timeRange);
-      setStats(mockStats);
+      if (window.electronAPI) {
+        // تحميل إحصائيات حقيقية من Electron backend
+        const realStats = await window.electronAPI.getFileStatistics({
+          timeRange,
+          includeCategorization: true,
+          includeEncryption: true,
+          includeDuplicates: true,
+        });
+        setStats(realStats);
+      } else {
+        // تحميل إحصائيات من web backend
+        const response = await fetch("/api/stats", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ timeRange, chartType }),
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          const realStats = await response.json();
+          setStats(realStats);
+        } else {
+          // Fallback للبيانات الوهمية
+          const mockStats = generateMockStats(timeRange);
+          setStats(mockStats);
+        }
+      }
     } catch (error) {
       console.error("خطأ في تحميل الإحصائيات:", error);
+      // Fallback للبيانات الوهمية في حالة الخطأ
+      const mockStats = generateMockStats(timeRange);
+      setStats(mockStats);
     } finally {
       setIsLoading(false);
     }
