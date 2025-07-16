@@ -1,0 +1,418 @@
+/* Original Login Interface Styles - EXACT MATCH TO DESIGN */
+
+.original-login-container {
+  min-height: 100vh;
+  width: 100vw;
+  background: linear-gradient(135deg, #0f123b 0%, #090d2e 50%, #020515 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+.original-login-layout {
+  display: flex;
+  width: 100%;
+  max-width: 1400px;
+  height: 100vh;
+  align-items: center;
+}
+
+/* Left Side - Brand Section */
+.original-left-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px;
+  position: relative;
+}
+
+.brand-content {
+  text-align: center;
+  max-width: 500px;
+}
+
+.brand-subtitle {
+  color: #a0aec0;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 3.6px;
+  margin-bottom: 16px;
+  opacity: 0.8;
+}
+
+.brand-title {
+  color: #ffffff;
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: 6.48px;
+  line-height: 1.2;
+  margin-bottom: 32px;
+  background: linear-gradient(135deg, #ffffff 0%, #00b4ff 50%, #0075ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.brand-description {
+  color: #a0aec0;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+/* Right Side - Auth Card */
+.original-right-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 450px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 24px;
+  box-shadow:
+    0 20px 60px rgba(15, 18, 59, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  overflow: hidden;
+}
+
+.auth-card-content {
+  padding: 48px;
+}
+
+/* Welcome Header */
+.welcome-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.welcome-title {
+  color: #ffffff;
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.welcome-subtitle {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.7;
+  opacity: 0.8;
+}
+
+/* Register Section */
+.register-section {
+  margin-bottom: 32px;
+}
+
+.register-title {
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+/* Social Buttons */
+.social-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 32px;
+}
+
+.social-button {
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.social-button:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.4);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.08) 100%
+  );
+  box-shadow: 0 8px 25px rgba(0, 117, 255, 0.15);
+}
+
+.social-button svg {
+  width: 24px;
+  height: 24px;
+  color: #ffffff;
+}
+
+/* Divider */
+.divider {
+  text-align: center;
+  color: #a0aec0;
+  font-size: 18px;
+  font-weight: 600;
+  position: relative;
+  margin: 24px 0;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(160, 174, 192, 0.3),
+    transparent
+  );
+}
+
+.divider::before {
+  left: 20px;
+}
+
+.divider::after {
+  right: 20px;
+}
+
+/* Form */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field-label {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.field-input {
+  width: 100%;
+  height: 50px;
+  padding: 0 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  backdrop-filter: blur(10px);
+  color: #ffffff;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.field-input::placeholder {
+  color: #a0aec0;
+  opacity: 0.7;
+}
+
+.field-input:focus {
+  outline: none;
+  border-color: #0075ff;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  box-shadow: 0 0 0 3px rgba(0, 117, 255, 0.2);
+}
+
+/* Password Field */
+.password-field {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #a0aec0;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.password-toggle:hover {
+  color: #ffffff;
+}
+
+/* Remember Me */
+.remember-section {
+  margin: 8px 0;
+}
+
+.remember-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.remember-checkbox input[type="checkbox"] {
+  display: none;
+}
+
+.checkbox-custom {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  background: transparent;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.remember-checkbox input[type="checkbox"]:checked + .checkbox-custom {
+  background: #0075ff;
+  border-color: #0075ff;
+}
+
+.remember-checkbox input[type="checkbox"]:checked + .checkbox-custom::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.remember-text {
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+/* Register Button */
+.register-button {
+  width: 100%;
+  height: 45px;
+  border-radius: 12px;
+  border: none;
+  background: #0075ff;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 16px;
+}
+
+.register-button:hover {
+  background: #0066e6;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 117, 255, 0.3);
+}
+
+.register-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Card Footer */
+.auth-card-footer {
+  padding: 24px 48px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.02) 0%,
+    rgba(255, 255, 255, 0.01) 100%
+  );
+}
+
+.auth-card-footer p {
+  color: #a0aec0;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .original-left-section {
+    display: none;
+  }
+
+  .original-right-section {
+    flex: none;
+    width: 100%;
+    padding: 40px 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .auth-card-content {
+    padding: 32px;
+  }
+
+  .auth-card-footer {
+    padding: 20px 32px;
+  }
+
+  .social-buttons {
+    gap: 12px;
+  }
+
+  .social-button {
+    width: 55px;
+    height: 55px;
+  }
+}
+
+@media (max-width: 480px) {
+  .original-right-section {
+    padding: 20px 16px;
+  }
+
+  .auth-card-content {
+    padding: 24px;
+  }
+
+  .auth-card-footer {
+    padding: 16px 24px;
+  }
+}
