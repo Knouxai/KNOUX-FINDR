@@ -145,6 +145,30 @@ function App() {
     }
   }, [user, currentPage, isElectron]);
 
+  // إظهار شاشة التحميل الأولية أو شاشة الانتقال
+  if (showInitialSplash && !isElectron) {
+    return (
+      <SplashScreen
+        message="Installing packages"
+        onComplete={() => {
+          setIsAppReady(true);
+        }}
+      />
+    );
+  }
+
+  // إظهار شاشة التحميل أثناء التنقل بين الصفحات المحمية
+  if (isTransitioning && user && !isElectron) {
+    return (
+      <SplashScreen
+        message="Loading section"
+        onComplete={() => {
+          // يتم التحكم في هذا من خلال الهوك
+        }}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen w-screen bg-gradient-to-br from-[#0F123B] via-[#090D2E] to-[#020515] font-jakarta">
       <Header
