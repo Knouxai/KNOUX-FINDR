@@ -67,7 +67,12 @@ const OriginalLoginForm = ({ onSignupSuccess, onSignIn }) => {
                 <div className="social-buttons">
                   <button
                     className="social-button facebook-btn"
-                    onClick={() => window.open("/auth/facebook", "_blank")}
+                    onClick={() =>
+                      window.open(
+                        "http://localhost:3001/auth/facebook",
+                        "_blank",
+                      )
+                    }
                   >
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                       <path
@@ -79,7 +84,9 @@ const OriginalLoginForm = ({ onSignupSuccess, onSignIn }) => {
 
                   <button
                     className="social-button github-btn"
-                    onClick={() => window.open("/auth/github", "_blank")}
+                    onClick={() =>
+                      window.open("http://localhost:3001/auth/github", "_blank")
+                    }
                   >
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                       <path
@@ -91,7 +98,9 @@ const OriginalLoginForm = ({ onSignupSuccess, onSignIn }) => {
 
                   <button
                     className="social-button google-btn"
-                    onClick={() => window.open("/auth/google", "_blank")}
+                    onClick={() =>
+                      window.open("http://localhost:3001/auth/google", "_blank")
+                    }
                   >
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                       <path
