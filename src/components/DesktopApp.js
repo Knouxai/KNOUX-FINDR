@@ -449,6 +449,17 @@ const DesktopApp = () => {
       </div>
 
       <div className="relative z-10 text-center text-white max-w-lg mx-auto px-6">
+        {/* Top Header with Professor Name */}
+        <div className="absolute -top-20 left-1/2 transform -translate-x-1/2 w-full">
+          <div className="glass-card rounded-xl p-4 border border-amber-400/30 bg-amber-500/5">
+            <div className="text-2xl font-black tracking-wider text-amber-400">
+              Prof S
+            </div>
+            <div className="text-2xl font-black tracking-wider text-amber-400">
+              adek Elgazar
+            </div>
+          </div>
+        </div>
         {/* Logo and Title */}
         <div className="mb-12">
           <div className="text-8xl mb-6 animate-pulse-glow">🚀</div>
@@ -885,7 +896,7 @@ const DesktopApp = () => {
                       {/* Load More Section */}
                       <div className="text-center pt-4 border-t border-white/10 mt-6">
                         <div className="text-sm text-gray-400 mb-3">
-                          عرض 3 من 1,247 نتيجة • البحث في{" "}
+                          عرض 3 من 1,247 ن��يجة • البحث في{" "}
                           {fileStats.totalFiles.toLocaleString()} ملف
                         </div>
                         <button className="glass-button px-6 py-3 rounded-lg hover:scale-105 transition-transform">
