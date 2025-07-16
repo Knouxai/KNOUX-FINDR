@@ -48,20 +48,35 @@ const Header = ({ currentPage, user, onLogout, onNavigate }) => {
               </button>
 
               <button
-                className={`nav-button ${currentPage === "profile" ? "active" : ""}`}
-                onClick={() => onNavigate("profile")}
+                className={`nav-button ${currentPage === "stats" ? "active" : ""}`}
+                onClick={() => onNavigate("stats")}
               >
-                <svg className="nav-icon" viewBox="0 0 12 12" fill="none">
-                  <path
-                    d="M7.89658 2.08253C7.4785 1.63114 6.89455 1.38257 6.25002 1.38257C5.60205 1.38257 5.01617 1.62964 4.60002 2.07823C4.17936 2.53177 3.9744 3.14815 4.02252 3.81374C4.11791 5.12686 5.11715 6.19507 6.25002 6.19507C7.38289 6.19507 8.38041 5.12708 8.47731 3.81417C8.52607 3.1546 8.31982 2.5395 7.89658 2.08253Z"
-                    fill="currentColor"
-                  />
-                  <path
-                    d="M10.0314 11.0071H2.46887C2.36989 11.0084 2.27186 10.9876 2.18192 10.9462C2.09198 10.9048 2.01239 10.8439 1.94895 10.768C1.8093 10.601 1.75301 10.3731 1.79469 10.1425C1.97602 9.13665 2.54192 8.29167 3.43137 7.69849C4.22157 7.1719 5.22252 6.88208 6.25012 6.88208C7.27772 6.88208 8.27867 7.17212 9.06887 7.69849C9.95832 8.29145 10.5242 9.13643 10.7055 10.1423C10.7472 10.3729 10.6909 10.6008 10.5513 10.7677C10.4879 10.8438 10.4083 10.9047 10.3184 10.9461C10.2284 10.9875 10.1304 11.0083 10.0314 11.0071Z"
-                    fill="currentColor"
-                  />
-                </svg>
-                Profile
+                <span className="nav-icon">📊</span>
+                إحصائيات
+              </button>
+
+              <button
+                className={`nav-button ${currentPage === "encryption" ? "active" : ""}`}
+                onClick={() => onNavigate("encryption")}
+              >
+                <span className="nav-icon">🔒</span>
+                تشفير
+              </button>
+
+              <button
+                className={`nav-button ${currentPage === "cloudsync" ? "active" : ""}`}
+                onClick={() => onNavigate("cloudsync")}
+              >
+                <span className="nav-icon">☁️</span>
+                مزامنة
+              </button>
+
+              <button
+                className={`nav-button ${currentPage === "powerops" ? "active" : ""}`}
+                onClick={() => onNavigate("powerops")}
+              >
+                <span className="nav-icon">⚡</span>
+                PowerOps
               </button>
             </>
           )}
