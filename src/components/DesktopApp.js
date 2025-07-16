@@ -4,6 +4,7 @@ import InstantSearch from "./InstantSearch";
 import Stats from "./Stats";
 import Timeline from "./Timeline";
 import DuplicateManager from "./DuplicateManager";
+import SocialLogin from "./SocialLogin";
 
 /**
  * KNOUX FINDR Desktop App UI
@@ -517,7 +518,7 @@ const DesktopApp = () => {
 
           <div className="grid grid-cols-2 gap-4 mb-8">
             <div className="text-center p-4 bg-white/5 rounded-lg">
-              <div className="text-3xl mb-2">🤖</div>
+              <div className="text-3xl mb-2">���</div>
               <div className="text-sm font-semibold">ذكاء اصطناعي</div>
               <div className="text-xs text-gray-400">بحث متقدم</div>
             </div>
