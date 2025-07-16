@@ -224,9 +224,28 @@ const DesktopApp = () => {
   useEffect(() => {
     if (window.electronAPI) {
       setIsElectron(true);
-      initializeApp();
+      // Show login screen first for Electron, skip for web
+      setShowLoginScreen(true);
     }
   }, []);
+
+  const handleLogin = async (credentials) => {
+    try {
+      // Simulate login process
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      setIsLoggedIn(true);
+      setShowLoginScreen(false);
+      initializeApp();
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
+  };
+
+  const handleQuickStart = () => {
+    setIsLoggedIn(true);
+    setShowLoginScreen(false);
+    initializeApp();
+  };
 
   const initializeApp = async () => {
     try {
