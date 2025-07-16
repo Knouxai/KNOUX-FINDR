@@ -150,7 +150,7 @@ const DesktopApp = () => {
       ],
     },
   ]);
-  const [activeView, setActiveView] = useState("search");
+  const [activeView, setActiveView] = useState("professional");
   const [searchFilters, setSearchFilters] = useState({
     useAI: true,
     category: "all",
@@ -341,7 +341,7 @@ const DesktopApp = () => {
 
   const handleRunDuplicateAnalysis = async () => {
     setIsDuplicateAnalysisRunning(true);
-    addNotification("جاري تشغيل تحليل الملفات ا��مكررة المتقدم...", "info");
+    addNotification("جاري تشغيل تحليل الملفات المكررة المتقدم...", "info");
 
     try {
       const duplicates = await window.electronAPI.getAdvancedDuplicates();
@@ -574,7 +574,7 @@ const DesktopApp = () => {
               onClick={handleQuickStart}
               className="w-full py-3 px-6 glass-button rounded-xl text-lg font-semibold hover:scale-105 transition-all duration-200"
             >
-              🚀 ابدأ الاستخدام فوراً
+              🚀 ابدأ الاستخدا�� فوراً
             </button>
 
             <div className="flex gap-3">
