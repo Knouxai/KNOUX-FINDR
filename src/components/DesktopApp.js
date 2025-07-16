@@ -3,6 +3,7 @@ import PowerOps from "./PowerOps";
 import InstantSearch from "./InstantSearch";
 import Stats from "./Stats";
 import Timeline from "./Timeline";
+import DuplicateManager from "./DuplicateManager";
 
 /**
  * KNOUX FINDR Desktop App UI
