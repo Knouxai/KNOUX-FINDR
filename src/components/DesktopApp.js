@@ -528,7 +528,7 @@ const DesktopApp = () => {
 
           {/* PowerOps View */}
           {activeView === "powerops" && (
-            <div className="space-y-6">
+            <div className="fade-in">
               <PowerOps
                 fileStats={fileStats}
                 onRefreshStats={async () => {
@@ -542,9 +542,24 @@ const DesktopApp = () => {
             </div>
           )}
 
+          {/* Duplicates View */}
+          {activeView === "duplicates" && (
+            <div className="fade-in">
+              <DuplicateManager
+                duplicateGroups={duplicateGroups}
+                onRunAnalysis={handleRunDuplicateAnalysis}
+                isAnalysisRunning={isDuplicateAnalysisRunning}
+                onRefreshStats={async () => {
+                  const stats = await window.electronAPI.getFileStats();
+                  setFileStats(stats);
+                }}
+              />
+            </div>
+          )}
+
           {/* Statistics View */}
           {activeView === "stats" && (
-            <div className="space-y-6">
+            <div className="fade-in">
               <Stats
                 fileStats={fileStats}
                 recentFiles={recentFiles}
@@ -555,7 +570,7 @@ const DesktopApp = () => {
 
           {/* Timeline View */}
           {activeView === "timeline" && (
-            <div className="space-y-6">
+            <div className="fade-in">
               <Timeline />
             </div>
           )}
