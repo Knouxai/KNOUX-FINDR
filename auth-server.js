@@ -138,11 +138,13 @@ app.get(
 
 app.get(
   "/auth/google/callback",
-  passport.authenticate("google", { failureRedirect: "/login?error=google" }),
+  passport.authenticate("google", {
+    failureRedirect: "http://localhost:3000/login?error=google",
+  }),
   (req, res) => {
     // Successful authentication
     res.redirect(
-      `/dashboard?user=${encodeURIComponent(JSON.stringify(req.user))}`,
+      `http://localhost:3000/dashboard?user=${encodeURIComponent(JSON.stringify(req.user))}`,
     );
   },
 );
