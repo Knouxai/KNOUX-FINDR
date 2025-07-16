@@ -114,7 +114,7 @@ const DesktopApp = () => {
     },
     {
       id: 4,
-      name: "مشروع React الن��ائي",
+      name: "مشروع React النهائي",
       path: "/Users/Dev/Projects/knoux-findr/src/App.js",
       size: 23847,
       modified_at: "2024-01-13T09:15:00Z",
@@ -342,7 +342,7 @@ const DesktopApp = () => {
 
   const handleRunDuplicateAnalysis = async () => {
     setIsDuplicateAnalysisRunning(true);
-    addNotification("جاري تشغيل تحليل الملفات المكررة المتقدم...", "info");
+    addNotification("ج��ري تشغيل تحليل الملفات المكررة المتقدم...", "info");
 
     try {
       const duplicates = await window.electronAPI.getAdvancedDuplicates();
@@ -633,10 +633,8 @@ const DesktopApp = () => {
     </div>
   );
 
-  // Show login screen for new users or web fallback
-  if (!isElectron || showLoginScreen) {
-    return <LoginScreen />;
-  }
+  // Professional auth screen is already handled above
+  // This section is now redundant
 
   return (
     <div
