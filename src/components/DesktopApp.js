@@ -602,7 +602,7 @@ const DesktopApp = () => {
 
           <div className="flex items-center gap-2 text-gray-400">
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            متصل
+            متصل ومحدث
           </div>
         </div>
       </footer>
