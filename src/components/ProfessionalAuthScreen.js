@@ -228,6 +228,56 @@ const ProfessionalAuthScreen = ({ onAuthSuccess }) => {
             </p>
           </div>
 
+          {/* Social Login Buttons */}
+          <div className="space-y-3 mb-6">
+            <div className="text-center text-sm text-gray-400 mb-4">
+              Quick Sign In Options
+            </div>
+
+            {/* Google Login */}
+            <button
+              type="button"
+              className="w-full py-3 px-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg font-semibold transition-all duration-200 hover:scale-105 flex items-center justify-center gap-3"
+              onClick={() =>
+                window.open("http://localhost:3001/auth/google", "_blank")
+              }
+            >
+              <span className="text-2xl">🟢</span>
+              <span>Continue with Google</span>
+            </button>
+
+            {/* GitHub Login */}
+            <button
+              type="button"
+              className="w-full py-3 px-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg font-semibold transition-all duration-200 hover:scale-105 flex items-center justify-center gap-3"
+              onClick={() =>
+                window.open("http://localhost:3001/auth/github", "_blank")
+              }
+            >
+              <span className="text-2xl">⚫</span>
+              <span>Continue with GitHub</span>
+            </button>
+
+            {/* Facebook Login */}
+            <button
+              type="button"
+              className="w-full py-3 px-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg font-semibold transition-all duration-200 hover:scale-105 flex items-center justify-center gap-3"
+              onClick={() =>
+                window.open("http://localhost:3001/auth/facebook", "_blank")
+              }
+            >
+              <span className="text-2xl">🔵</span>
+              <span>Continue with Facebook</span>
+            </button>
+
+            {/* Divider */}
+            <div className="flex items-center my-6">
+              <div className="flex-1 border-t border-white/20"></div>
+              <span className="px-4 text-gray-400 text-sm">or</span>
+              <div className="flex-1 border-t border-white/20"></div>
+            </div>
+          </div>
+
           {/* Auth Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Name Field (Signup Only) */}
