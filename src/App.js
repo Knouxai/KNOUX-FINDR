@@ -10,12 +10,24 @@ import NaturalQueryProcessor from "./components/NaturalQueryProcessor";
 import PowerOps from "./components/PowerOps";
 import FileEncryption from "./components/FileEncryption";
 import CloudSync from "./components/CloudSync";
+import SplashScreen from "./components/SplashScreen";
+import { useSplashScreen, useNavigationSplash } from "./hooks/useSplashScreen";
 import "./components/Header.css";
 
 function App() {
   const [currentPage, setCurrentPage] = useState("login");
   const [user, setUser] = useState(null);
   const [isElectron, setIsElectron] = useState(false);
+  const [isAppReady, setIsAppReady] = useState(false);
+
+  // هوك شاشة التحميل الرئيسية
+  const { isVisible: showInitialSplash, isLoading } = useSplashScreen(
+    3000,
+    !isElectron,
+  );
+
+  // هوك شاشة التحميل للتنقل
+  const { isTransitioning } = useNavigationSplash(currentPage, 1500);
 
   useEffect(() => {
     // Check if running in Electron environment
@@ -45,6 +57,13 @@ function App() {
       // Check authentication status for web app
       checkAuthStatus();
     }
+
+    // تعيين أن التطبيق جاهز بعد التحميل الأولي
+    const readyTimer = setTimeout(() => {
+      setIsAppReady(true);
+    }, 1000);
+
+    return () => clearTimeout(readyTimer);
   }, []);
 
   const checkAuthStatus = async () => {
