@@ -94,6 +94,23 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
                 KNOUX FINDR
               </div>
 
+              {/* Professor Attribution */}
+              <div className="glass-card rounded-lg p-3 mb-4 border border-amber-500/30 bg-amber-500/5">
+                <div
+                  className="text-amber-400 font-bold tracking-wider"
+                  style={{
+                    fontFamily: '"Playfair Display", serif',
+                    fontStyle: "italic",
+                    fontSize: "14px",
+                  }}
+                >
+                  Powered by Prof. Sadek Elgazar
+                </div>
+                <div className="text-xs text-amber-300/80 mt-1">
+                  AI Research Director & Project Supervisor
+                </div>
+              </div>
+
               {/* Enhanced Navigation Tabs */}
               <div className="flex justify-between items-center mb-[70px] max-lg:justify-center max-lg:gap-[20px]">
                 <div className="flex gap-[12px] max-lg:flex-wrap max-lg:justify-center p-2 glass-card rounded-2xl">
