@@ -1,135 +1,80 @@
 import React, { useState, useEffect } from "react";
+import LocalAuthForm from "./LocalAuthForm";
 
 /**
  * KNOUX FINDR Professional Authentication Screen
- * Addresses all identified issues and improvements:
- * - Clean header-less design during auth
- * - Comprehensive validation and feedback
- * - Responsive design
- * - Loading states and professional UX
- * - Prof. Sadek Elgazar attribution
+ * Enhanced Features:
+ * - Real OAuth integration with Apple, Microsoft
+ * - Local email/password authentication
+ * - Dynamic UI based on auth state
+ * - JWT token management
+ * - Enhanced security and validation
+ * - Arabic RTL support
+ * - Prof. Sadek Elgazar attribution protection
  */
 
 const ProfessionalAuthScreen = ({ onAuthSuccess }) => {
-  const [authMode, setAuthMode] = useState("signin"); // signin | signup
+  const [authMode, setAuthMode] = useState("signin"); // signin | signup | local
   const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    agreeToTerms: false,
-  });
-  const [errors, setErrors] = useState({});
-  const [showSuccess, setShowSuccess] = useState(false);
+  const [showLocalAuth, setShowLocalAuth] = useState(false);
   const [notification, setNotification] = useState(null);
+  const [user, setUser] = useState(null);
 
-  // Enhanced validation rules
-  const validateForm = () => {
-    const newErrors = {};
-
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!formData.email) {
-      newErrors.email = "Email is required";
-    } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = "Please enter a valid email address";
+  // Check for existing authentication
+  useEffect(() => {
+    const token = localStorage.getItem("knoux_token");
+    if (token) {
+      // Verify token with server
+      fetch("http://localhost:3001/api/verify-token", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token }),
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          if (result.success) {
+            setUser(result.user);
+            onAuthSuccess({
+              ...result.user,
+              token,
+              authMethod: "token",
+            });
+          } else {
+            localStorage.removeItem("knoux_token");
+          }
+        })
+        .catch((error) => {
+          console.error("Token verification failed:", error);
+          localStorage.removeItem("knoux_token");
+        });
     }
-
-    // Password validation
-    if (!formData.password) {
-      newErrors.password = "Password is required";
-    } else if (formData.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters";
-    } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
-      newErrors.password =
-        "Password must contain uppercase, lowercase, and numbers";
-    }
-
-    // Name validation for signup
-    if (authMode === "signup") {
-      if (!formData.name) {
-        newErrors.name = "Full name is required";
-      } else if (formData.name.length < 2) {
-        newErrors.name = "Name must be at least 2 characters";
-      }
-
-      // Confirm password
-      if (formData.password !== formData.confirmPassword) {
-        newErrors.confirmPassword = "Passwords do not match";
-      }
-
-      // Terms agreement
-      if (!formData.agreeToTerms) {
-        newErrors.agreeToTerms =
-          "You must agree to the terms and privacy policy";
-      }
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  }, [onAuthSuccess]);
 
   const showNotification = (message, type = "success") => {
     setNotification({ message, type });
     setTimeout(() => setNotification(null), 5000);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!validateForm()) {
-      showNotification("Please fix the errors below", "error");
-      return;
-    }
-
+  // Handle OAuth success callback
+  const handleOAuthSuccess = (provider) => {
     setIsLoading(true);
+    showNotification(`جارٍ تسجيل الدخول عبر ${provider}...`, "success");
 
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // Simulate successful auth
-      setShowSuccess(true);
-      showNotification(
-        authMode === "signup"
-          ? "Account created successfully! Welcome to KNOUX FINDR"
-          : "Welcome back! Redirecting to your dashboard...",
-        "success",
-      );
-
-      setTimeout(() => {
-        onAuthSuccess({
-          name: formData.name || "Professional User",
-          email: formData.email,
-          authMethod: "email",
-        });
-      }, 1500);
-    } catch (error) {
-      showNotification("Authentication failed. Please try again.", "error");
-    } finally {
-      setIsLoading(false);
-    }
+    // OAuth providers will redirect to their respective endpoints
+    // The server will handle the authentication and redirect back
   };
 
-  const handleInputChange = (field, value) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-    // Clear error when user starts typing
-    if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: "" }));
-    }
+  // Handle local auth success
+  const handleLocalAuthSuccess = (userData) => {
+    setUser(userData);
+    onAuthSuccess(userData);
   };
 
-  const toggleAuthMode = () => {
-    setAuthMode((prev) => (prev === "signin" ? "signup" : "signin"));
-    setErrors({});
-    setFormData({
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      agreeToTerms: false,
-    });
+  const toggleLocalAuth = () => {
+    setShowLocalAuth(!showLocalAuth);
   };
 
   return (
@@ -211,242 +156,114 @@ const ProfessionalAuthScreen = ({ onAuthSuccess }) => {
             </p>
           </div>
 
-          {/* Social Login Buttons */}
-          <div className="space-y-3 mb-6">
-            <div className="text-center text-sm text-gray-400 mb-4">
-              Quick Sign In Options
-            </div>
-
-            {/* Google Login */}
-            <button
-              type="button"
-              className="w-full py-3 px-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg font-semibold transition-all duration-200 hover:scale-105 flex items-center justify-center gap-3"
-              onClick={() =>
-                window.open("http://localhost:3001/auth/google", "_blank")
-              }
-            >
-              <span className="text-2xl">🟢</span>
-              <span>Continue with Google</span>
-            </button>
-
-            {/* GitHub Login */}
-            <button
-              type="button"
-              className="w-full py-3 px-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg font-semibold transition-all duration-200 hover:scale-105 flex items-center justify-center gap-3"
-              onClick={() =>
-                window.open("http://localhost:3001/auth/github", "_blank")
-              }
-            >
-              <span className="text-2xl">⚫</span>
-              <span>Continue with GitHub</span>
-            </button>
-
-            {/* Facebook Login */}
-            <button
-              type="button"
-              className="w-full py-3 px-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg font-semibold transition-all duration-200 hover:scale-105 flex items-center justify-center gap-3"
-              onClick={() =>
-                window.open("http://localhost:3001/auth/facebook", "_blank")
-              }
-            >
-              <span className="text-2xl">🔵</span>
-              <span>Continue with Facebook</span>
-            </button>
-
-            {/* Divider */}
-            <div className="flex items-center my-6">
-              <div className="flex-1 border-t border-white/20"></div>
-              <span className="px-4 text-gray-400 text-sm">or</span>
-              <div className="flex-1 border-t border-white/20"></div>
-            </div>
-          </div>
-
-          {/* Auth Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Name Field (Signup Only) */}
-            {authMode === "signup" && (
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => handleInputChange("name", e.target.value)}
-                  className={`w-full px-4 py-3 rounded-lg glass-card text-white placeholder-gray-400 focus:outline-none focus:ring-2 transition-all ${
-                    errors.name
-                      ? "border border-red-500/50 focus:ring-red-500/50"
-                      : "focus:ring-blue-500/50"
-                  }`}
-                  placeholder="Enter your full name"
-                />
-                {errors.name && (
-                  <p className="text-red-400 text-xs mt-1 flex items-center gap-1">
-                    <span>❌</span> {errors.name}
-                  </p>
-                )}
+          {/* Local Auth Form or OAuth Options */}
+          {showLocalAuth ? (
+            <LocalAuthForm
+              onAuthSuccess={handleLocalAuthSuccess}
+              mode={authMode}
+            />
+          ) : (
+            <div className="space-y-3 mb-6">
+              <div className="text-center text-sm text-gray-400 mb-4">
+                خيارات تسجيل الدخول السريع
               </div>
-            )}
 
-            {/* Email Field */}
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Email Address
-              </label>
-              <input
-                type="email"
-                value={formData.email}
-                onChange={(e) => handleInputChange("email", e.target.value)}
-                className={`w-full px-4 py-3 rounded-lg glass-card text-white placeholder-gray-400 focus:outline-none focus:ring-2 transition-all ${
-                  errors.email
-                    ? "border border-red-500/50 focus:ring-red-500/50"
-                    : "focus:ring-blue-500/50"
-                }`}
-                placeholder="Enter your email address"
-              />
-              {errors.email && (
-                <p className="text-red-400 text-xs mt-1 flex items-center gap-1">
-                  <span>❌</span> {errors.email}
-                </p>
-              )}
-            </div>
+              {/* Apple Login */}
+              <button
+                type="button"
+                className="w-full py-3 px-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg font-semibold transition-all duration-200 hover:scale-105 flex items-center justify-center gap-3"
+                onClick={() => {
+                  handleOAuthSuccess("Apple");
+                  window.open("http://localhost:3001/auth/apple", "_self");
+                }}
+              >
+                <span className="text-2xl">🍎</span>
+                <span>المتابعة مع Apple</span>
+              </button>
 
-            {/* Password Field */}
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Password
-              </label>
-              <input
-                type="password"
-                value={formData.password}
-                onChange={(e) => handleInputChange("password", e.target.value)}
-                className={`w-full px-4 py-3 rounded-lg glass-card text-white placeholder-gray-400 focus:outline-none focus:ring-2 transition-all ${
-                  errors.password
-                    ? "border border-red-500/50 focus:ring-red-500/50"
-                    : "focus:ring-blue-500/50"
-                }`}
-                placeholder={
-                  authMode === "signup"
-                    ? "Create a strong password"
-                    : "Enter your password"
-                }
-              />
-              {errors.password && (
-                <p className="text-red-400 text-xs mt-1 flex items-center gap-1">
-                  <span>❌</span> {errors.password}
-                </p>
-              )}
-            </div>
+              {/* Microsoft Login */}
+              <button
+                type="button"
+                className="w-full py-3 px-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg font-semibold transition-all duration-200 hover:scale-105 flex items-center justify-center gap-3"
+                onClick={() => {
+                  handleOAuthSuccess("Microsoft");
+                  window.open("http://localhost:3001/auth/microsoft", "_self");
+                }}
+              >
+                <span className="text-2xl">🟦</span>
+                <span>المتابعة مع Microsoft</span>
+              </button>
 
-            {/* Confirm Password (Signup Only) */}
-            {authMode === "signup" && (
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Confirm Password
-                </label>
-                <input
-                  type="password"
-                  value={formData.confirmPassword}
-                  onChange={(e) =>
-                    handleInputChange("confirmPassword", e.target.value)
-                  }
-                  className={`w-full px-4 py-3 rounded-lg glass-card text-white placeholder-gray-400 focus:outline-none focus:ring-2 transition-all ${
-                    errors.confirmPassword
-                      ? "border border-red-500/50 focus:ring-red-500/50"
-                      : "focus:ring-blue-500/50"
-                  }`}
-                  placeholder="Confirm your password"
-                />
-                {errors.confirmPassword && (
-                  <p className="text-red-400 text-xs mt-1 flex items-center gap-1">
-                    <span>❌</span> {errors.confirmPassword}
-                  </p>
-                )}
+              {/* Google Login */}
+              <button
+                type="button"
+                className="w-full py-3 px-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg font-semibold transition-all duration-200 hover:scale-105 flex items-center justify-center gap-3"
+                onClick={() => {
+                  handleOAuthSuccess("Google");
+                  window.open("http://localhost:3001/auth/google", "_self");
+                }}
+              >
+                <span className="text-2xl">🟢</span>
+                <span>المتابعة مع Google</span>
+              </button>
+
+              {/* GitHub Login */}
+              <button
+                type="button"
+                className="w-full py-3 px-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg font-semibold transition-all duration-200 hover:scale-105 flex items-center justify-center gap-3"
+                onClick={() => {
+                  handleOAuthSuccess("GitHub");
+                  window.open("http://localhost:3001/auth/github", "_self");
+                }}
+              >
+                <span className="text-2xl">⚫</span>
+                <span>المتابعة مع GitHub</span>
+              </button>
+
+              {/* Facebook Login */}
+              <button
+                type="button"
+                className="w-full py-3 px-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg font-semibold transition-all duration-200 hover:scale-105 flex items-center justify-center gap-3"
+                onClick={() => {
+                  handleOAuthSuccess("Facebook");
+                  window.open("http://localhost:3001/auth/facebook", "_self");
+                }}
+              >
+                <span className="text-2xl">🔵</span>
+                <span>المتابعة مع Facebook</span>
+              </button>
+
+              {/* Local Auth Toggle */}
+              <div className="flex items-center my-6">
+                <div className="flex-1 border-t border-white/20"></div>
+                <span className="px-4 text-gray-400 text-sm">أو</span>
+                <div className="flex-1 border-t border-white/20"></div>
               </div>
-            )}
 
-            {/* Terms Agreement (Signup Only) */}
-            {authMode === "signup" && (
-              <div>
-                <label className="flex items-start gap-3 text-sm text-gray-300 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={formData.agreeToTerms}
-                    onChange={(e) =>
-                      handleInputChange("agreeToTerms", e.target.checked)
-                    }
-                    className={`mt-1 rounded ${errors.agreeToTerms ? "border-red-500" : ""}`}
-                  />
-                  <span>
-                    I agree to the{" "}
-                    <button
-                      type="button"
-                      className="text-blue-400 hover:text-blue-300 underline"
-                    >
-                      Terms of Service
-                    </button>{" "}
-                    and{" "}
-                    <button
-                      type="button"
-                      className="text-blue-400 hover:text-blue-300 underline"
-                    >
-                      Privacy Policy
-                    </button>
-                  </span>
-                </label>
-                {errors.agreeToTerms && (
-                  <p className="text-red-400 text-xs mt-1 flex items-center gap-1">
-                    <span>❌</span> {errors.agreeToTerms}
-                  </p>
-                )}
-              </div>
-            )}
+              <button
+                type="button"
+                onClick={toggleLocalAuth}
+                className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 border border-blue-500/30 rounded-lg font-semibold transition-all duration-200 hover:scale-105 flex items-center justify-center gap-3"
+              >
+                <span className="text-2xl">📧</span>
+                <span>تسجيل دخول بالبريد الإلكتروني</span>
+              </button>
+            </div>
+          )}
 
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={isLoading}
-              className={`w-full py-4 px-6 rounded-lg font-semibold text-lg transition-all duration-200 ${
-                isLoading
-                  ? "bg-gray-600 cursor-not-allowed"
-                  : "primary-button hover:scale-105 shadow-lg"
-              }`}
-            >
-              {isLoading ? (
-                <div className="flex items-center justify-center gap-3">
-                  <div className="loading-spinner w-5 h-5"></div>
-                  <span>
-                    {authMode === "signup"
-                      ? "Creating Account..."
-                      : "Signing In..."}
-                  </span>
-                </div>
-              ) : (
-                <>
-                  <span className="text-xl mr-2">
-                    {authMode === "signup" ? "🚀" : "🔐"}
-                  </span>
-                  {authMode === "signup" ? "Create Account" : "Sign In"}
-                </>
-              )}
-            </button>
-          </form>
-
-          {/* Mode Toggle */}
-          <div className="text-center mt-6">
-            <p className="text-gray-400 text-sm">
-              {authMode === "signup"
-                ? "Already have an account?"
-                : "Don't have an account?"}
-            </p>
-            <button
-              type="button"
-              onClick={toggleAuthMode}
-              className="text-blue-400 hover:text-blue-300 font-semibold mt-1 transition-colors"
-            >
-              {authMode === "signup" ? "Sign In" : "Sign Up"}
-            </button>
-          </div>
+          {/* Back to OAuth Button */}
+          {showLocalAuth && (
+            <div className="text-center mt-6">
+              <button
+                type="button"
+                onClick={toggleLocalAuth}
+                className="text-blue-400 hover:text-blue-300 font-semibold mt-1 transition-colors flex items-center justify-center gap-2 mx-auto"
+              >
+                <span>←</span>
+                <span>العودة إلى خيارات تسجيل الدخول السريع</span>
+              </button>
+            </div>
+          )}
 
           {/* Help Section */}
           <div className="text-center mt-6 pt-6 border-t border-white/10">
