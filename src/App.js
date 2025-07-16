@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 import SignupForm from "./components/SignupForm";
 import Dashboard from "./components/Dashboard";
 import DesktopApp from "./components/DesktopApp";
+import ProfessionalAuthScreen from "./components/ProfessionalAuthScreen";
 import InstantSearch from "./components/InstantSearch";
 import Timeline from "./components/Timeline";
 import Stats from "./components/Stats";
 import NaturalQueryProcessor from "./components/NaturalQueryProcessor";
 import PowerOps from "./components/PowerOps";
 
-function App() {
-  const [currentPage, setCurrentPage] = useState("signup");
-  const [user, setUser] = useState(null);
+// Main App Component that handles routing and authentication state
+const AppContent = () => {
+  const { isAuthenticated, isLoading, user, login, logout } = useAuth();
+  const [currentPage, setCurrentPage] = useState("auth");
   const [isElectron, setIsElectron] = useState(false);
 
   useEffect(() => {
@@ -18,26 +21,50 @@ function App() {
     if (window.electronAPI) {
       setIsElectron(true);
       // Auto-login for desktop app
-      setUser({ name: "Desktop User", email: "desktop@knoux.com" });
+      if (!isAuthenticated) {
+        login({
+          name: "Desktop User",
+          email: "desktop@knoux.com",
+          provider: "desktop",
+          authMethod: "desktop",
+        });
+      }
       setCurrentPage("desktop");
+    } else {
+      // Web environment routing
+      if (isAuthenticated) {
+        setCurrentPage("dashboard");
+      } else {
+        setCurrentPage("auth");
+      }
     }
-  }, []);
+  }, [isAuthenticated, isElectron, login]);
 
-  const handleSignupSuccess = (userData) => {
-    setUser(userData);
+  const handleAuthSuccess = (userData) => {
+    login(userData);
     setCurrentPage(isElectron ? "desktop" : "dashboard");
   };
 
   const handleSignIn = () => {
-    // Simulate sign in
-    setUser({ name: "Demo User", email: "demo@knoux.com" });
-    setCurrentPage(isElectron ? "desktop" : "dashboard");
+    setCurrentPage("signin");
   };
 
-  const handleLogout = () => {
-    setUser(null);
-    setCurrentPage("signup");
+  const handleLogout = async () => {
+    await logout();
+    setCurrentPage("auth");
   };
+
+  // Show loading spinner while checking authentication
+  if (isLoading) {
+    return (
+      <div className="min-h-screen w-screen bg-gradient-to-br from-[#0F123B] via-[#090D2E] to-[#020515] font-jakarta flex items-center justify-center">
+        <div className="text-center">
+          <div className="loading-spinner w-12 h-12 mx-auto mb-4"></div>
+          <div className="text-white text-lg">جارٍ التحقق من المصادقة...</div>
+        </div>
+      </div>
+    );
+  }
 
   // If running in Electron, show desktop app directly
   if (isElectron && currentPage === "desktop") {
@@ -46,16 +73,34 @@ function App() {
 
   return (
     <div className="min-h-screen w-screen bg-gradient-to-br from-[#0F123B] via-[#090D2E] to-[#020515] font-jakarta">
-      {currentPage === "signup" && (
+      {/* Authentication Pages */}
+      {(currentPage === "auth" || currentPage === "signin") &&
+        !isAuthenticated && (
+          <ProfessionalAuthScreen onAuthSuccess={handleAuthSuccess} />
+        )}
+
+      {/* Legacy Signup Form (keep for compatibility) */}
+      {currentPage === "signup" && !isAuthenticated && (
         <SignupForm
-          onSignupSuccess={handleSignupSuccess}
+          onSignupSuccess={handleAuthSuccess}
           onSignIn={handleSignIn}
         />
       )}
-      {currentPage === "dashboard" && (
+
+      {/* Dashboard for authenticated users */}
+      {currentPage === "dashboard" && isAuthenticated && (
         <Dashboard user={user} onLogout={handleLogout} />
       )}
     </div>
+  );
+};
+
+// Wrapper App component with AuthProvider
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 
