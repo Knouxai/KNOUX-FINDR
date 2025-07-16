@@ -577,9 +577,17 @@ const DesktopApp = () => {
         </div>
 
         {/* Version Info */}
-        <div className="mt-6 space-y-2">
-          <div className="text-sm font-bold text-amber-400 tracking-wider">
-            Prof S adek Elgazar
+        <div className="mt-6 space-y-3">
+          <div className="glass-card rounded-lg p-3 border border-amber-400/30 bg-amber-500/5">
+            <div className="text-lg font-black tracking-wider text-amber-400">
+              Prof S
+            </div>
+            <div className="text-lg font-black tracking-wider text-amber-400">
+              adek Elgazar
+            </div>
+            <div className="text-xs text-amber-300/80 mt-1">
+              Project Supervisor
+            </div>
           </div>
           <div className="text-xs text-gray-500">
             KNOUX FINDR Desktop v1.0.0 • Powered by AI • Made with ❤️
@@ -896,7 +904,7 @@ const DesktopApp = () => {
                       {/* Load More Section */}
                       <div className="text-center pt-4 border-t border-white/10 mt-6">
                         <div className="text-sm text-gray-400 mb-3">
-                          عرض 3 من 1,247 ن��يجة • البحث في{" "}
+                          عرض 3 من 1,247 نتيجة • البحث في{" "}
                           {fileStats.totalFiles.toLocaleString()} ملف
                         </div>
                         <button className="glass-button px-6 py-3 rounded-lg hover:scale-105 transition-transform">
