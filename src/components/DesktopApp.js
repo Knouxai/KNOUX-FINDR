@@ -32,7 +32,7 @@ const DesktopApp = () => {
       category: "Work",
       aiRelevanceScore: 0.95,
       highlights: ["تقرير", "مبيعات", "2024"],
-      content_preview: "ملخص نتائج المبيعات للربع الأخير من عام 2024...",
+      content_preview: "ملخص نتائج المبيعات ��لربع الأخير من عام 2024...",
     },
     {
       id: "search_2",
@@ -193,7 +193,7 @@ const DesktopApp = () => {
     },
     {
       id: 7,
-      name: "��صميم الشعار الجديد.ai",
+      name: "تصميم الشعار الجديد.ai",
       path: "/Users/Design/Logos/new_logo_v3.ai",
       size: 8472938,
       modified_at: "2024-01-10T16:20:00Z",
@@ -220,7 +220,15 @@ const DesktopApp = () => {
     startTime: "2024-01-15T08:00:00Z",
     endTime: "2024-01-15T08:45:23Z",
   });
-  const [indexingProgress, setIndexingProgress] = useState(null);
+  const [indexingProgress, setIndexingProgress] = useState({
+    status: "فهرسة المحتوى مكتملة",
+    progress: 100,
+    currentFile: "",
+    filesProcessed: 147832,
+    totalFiles: 147832,
+    processingSpeed: "3,247 ملف/دقيقة",
+    estimatedTimeRemaining: "00:00:00",
+  });
   const [aiSuggestions, setAiSuggestions] = useState([
     {
       title: "🔍 اقتراحات البحث الذكية",
@@ -492,7 +500,7 @@ const DesktopApp = () => {
 
   const handleRunDuplicateAnalysis = async () => {
     setIsDuplicateAnalysisRunning(true);
-    addNotification("جاري تشغيل تحليل المل��ات المكررة المتقدم...", "info");
+    addNotification("جاري تشغيل تحليل الملفات المكررة المتقدم...", "info");
 
     try {
       const duplicates = await window.electronAPI.getAdvancedDuplicates();
@@ -864,7 +872,7 @@ const DesktopApp = () => {
                     }
                     className="bg-white/10 border border-white/20 rounded-lg px-4 py-2"
                   >
-                    <option value="all">جميع التصنيفات</option>
+                    <option value="all">��ميع التصنيفات</option>
                     <option value="Documents">مستندات</option>
                     <option value="Images">صور</option>
                     <option value="Videos">فيديوهات</option>
