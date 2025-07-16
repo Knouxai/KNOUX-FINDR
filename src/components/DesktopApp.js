@@ -703,8 +703,9 @@ const DesktopApp = () => {
                       </div>
                       {searchResults.map((file, index) => (
                         <div
-                          key={index}
-                          className="flex items-center gap-4 p-4 glass-button rounded-lg hover:scale-[1.02] transition-transform group"
+                          key={file.id}
+                          className="flex items-center gap-4 p-4 glass-button rounded-lg hover:scale-[1.01] transition-all duration-200 group border border-white/5 hover:border-blue-500/30"
+                          style={{ animationDelay: `${index * 50}ms` }}
                         >
                           <div className="text-3xl">
                             {getFileIcon(file.extension, file.mime_type)}
