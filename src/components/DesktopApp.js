@@ -109,7 +109,7 @@ const DesktopApp = () => {
     },
     {
       id: 4,
-      name: "مشروع React النهائي",
+      name: "مشرو�� React النهائي",
       path: "/Users/Dev/Projects/knoux-findr/src/App.js",
       size: 23847,
       modified_at: "2024-01-13T09:15:00Z",
@@ -456,9 +456,24 @@ const DesktopApp = () => {
             KNOUX FINDR
           </h1>
           <p className="text-xl text-gray-300 mb-2">Desktop Search Engine</p>
-          <p className="text-lg text-blue-400 font-semibold">
+          <p className="text-lg text-blue-400 font-semibold mb-4">
             محرك البحث المحلي المدعوم بالذكاء الاصطناعي
           </p>
+
+          {/* Developer Credit */}
+          <div className="glass-card rounded-lg p-4 mb-6 border border-amber-500/30 bg-amber-500/5">
+            <div className="flex items-center justify-center gap-3">
+              <div className="text-2xl">👨‍🎓</div>
+              <div className="text-center">
+                <div className="text-lg font-bold text-amber-400 tracking-wide">
+                  Prof S adek Elgazar
+                </div>
+                <div className="text-xs text-amber-300/80 font-semibold">
+                  Project Supervisor • AI Research Director
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Welcome Card */}
@@ -486,7 +501,7 @@ const DesktopApp = () => {
             <div className="text-center p-4 bg-white/5 rounded-lg">
               <div className="text-3xl mb-2">⚡</div>
               <div className="text-sm font-semibold">سرعة فائقة</div>
-              <div className="text-xs text-gray-400">��داء محسن</div>
+              <div className="text-xs text-gray-400">أداء محسن</div>
             </div>
           </div>
 
