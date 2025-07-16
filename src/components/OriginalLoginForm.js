@@ -9,6 +9,23 @@ const OriginalLoginForm = ({ onSignupSuccess, onSignIn }) => {
   });
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [loadingProvider, setLoadingProvider] = useState(null);
+
+  useEffect(() => {
+    // Listen for OAuth popup messages
+    const handleMessage = (event) => {
+      if (event.origin !== window.location.origin) return;
+
+      if (event.data.type === "OAUTH_SUCCESS") {
+        handleOAuthSuccess(event.data.user);
+      } else if (event.data.type === "OAUTH_ERROR") {
+        handleOAuthError(event.data.error);
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, []);
 
   const handleInputChange = (e) => {
     setFormData({
@@ -25,6 +42,45 @@ const OriginalLoginForm = ({ onSignupSuccess, onSignIn }) => {
       setIsLoading(false);
       onSignupSuccess(formData);
     }, 2000);
+  };
+
+  const handleOAuthLogin = (provider) => {
+    setLoadingProvider(provider);
+
+    // Open OAuth in popup window
+    const popup = window.open(
+      `http://localhost:3001/auth/${provider}`,
+      `${provider}-oauth`,
+      "width=500,height=600,scrollbars=yes,resizable=yes",
+    );
+
+    // Check if popup was blocked
+    if (!popup || popup.closed || typeof popup.closed === "undefined") {
+      setLoadingProvider(null);
+      // Fallback to redirect if popup is blocked
+      window.location.href = `http://localhost:3001/auth/${provider}`;
+    }
+
+    // Monitor popup closure
+    const checkClosed = setInterval(() => {
+      if (popup.closed) {
+        clearInterval(checkClosed);
+        setLoadingProvider(null);
+      }
+    }, 1000);
+  };
+
+  const handleOAuthSuccess = (user) => {
+    setLoadingProvider(null);
+    if (onSignupSuccess) {
+      onSignupSuccess(user);
+    }
+  };
+
+  const handleOAuthError = (error) => {
+    setLoadingProvider(null);
+    console.error("OAuth error:", error);
+    // Could show error notification here
   };
 
   return (
@@ -67,12 +123,8 @@ const OriginalLoginForm = ({ onSignupSuccess, onSignIn }) => {
                 <div className="social-buttons">
                   <button
                     className="social-button facebook-btn"
-                    onClick={() =>
-                      window.open(
-                        "http://localhost:3001/auth/facebook",
-                        "_blank",
-                      )
-                    }
+                    onClick={() => handleOAuthLogin("facebook")}
+                    disabled={loadingProvider === "facebook"}
                   >
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                       <path
@@ -84,9 +136,8 @@ const OriginalLoginForm = ({ onSignupSuccess, onSignIn }) => {
 
                   <button
                     className="social-button github-btn"
-                    onClick={() =>
-                      window.open("http://localhost:3001/auth/github", "_blank")
-                    }
+                    onClick={() => handleOAuthLogin("github")}
+                    disabled={loadingProvider === "github"}
                   >
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                       <path
@@ -98,9 +149,8 @@ const OriginalLoginForm = ({ onSignupSuccess, onSignIn }) => {
 
                   <button
                     className="social-button google-btn"
-                    onClick={() =>
-                      window.open("http://localhost:3001/auth/google", "_blank")
-                    }
+                    onClick={() => handleOAuthLogin("google")}
+                    disabled={loadingProvider === "google"}
                   >
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                       <path
