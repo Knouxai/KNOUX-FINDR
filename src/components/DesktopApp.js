@@ -142,7 +142,142 @@ const DesktopApp = () => {
     dateTo: "",
     fileType: "all",
   });
-  const [duplicateGroups, setDuplicateGroups] = useState([]);
+  const [duplicateGroups, setDuplicateGroups] = useState([
+    {
+      id: "dup_1",
+      algorithm: "exactHash",
+      confidence: 100,
+      files: [
+        {
+          path: "/Users/Downloads/document.pdf",
+          size: 2847293,
+          hash: "a1b2c3d4",
+          modified_at: "2024-01-15T10:30:00Z",
+        },
+        {
+          path: "/Users/Desktop/document.pdf",
+          size: 2847293,
+          hash: "a1b2c3d4",
+          modified_at: "2024-01-15T10:30:00Z",
+        },
+        {
+          path: "/Users/Backup/document.pdf",
+          size: 2847293,
+          hash: "a1b2c3d4",
+          modified_at: "2024-01-15T10:30:00Z",
+        },
+      ],
+      totalSize: 8541879,
+      potentialSavings: 5694586,
+      recommendation: "delete_oldest",
+    },
+    {
+      id: "dup_2",
+      algorithm: "fuzzyHash",
+      confidence: 95,
+      files: [
+        {
+          path: "/Users/Pictures/vacation_photo_1.jpg",
+          size: 4293847,
+          hash: "e5f6g7h8",
+          modified_at: "2024-01-10T14:22:00Z",
+        },
+        {
+          path: "/Users/Pictures/vacation_photo_1_edited.jpg",
+          size: 4298473,
+          hash: "e5f6g7h9",
+          modified_at: "2024-01-11T16:30:00Z",
+        },
+      ],
+      totalSize: 8592320,
+      potentialSavings: 4293847,
+      recommendation: "keep_largest",
+    },
+    {
+      id: "dup_3",
+      algorithm: "contentSimilarity",
+      confidence: 87,
+      files: [
+        {
+          path: "/Users/Music/song.mp3",
+          size: 5847293,
+          hash: "i9j0k1l2",
+          modified_at: "2024-01-05T20:15:00Z",
+        },
+        {
+          path: "/Users/Music/Backup/song.mp3",
+          size: 5847293,
+          hash: "i9j0k1l2",
+          modified_at: "2024-01-05T20:15:00Z",
+        },
+        {
+          path: "/Users/iTunes/song.mp3",
+          size: 5847293,
+          hash: "i9j0k1l2",
+          modified_at: "2024-01-05T20:15:00Z",
+        },
+        {
+          path: "/Users/Desktop/Music/song.mp3",
+          size: 5847293,
+          hash: "i9j0k1l2",
+          modified_at: "2024-01-05T20:15:00Z",
+        },
+      ],
+      totalSize: 23389172,
+      potentialSavings: 17541879,
+      recommendation: "keep_one",
+    },
+    {
+      id: "dup_4",
+      algorithm: "imageSimilarity",
+      confidence: 92,
+      files: [
+        {
+          path: "/Users/Desktop/screenshot_1.png",
+          size: 847293,
+          hash: "m3n4o5p6",
+          modified_at: "2024-01-08T09:45:00Z",
+        },
+        {
+          path: "/Users/Desktop/screenshot_2.png",
+          size: 849102,
+          hash: "m3n4o5p7",
+          modified_at: "2024-01-08T09:46:00Z",
+        },
+      ],
+      totalSize: 1696395,
+      potentialSavings: 847293,
+      recommendation: "review_manual",
+    },
+    {
+      id: "dup_5",
+      algorithm: "namePhonetic",
+      confidence: 78,
+      files: [
+        {
+          path: "/Users/Documents/مذكرة_اجتماع.docx",
+          size: 1847293,
+          hash: "q7r8s9t0",
+          modified_at: "2024-01-12T11:20:00Z",
+        },
+        {
+          path: "/Users/Documents/مذكره_اجتماع.docx",
+          size: 1849102,
+          hash: "q7r8s9t1",
+          modified_at: "2024-01-12T11:25:00Z",
+        },
+        {
+          path: "/Users/Documents/مذكرة اجتماع.docx",
+          size: 1851847,
+          hash: "q7r8s9t2",
+          modified_at: "2024-01-12T11:30:00Z",
+        },
+      ],
+      totalSize: 5548242,
+      potentialSavings: 3696395,
+      recommendation: "merge_content",
+    },
+  ]);
   const [isDuplicateAnalysisRunning, setIsDuplicateAnalysisRunning] =
     useState(false);
   const [notifications, setNotifications] = useState([]);
@@ -590,7 +725,7 @@ const DesktopApp = () => {
                       }
                       className="rounded"
                     />
-                    <span>🤖 ا��بحث بالذكاء الاصطناعي</span>
+                    <span>🤖 البحث بالذكاء الاصطناعي</span>
                   </label>
 
                   <select
