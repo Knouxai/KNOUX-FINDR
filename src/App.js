@@ -10,7 +10,8 @@ import NaturalQueryProcessor from "./components/NaturalQueryProcessor";
 import PowerOps from "./components/PowerOps";
 import FileEncryption from "./components/FileEncryption";
 import CloudSync from "./components/CloudSync";
-import SplashScreen from './components/SplashScreen";\nimport TransitionScreen from "./components/TransitionScreen';
+import SplashScreen from "./components/SplashScreen";
+import TransitionScreen from "./components/TransitionScreen";
 import { useSplashScreen, useNavigationSplash } from "./hooks/useSplashScreen";
 import "./components/Header.css";
 
