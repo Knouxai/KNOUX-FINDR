@@ -378,7 +378,7 @@ const DesktopApp = () => {
         return "📊";
       case ".ppt":
       case ".pptx":
-        return "📽️";
+        return "���️";
       case ".zip":
       case ".rar":
       case ".7z":
@@ -707,7 +707,7 @@ const DesktopApp = () => {
                           className="flex items-center gap-4 p-4 glass-button rounded-lg hover:scale-[1.01] transition-all duration-200 group border border-white/5 hover:border-blue-500/30"
                           style={{ animationDelay: `${index * 50}ms` }}
                         >
-                          <div className="text-3xl">
+                          <div className="text-3xl transform group-hover:scale-110 transition-transform">
                             {getFileIcon(file.extension, file.mime_type)}
                           </div>
                           <div className="flex-1 min-w-0">
