@@ -415,65 +415,130 @@ const DesktopApp = () => {
     }
   };
 
-  if (!isElectron) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-[#0F123B] via-[#090D2E] to-[#020515] font-jakarta flex items-center justify-center">
-        <div className="text-center text-white relative">
-          {/* Animated background elements */}
-          <div className="absolute top-10 left-10 w-32 h-32 bg-blue-500/10 rounded-full blur-xl floating-orb"></div>
+  // Login Screen Component
+  const LoginScreen = () => (
+    <div className="min-h-screen bg-gradient-to-br from-[#0F123B] via-[#090D2E] to-[#020515] font-jakarta flex items-center justify-center overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="floating-orb absolute top-20 left-20 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl"></div>
+        <div
+          className="floating-orb absolute top-40 right-32 w-48 h-48 bg-purple-500/5 rounded-full blur-2xl"
+          style={{ animationDelay: "2s" }}
+        ></div>
+        <div
+          className="floating-orb absolute bottom-32 left-1/3 w-32 h-32 bg-green-500/5 rounded-full blur-xl"
+          style={{ animationDelay: "4s" }}
+        ></div>
+        <div
+          className="floating-orb absolute bottom-20 right-20 w-40 h-40 bg-pink-500/5 rounded-full blur-xl"
+          style={{ animationDelay: "6s" }}
+        ></div>
+
+        {/* Animated Particles */}
+        <div className="absolute inset-0 opacity-20">
           <div
-            className="absolute top-20 right-20 w-24 h-24 bg-purple-500/10 rounded-full blur-lg floating-orb"
-            style={{ animationDelay: "2s" }}
+            className="w-full h-full"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.15) 1px, transparent 0)",
+              backgroundSize: "50px 50px",
+              animation: "float 20s ease-in-out infinite",
+            }}
           ></div>
-          <div
-            className="absolute bottom-10 left-1/3 w-20 h-20 bg-green-500/10 rounded-full blur-md floating-orb"
-            style={{ animationDelay: "4s" }}
-          ></div>
-
-          <div className="relative z-10">
-            <div className="text-6xl mb-6 animate-bounce">🚀</div>
-            <h1 className="text-4xl font-bold mb-6 gradient-text">
-              KNOUX FINDR Desktop
-            </h1>
-            <p className="text-gray-400 text-lg mb-8">
-              محرك البحث المحلي الأكثر قوة مع التنظيم المدعوم بالذكاء الاصطناعي
-            </p>
-
-            <div className="glass-card rounded-xl p-8 max-w-md mx-auto">
-              <h3 className="text-xl font-bold mb-6 text-blue-400">
-                🎯 الميزات المتقدمة
-              </h3>
-              <ul className="text-sm text-gray-300 space-y-3 text-right">
-                <li className="flex items-center gap-3">
-                  <span>🤖</span>
-                  <span>بحث مدعوم بالذكاء الاصطناعي</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span>🔍</span>
-                  <span>كشف متقدم للملفات المكررة</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span>📁</span>
-                  <span>تصنيف ذكي للملفات</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span>📊</span>
-                  <span>إحصائيات شاملة ومتقدمة</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span>⚡</span>
-                  <span>واجهة سريعة وجميلة</span>
-                </li>
-              </ul>
-            </div>
-
-            <p className="text-gray-500 mt-6 text-sm">
-              يرجى تشغيل التطبيق من Electron للوصول للميزات الكاملة
-            </p>
-          </div>
         </div>
       </div>
-    );
+
+      <div className="relative z-10 text-center text-white max-w-lg mx-auto px-6">
+        {/* Logo and Title */}
+        <div className="mb-12">
+          <div className="text-8xl mb-6 animate-pulse-glow">🚀</div>
+          <h1 className="text-5xl font-bold mb-4 gradient-text tracking-wider">
+            KNOUX FINDR
+          </h1>
+          <p className="text-xl text-gray-300 mb-2">Desktop Search Engine</p>
+          <p className="text-lg text-blue-400 font-semibold">
+            محرك البحث المحلي المدعوم بالذكاء الاصطناعي
+          </p>
+        </div>
+
+        {/* Welcome Card */}
+        <div className="glass-card rounded-2xl p-8 mb-8 border border-white/10">
+          <h2 className="text-2xl font-bold mb-6 text-blue-400">
+            مرحباً بك في KNOUX FINDR
+          </h2>
+
+          <div className="grid grid-cols-2 gap-4 mb-8">
+            <div className="text-center p-4 bg-white/5 rounded-lg">
+              <div className="text-3xl mb-2">🤖</div>
+              <div className="text-sm font-semibold">ذكاء اصطناعي</div>
+              <div className="text-xs text-gray-400">بحث متقدم</div>
+            </div>
+            <div className="text-center p-4 bg-white/5 rounded-lg">
+              <div className="text-3xl mb-2">🔍</div>
+              <div className="text-sm font-semibold">كشف المكررات</div>
+              <div className="text-xs text-gray-400">توفير المساحة</div>
+            </div>
+            <div className="text-center p-4 bg-white/5 rounded-lg">
+              <div className="text-3xl mb-2">📊</div>
+              <div className="text-sm font-semibold">تحليل الملفات</div>
+              <div className="text-xs text-gray-400">إحصائيات شاملة</div>
+            </div>
+            <div className="text-center p-4 bg-white/5 rounded-lg">
+              <div className="text-3xl mb-2">⚡</div>
+              <div className="text-sm font-semibold">سرعة فائقة</div>
+              <div className="text-xs text-gray-400">��داء محسن</div>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="space-y-4">
+            <button
+              onClick={handleQuickStart}
+              className="w-full py-4 px-6 primary-button rounded-xl text-lg font-semibold hover:scale-105 transition-all duration-200 shadow-lg"
+            >
+              🚀 ابدأ الاستخدام فوراً
+            </button>
+
+            <div className="flex gap-4">
+              <button
+                onClick={() => {
+                  /* Handle demo */
+                }}
+                className="flex-1 py-3 px-4 glass-button rounded-lg text-sm font-semibold hover:scale-105 transition-all duration-200"
+              >
+                📖 جولة تعريفية
+              </button>
+              <button
+                onClick={() => {
+                  /* Handle settings */
+                }}
+                className="flex-1 py-3 px-4 glass-button rounded-lg text-sm font-semibold hover:scale-105 transition-all duration-200"
+              >
+                ⚙️ الإعدادات
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* System Status */}
+        <div className="glass-card rounded-lg p-4 border border-green-500/20 bg-green-500/5">
+          <div className="flex items-center justify-center gap-3 text-green-400">
+            <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+            <span className="text-sm font-semibold">النظام جاهز ومتصل</span>
+          </div>
+        </div>
+
+        {/* Version Info */}
+        <div className="mt-6 text-xs text-gray-500">
+          KNOUX FINDR Desktop v1.0.0 • Powered by AI • Made with ❤️
+        </div>
+      </div>
+    </div>
+  );
+
+  // Show login screen for new users or web fallback
+  if (!isElectron || showLoginScreen) {
+    return <LoginScreen />;
   }
 
   return (
