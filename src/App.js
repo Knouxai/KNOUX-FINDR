@@ -22,8 +22,26 @@ function App() {
       // Auto-login for desktop app
       setUser({ name: "Desktop User", email: "desktop@knoux.com" });
       setCurrentPage("desktop");
+    } else {
+      // Check authentication status for web app
+      checkAuthStatus();
     }
   }, []);
+
+  const checkAuthStatus = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/api/user", {
+        credentials: "include",
+      });
+      const data = await response.json();
+      if (data.success && data.user) {
+        setUser(data.user);
+        setCurrentPage("dashboard");
+      }
+    } catch (error) {
+      console.log("No existing authentication found");
+    }
+  };
 
   const handleSignupSuccess = (userData) => {
     setUser(userData);
@@ -31,14 +49,22 @@ function App() {
   };
 
   const handleSignIn = () => {
-    // Simulate sign in
-    setUser({ name: "Demo User", email: "demo@knoux.com" });
-    setCurrentPage(isElectron ? "desktop" : "dashboard");
+    // Redirect to login page
+    setCurrentPage("login");
   };
 
-  const handleLogout = () => {
-    setUser(null);
-    setCurrentPage("login");
+  const handleLogout = async () => {
+    try {
+      await fetch("http://localhost:3001/api/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+      setUser(null);
+      setCurrentPage("login");
+    }
   };
 
   const handleNavigate = (page) => {
@@ -53,9 +79,11 @@ function App() {
   // Authentication protection for secured routes
   const protectedRoutes = ["dashboard", "timeline", "search"];
 
-  if (!user && protectedRoutes.includes(currentPage)) {
-    setCurrentPage("login");
-  }
+  useEffect(() => {
+    if (!user && protectedRoutes.includes(currentPage) && !isElectron) {
+      setCurrentPage("login");
+    }
+  }, [user, currentPage, isElectron]);
 
   return (
     <div className="min-h-screen w-screen bg-gradient-to-br from-[#0F123B] via-[#090D2E] to-[#020515] font-jakarta">
