@@ -34,7 +34,7 @@ const DesktopApp = () => {
     },
     {
       id: "search_2",
-      name: "عرض تقديمي - استراتيجية المنت��.pptx",
+      name: "عرض تقديمي - استراتيجية المنتج.pptx",
       path: "/Users/Documents/Presentations/Product_Strategy_2024.pptx",
       size: 18472938,
       modified_at: "2024-01-14T16:45:00Z",
@@ -118,14 +118,14 @@ const DesktopApp = () => {
   ]);
   const [indexingStatus, setIndexingStatus] = useState({
     status: "completed",
-    message: "��م فهرسة 147,832 ملف بنجاح",
+    message: "تم فهرسة 147,832 ملف بنجاح",
     filesProcessed: 147832,
     totalFiles: 147832,
   });
   const [indexingProgress, setIndexingProgress] = useState(null);
   const [aiSuggestions, setAiSuggestions] = useState([
     {
-      title: "🔍 اقتراحات البحث الذكية",
+      title: "🔍 اقتراحات الب��ث الذكية",
       items: [
         { text: "تقارير العمل الأخيرة", confidence: 95, category: "Work" },
         { text: "صور العطلة الصيفية", confidence: 89, category: "Personal" },
@@ -213,7 +213,7 @@ const DesktopApp = () => {
     },
     {
       id: 2,
-      message: "تم تصنيف 1,247 ملف جديد بالذكاء الاصطناعي",
+      message: "تم تصنيف 1,247 مل�� جديد بالذكاء الاصطناعي",
       type: "success",
       timestamp: new Date(Date.now() - 120000),
     },
@@ -740,11 +740,14 @@ const DesktopApp = () => {
                               )}
                             </div>
                           </div>
-                          <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button className="px-3 py-2 bg-blue-500/20 hover:bg-blue-500/40 rounded text-sm transition-colors">
+                          <div className="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button className="px-3 py-2 bg-blue-500/20 hover:bg-blue-500/40 rounded text-sm transition-colors hover:scale-105">
                               📂 فتح
                             </button>
-                            <button className="px-3 py-2 bg-red-500/20 hover:bg-red-500/40 rounded text-sm transition-colors">
+                            <button className="px-3 py-2 bg-green-500/20 hover:bg-green-500/40 rounded text-sm transition-colors hover:scale-105">
+                              ⭐ مفضل
+                            </button>
+                            <button className="px-3 py-2 bg-red-500/20 hover:bg-red-500/40 rounded text-sm transition-colors hover:scale-105">
                               🗑️ حذف
                             </button>
                           </div>
