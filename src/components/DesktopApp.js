@@ -593,6 +593,11 @@ const DesktopApp = () => {
             <span className="text-orange-400">
               🤖 {fileStats.analyzedFiles || 0} محلل
             </span>
+            {duplicateGroups.length > 0 && (
+              <span className="text-red-400 hover:scale-105 transition-transform cursor-pointer">
+                🔄 {duplicateGroups.length} مجموعة مكررة
+              </span>
+            )}
           </div>
 
           <div className="flex items-center gap-2 text-gray-400">
