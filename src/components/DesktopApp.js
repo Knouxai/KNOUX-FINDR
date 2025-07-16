@@ -34,7 +34,7 @@ const DesktopApp = () => {
     },
     {
       id: "search_2",
-      name: "عرض تقديمي - استراتيجية المنتج.pptx",
+      name: "عرض تقديمي - استراتيجية المنت��.pptx",
       path: "/Users/Documents/Presentations/Product_Strategy_2024.pptx",
       size: 18472938,
       modified_at: "2024-01-14T16:45:00Z",
@@ -118,7 +118,7 @@ const DesktopApp = () => {
   ]);
   const [indexingStatus, setIndexingStatus] = useState({
     status: "completed",
-    message: "تم فهرسة 147,832 ملف بنجاح",
+    message: "��م فهرسة 147,832 ملف بنجاح",
     filesProcessed: 147832,
     totalFiles: 147832,
   });
@@ -378,7 +378,7 @@ const DesktopApp = () => {
         return "📊";
       case ".ppt":
       case ".pptx":
-        return "���️";
+        return "📽️";
       case ".zip":
       case ".rar":
       case ".7z":
@@ -717,18 +717,25 @@ const DesktopApp = () => {
                             <div className="text-sm text-gray-400 truncate">
                               📁 {file.path}
                             </div>
-                            <div className="flex gap-4 text-xs text-gray-500 mt-2">
-                              <span>💾 {formatFileSize(file.size)}</span>
-                              <span>
+                            <div className="flex gap-3 text-xs text-gray-500 mt-2">
+                              <span className="bg-gray-500/20 px-2 py-1 rounded">
+                                💾 {formatFileSize(file.size)}
+                              </span>
+                              <span className="bg-gray-500/20 px-2 py-1 rounded">
                                 📅{" "}
                                 {new Date(file.modified_at).toLocaleDateString(
                                   "ar",
                                 )}
                               </span>
-                              {file.category && <span>🏷️ {file.category}</span>}
+                              {file.category && (
+                                <span className="bg-blue-500/20 px-2 py-1 rounded text-blue-300">
+                                  🏷️ {file.category}
+                                </span>
+                              )}
                               {file.aiRelevanceScore && (
-                                <span className="text-blue-400">
-                                  🤖 {Math.round(file.aiRelevanceScore * 100)}%
+                                <span className="bg-purple-500/20 px-2 py-1 rounded text-purple-300">
+                                  🤖 صلة{" "}
+                                  {Math.round(file.aiRelevanceScore * 100)}%
                                 </span>
                               )}
                             </div>
