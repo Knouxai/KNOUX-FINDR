@@ -396,24 +396,133 @@ const DesktopApp = () => {
       {/* Main Content Area */}
       <main className="relative z-10 flex-1 p-4 overflow-hidden">
         <div className="h-[calc(100vh-200px)] overflow-y-auto">
-          {/* Search View */}
+          {/* Instant Search View */}
           {activeView === "search" && (
-            <div className="space-y-6">
-              <InstantSearch
-                user={{ name: "Desktop User" }}
-                onLogout={() => {}}
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                searchResults={searchResults}
-                setSearchResults={setSearchResults}
-                isSearching={isSearching}
-                handleSearch={handleSearch}
-                fileStats={fileStats}
-                recentFiles={recentFiles}
-                aiSuggestions={aiSuggestions}
-                searchFilters={searchFilters}
-                setSearchFilters={setSearchFilters}
-              />
+            <div className="space-y-6 fade-in">
+              <div className="glass-card rounded-xl p-6">
+                <h2 className="text-2xl font-bold mb-4 gradient-text">
+                  🔍 البحث الفوري
+                </h2>
+
+                {/* Search Input */}
+                <div className="flex gap-4 mb-6">
+                  <div className="flex-1 relative">
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+                      placeholder="🔍 ابحث في ملفاتك... (دعم البحث بالذكاء الاصطناعي)"
+                      className="w-full h-14 px-6 rounded-lg glass-card text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 text-lg"
+                    />
+                    {isSearching && (
+                      <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                        <div className="loading-spinner"></div>
+                      </div>
+                    )}
+                  </div>
+                  <button
+                    onClick={handleSearch}
+                    disabled={isSearching}
+                    className="px-8 py-3 primary-button rounded-lg font-semibold hover:scale-105 transition-transform text-lg"
+                  >
+                    بحث
+                  </button>
+                </div>
+
+                {/* Search Filters */}
+                <div className="flex gap-4 mb-6">
+                  <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={searchFilters.useAI}
+                      onChange={(e) =>
+                        setSearchFilters((prev) => ({
+                          ...prev,
+                          useAI: e.target.checked,
+                        }))
+                      }
+                      className="rounded"
+                    />
+                    <span>🤖 البحث بالذكاء الاصطناعي</span>
+                  </label>
+
+                  <select
+                    value={searchFilters.category}
+                    onChange={(e) =>
+                      setSearchFilters((prev) => ({
+                        ...prev,
+                        category: e.target.value,
+                      }))
+                    }
+                    className="bg-white/10 border border-white/20 rounded-lg px-4 py-2"
+                  >
+                    <option value="all">جميع التصنيفات</option>
+                    <option value="Documents">مستندات</option>
+                    <option value="Images">صور</option>
+                    <option value="Videos">فيديوهات</option>
+                    <option value="Audio">صوتيات</option>
+                  </select>
+                </div>
+
+                {/* Search Results */}
+                <div className="space-y-3">
+                  {searchResults.length === 0 ? (
+                    <div className="text-center py-12 text-gray-400">
+                      {searchQuery
+                        ? "لم يتم العثور على نتائج"
+                        : "أدخل كلمة للبحث"}
+                    </div>
+                  ) : (
+                    <>
+                      <h3 className="text-xl font-bold mb-4">
+                        النتائج ({searchResults.length})
+                      </h3>
+                      {searchResults.map((file, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center gap-4 p-4 glass-button rounded-lg hover:scale-[1.02] transition-transform group"
+                        >
+                          <div className="text-3xl">
+                            {getFileIcon(file.extension, file.mime_type)}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="font-semibold text-lg truncate group-hover:text-blue-400 transition-colors">
+                              {file.name}
+                            </div>
+                            <div className="text-sm text-gray-400 truncate">
+                              📁 {file.path}
+                            </div>
+                            <div className="flex gap-4 text-xs text-gray-500 mt-2">
+                              <span>💾 {formatFileSize(file.size)}</span>
+                              <span>
+                                📅{" "}
+                                {new Date(file.modified_at).toLocaleDateString(
+                                  "ar",
+                                )}
+                              </span>
+                              {file.category && <span>🏷️ {file.category}</span>}
+                              {file.aiRelevanceScore && (
+                                <span className="text-blue-400">
+                                  🤖 {Math.round(file.aiRelevanceScore * 100)}%
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button className="px-3 py-2 bg-blue-500/20 hover:bg-blue-500/40 rounded text-sm transition-colors">
+                              📂 فتح
+                            </button>
+                            <button className="px-3 py-2 bg-red-500/20 hover:bg-red-500/40 rounded text-sm transition-colors">
+                              🗑️ حذف
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </>
+                  )}
+                </div>
+              </div>
             </div>
           )}
 
