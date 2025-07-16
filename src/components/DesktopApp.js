@@ -341,7 +341,7 @@ const DesktopApp = () => {
 
   const handleRunDuplicateAnalysis = async () => {
     setIsDuplicateAnalysisRunning(true);
-    addNotification("جاري تشغيل تحليل الملفات المكررة المتقدم...", "info");
+    addNotification("جاري تشغيل تحليل الملفات ا��مكررة المتقدم...", "info");
 
     try {
       const duplicates = await window.electronAPI.getAdvancedDuplicates();
@@ -798,7 +798,43 @@ const DesktopApp = () => {
       {/* Main Content Area */}
       <main className="relative z-10 flex-1 p-4 overflow-hidden">
         <div className="h-[calc(100vh-200px)] overflow-y-auto">
-          {/* Instant Search View */}
+          {/* Professional Dashboard View */}
+          {activeView === "professional" && (
+            <div className="fade-in">
+              <ProfessionalDashboard
+                user={{ name: "Enterprise User", email: "admin@knoux.com" }}
+                onLogout={() => setShowLoginScreen(true)}
+              />
+            </div>
+          )}
+
+          {/* Database Management View */}
+          {activeView === "database" && (
+            <div className="fade-in">
+              <DatabaseManager />
+            </div>
+          )}
+
+          {/* Language Center View */}
+          {activeView === "languages" && (
+            <div className="fade-in">
+              <LanguageManager />
+            </div>
+          )}
+
+          {/* Enterprise Analytics View */}
+          {activeView === "analytics" && (
+            <div className="fade-in">
+              <Stats
+                fileStats={fileStats}
+                recentFiles={recentFiles}
+                duplicateGroups={duplicateGroups}
+                isEnterpriseMode={true}
+              />
+            </div>
+          )}
+
+          {/* Intelligent Search View */}
           {activeView === "search" && (
             <div className="space-y-6 fade-in">
               <div className="glass-card rounded-xl p-6">
