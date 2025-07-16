@@ -47,27 +47,12 @@ const OriginalLoginForm = ({ onSignupSuccess, onSignIn }) => {
   const handleOAuthLogin = (provider) => {
     setLoadingProvider(provider);
 
-    // Open OAuth in popup window
-    const popup = window.open(
-      `http://localhost:3001/auth/${provider}`,
-      `${provider}-oauth`,
-      "width=500,height=600,scrollbars=yes,resizable=yes",
-    );
+    // BUILDER.IO REQUIREMENT: OAuth endpoints as specified
+    // Google: /auth/google, GitHub: /auth/github, Facebook: /auth/facebook, Apple: /auth/apple (placeholder)
+    const authUrl = `/auth/${provider}`;
 
-    // Check if popup was blocked
-    if (!popup || popup.closed || typeof popup.closed === "undefined") {
-      setLoadingProvider(null);
-      // Fallback to redirect if popup is blocked
-      window.location.href = `http://localhost:3001/auth/${provider}`;
-    }
-
-    // Monitor popup closure
-    const checkClosed = setInterval(() => {
-      if (popup.closed) {
-        clearInterval(checkClosed);
-        setLoadingProvider(null);
-      }
-    }, 1000);
+    // Use window.location.href as requested in requirements
+    window.location.href = authUrl;
   };
 
   const handleOAuthSuccess = (user) => {
