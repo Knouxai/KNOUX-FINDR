@@ -58,7 +58,7 @@ function App() {
       checkAuthStatus();
     }
 
-    // تعيين أن التطبيق جاهز بعد التحميل الأولي
+    // تعيين أن ا��تطبيق جاهز بعد التحميل الأولي
     const readyTimer = setTimeout(() => {
       setIsAppReady(true);
     }, 1000);
@@ -159,14 +159,7 @@ function App() {
 
   // إظهار شاشة التحميل أثناء التنقل بين الصفحات المحمية
   if (isTransitioning && user && !isElectron) {
-    return (
-      <SplashScreen
-        message="Loading section"
-        onComplete={() => {
-          // يتم التحكم في هذا من خلال الهوك
-        }}
-      />
-    );
+    return <TransitionScreen message="Loading section..." />;
   }
 
   return (
