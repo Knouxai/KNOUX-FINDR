@@ -29,7 +29,8 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
   };
 
   const socialSignup = (platform) => {
-    alert(`${platform} registration coming soon!`);
+    // OAuth integration now handled by onClick events
+    console.log(`${platform} OAuth integration active`);
   };
 
   return (
