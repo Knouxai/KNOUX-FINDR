@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./OriginalLoginForm.css";
 
 const OriginalLoginForm = ({ onSignupSuccess, onSignIn }) => {
   const [formData, setFormData] = useState({
