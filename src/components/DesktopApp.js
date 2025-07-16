@@ -371,14 +371,11 @@ const DesktopApp = () => {
       <nav className="relative z-10 p-4 pb-0">
         <div className="flex gap-2">
           {[
-            { id: "search", label: "🔍 بحث سريع", component: "search" },
-            {
-              id: "powerops",
-              label: "⚡ عمليات متقدمة",
-              component: "powerops",
-            },
-            { id: "stats", label: "📊 إحصائيات", component: "stats" },
-            { id: "timeline", label: "📅 الخط الزمني", component: "timeline" },
+            { id: "search", label: "🔍 بحث سريع", icon: "🔍" },
+            { id: "powerops", label: "⚡ عمليات متقدمة", icon: "⚡" },
+            { id: "duplicates", label: "🔄 المكررات", icon: "🔄" },
+            { id: "stats", label: "📊 إحصائيات", icon: "📊" },
+            { id: "timeline", label: "📅 الخط الزمني", icon: "📅" },
           ].map((tab) => (
             <button
               key={tab.id}
