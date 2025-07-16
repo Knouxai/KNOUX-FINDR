@@ -114,7 +114,7 @@ const DesktopApp = () => {
     },
     {
       id: 4,
-      name: "مشروع React النهائي",
+      name: "مشروع React الن��ائي",
       path: "/Users/Dev/Projects/knoux-findr/src/App.js",
       size: 23847,
       modified_at: "2024-01-13T09:15:00Z",
@@ -433,7 +433,12 @@ const DesktopApp = () => {
     }
   };
 
-  // Login Screen Component
+  // Use Professional Auth Screen instead of basic login
+  if (!isElectron || showLoginScreen) {
+    return <ProfessionalAuthScreen onAuthSuccess={handleSocialLoginSuccess} />;
+  }
+
+  // Legacy Login Screen Component (for reference)
   const LoginScreen = () => (
     <div className="min-h-screen bg-gradient-to-br from-[#0F123B] via-[#090D2E] to-[#020515] font-jakarta flex items-center justify-center overflow-hidden">
       {/* Animated Background Elements */}
@@ -840,7 +845,7 @@ const DesktopApp = () => {
             <div className="space-y-6 fade-in">
               <div className="glass-card rounded-xl p-6">
                 <h2 className="text-2xl font-bold mb-4 gradient-text">
-                  🔍 البحث الفور��
+                  🔍 البحث الفوري
                 </h2>
 
                 {/* Search Input */}
