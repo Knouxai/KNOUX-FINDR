@@ -159,11 +159,13 @@ app.get(
 
 app.get(
   "/auth/github/callback",
-  passport.authenticate("github", { failureRedirect: "/login?error=github" }),
+  passport.authenticate("github", {
+    failureRedirect: "http://localhost:3000/login?error=github",
+  }),
   (req, res) => {
     // Successful authentication
     res.redirect(
-      `/dashboard?user=${encodeURIComponent(JSON.stringify(req.user))}`,
+      `http://localhost:3000/dashboard?user=${encodeURIComponent(JSON.stringify(req.user))}`,
     );
   },
 );
