@@ -19,7 +19,7 @@ import DuplicateManager from "./DuplicateManager";
 
 const DesktopApp = () => {
   const [isElectron, setIsElectron] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("تقارير العمل");
   const [searchResults, setSearchResults] = useState([
     {
       id: "search_1",
@@ -99,7 +99,7 @@ const DesktopApp = () => {
       category: "Data",
       aiRelevanceScore: 0.85,
       highlights: ["قاعدة", "بيانات", "عملاء"],
-      content_preview: "قائمة محدثة بمعلومات العملاء وبيانات التواصل...",
+      content_preview: "قائمة محدثة بمعلومات العملاء وب��انات التواصل...",
     },
   ]);
   const [isSearching, setIsSearching] = useState(false);
@@ -122,7 +122,7 @@ const DesktopApp = () => {
     },
     recentSearches: [
       "تقارير العمل",
-      "صور ال��طلة",
+      "صور العطلة",
       "المشاريع القديمة",
       "مقاطع فيديو",
       "ملفات التصميم",
@@ -172,7 +172,7 @@ const DesktopApp = () => {
     },
     {
       id: 5,
-      name: "فيديو اجتماع الف��يق.mp4",
+      name: "فيديو اجتماع الفريق.mp4",
       path: "/Users/Videos/Meetings/team_meeting_2024_01_12.mp4",
       size: 284739200,
       modified_at: "2024-01-12T11:30:00Z",
