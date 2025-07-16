@@ -381,11 +381,12 @@ const DesktopApp = () => {
               key={tab.id}
               className={`px-6 py-3 rounded-lg font-semibold transition-all hover:scale-105 ${
                 activeView === tab.id
-                  ? "primary-button shadow-lg"
+                  ? "primary-button shadow-lg animate-pulse-glow"
                   : "glass-button hover:bg-white/10"
               }`}
               onClick={() => setActiveView(tab.id)}
             >
+              <span className="text-lg mr-2">{tab.icon}</span>
               {tab.label}
             </button>
           ))}
