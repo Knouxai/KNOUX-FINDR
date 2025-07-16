@@ -99,7 +99,7 @@ const DesktopApp = () => {
       category: "Data",
       aiRelevanceScore: 0.85,
       highlights: ["قاعدة", "بيانات", "عملاء"],
-      content_preview: "قائمة محدثة بمعلومات العملاء وب��انات التواصل...",
+      content_preview: "قائمة محدثة بمعلومات العملاء وبيانات التواصل...",
     },
   ]);
   const [isSearching, setIsSearching] = useState(false);
@@ -193,7 +193,7 @@ const DesktopApp = () => {
     },
     {
       id: 7,
-      name: "تصميم الشعار الجديد.ai",
+      name: "��صميم الشعار الجديد.ai",
       path: "/Users/Design/Logos/new_logo_v3.ai",
       size: 8472938,
       modified_at: "2024-01-10T16:20:00Z",
@@ -212,7 +212,14 @@ const DesktopApp = () => {
       category: "Archives",
     },
   ]);
-  const [indexingStatus, setIndexingStatus] = useState(null);
+  const [indexingStatus, setIndexingStatus] = useState({
+    status: "completed",
+    message: "تم فهرسة 147,832 ملف بنجاح",
+    filesProcessed: 147832,
+    totalFiles: 147832,
+    startTime: "2024-01-15T08:00:00Z",
+    endTime: "2024-01-15T08:45:23Z",
+  });
   const [indexingProgress, setIndexingProgress] = useState(null);
   const [aiSuggestions, setAiSuggestions] = useState([
     {
@@ -485,7 +492,7 @@ const DesktopApp = () => {
 
   const handleRunDuplicateAnalysis = async () => {
     setIsDuplicateAnalysisRunning(true);
-    addNotification("جاري تشغيل تحليل الملفات المكررة المتقدم...", "info");
+    addNotification("جاري تشغيل تحليل المل��ات المكررة المتقدم...", "info");
 
     try {
       const duplicates = await window.electronAPI.getAdvancedDuplicates();
