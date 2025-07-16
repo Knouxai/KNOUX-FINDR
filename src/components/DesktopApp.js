@@ -101,7 +101,7 @@ const DesktopApp = () => {
     },
     {
       id: 6,
-      name: "قاعدة بيانات العملاء.xlsx",
+      name: "قا��دة بيانات العملاء.xlsx",
       path: "/Users/Desktop/Data/customer_database_2024.xlsx",
       size: 1847293,
       modified_at: "2024-01-11T13:45:00Z",
@@ -133,7 +133,45 @@ const DesktopApp = () => {
   ]);
   const [indexingStatus, setIndexingStatus] = useState(null);
   const [indexingProgress, setIndexingProgress] = useState(null);
-  const [aiSuggestions, setAiSuggestions] = useState([]);
+  const [aiSuggestions, setAiSuggestions] = useState([
+    {
+      title: "🔍 اقتراحات البحث الذكية",
+      items: [
+        { text: "تقارير العمل الأخيرة", confidence: 95, category: "Work" },
+        { text: "صور العطلة الصيفية", confidence: 89, category: "Personal" },
+        { text: "مشاريع React والبرمجة", confidence: 92, category: "Code" },
+        { text: "ملفات PDF المهمة", confidence: 87, category: "Documents" },
+      ],
+    },
+    {
+      title: "📁 تصنيفات مقترحة",
+      items: [
+        {
+          text: "ملفات التصميم غير المصنفة",
+          confidence: 94,
+          category: "Design",
+        },
+        { text: "مقاطع فيديو الاجتماعات", confidence: 91, category: "Work" },
+        { text: "أرشيف الصور القديمة", confidence: 88, category: "Archives" },
+      ],
+    },
+    {
+      title: "🤖 تحليل المحتوى",
+      items: [
+        {
+          text: "ملفات تحتاج إعادة تسمية",
+          confidence: 85,
+          category: "Organization",
+        },
+        { text: "مجلدات فارغة للحذف", confidence: 93, category: "Cleanup" },
+        {
+          text: "ملفات كبيرة الحجم للمراجعة",
+          confidence: 90,
+          category: "Storage",
+        },
+      ],
+    },
+  ]);
   const [activeView, setActiveView] = useState("search");
   const [searchFilters, setSearchFilters] = useState({
     useAI: true,
