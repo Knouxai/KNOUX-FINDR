@@ -76,11 +76,16 @@ function App() {
     return <DesktopApp user={user} onLogout={handleLogout} />;
   }
 
-  // Authentication protection for secured routes
+  // BUILDER.IO REQUIREMENT: Authentication protection for secured routes
+  // Redirect unauthenticated users to /login when trying to access protected pages
   const protectedRoutes = ["dashboard", "timeline", "search"];
 
   useEffect(() => {
+    // If user is not logged in and trying to access protected route, redirect to login
     if (!user && protectedRoutes.includes(currentPage) && !isElectron) {
+      console.log(
+        `Redirecting to login - attempted to access protected route: ${currentPage}`,
+      );
       setCurrentPage("login");
     }
   }, [user, currentPage, isElectron]);
