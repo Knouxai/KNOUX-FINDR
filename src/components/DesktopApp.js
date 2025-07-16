@@ -248,6 +248,19 @@ const DesktopApp = () => {
     initializeApp();
   };
 
+  const handleSocialLoginSuccess = (user) => {
+    setIsLoggedIn(true);
+    setShowLoginScreen(false);
+    // Store user info (could be in context/state management)
+    sessionStorage.setItem("knouxUser", JSON.stringify(user));
+    initializeApp();
+  };
+
+  const handleSocialLoginError = (error) => {
+    console.error("Social login failed:", error);
+    addNotification(`فشل تسجيل الدخول: ${error}`, "error");
+  };
+
   const initializeApp = async () => {
     try {
       // Get initial file statistics
@@ -317,7 +330,7 @@ const DesktopApp = () => {
       }
     } catch (error) {
       console.error("Search failed:", error);
-      addNotification("فشل في البحث", "error");
+      addNotification("فشل في ال��حث", "error");
     } finally {
       setIsSearching(false);
     }
@@ -518,7 +531,7 @@ const DesktopApp = () => {
 
           <div className="grid grid-cols-2 gap-4 mb-8">
             <div className="text-center p-4 bg-white/5 rounded-lg">
-              <div className="text-3xl mb-2">���</div>
+              <div className="text-3xl mb-2">🤖</div>
               <div className="text-sm font-semibold">ذكاء اصطناعي</div>
               <div className="text-xs text-gray-400">بحث متقدم</div>
             </div>
