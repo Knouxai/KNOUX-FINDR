@@ -624,6 +624,15 @@ textarea:focus {
   }
 }
 
+/* App Content Layout */
+.app-content.with-header {
+  padding-top: 80px;
+}
+
+.app-content.no-header {
+  padding-top: 0;
+}
+
 /* Print optimizations */
 @media print {
   .glass-card,
@@ -640,6 +649,10 @@ textarea:focus {
   }
 
   .floating-orb {
+    display: none;
+  }
+
+  .app-header {
     display: none;
   }
 }
