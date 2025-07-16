@@ -1,6 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
+import LanguageSwitcher from "./LanguageSwitcher";
+import "./LanguageSwitcher.css";
 
 const Header = ({ currentPage, user, onLogout, onNavigate }) => {
+  const [currentLanguage, setCurrentLanguage] = useState("en");
+
+  const handleLanguageChange = (langCode) => {
+    setCurrentLanguage(langCode);
+    // TODO: Implement actual language switching logic
+    console.log(`Language changed to: ${langCode}`);
+  };
   // Hide header on login and signup pages
   if (currentPage === "login" || currentPage === "signup") {
     return null;
@@ -54,6 +63,11 @@ const Header = ({ currentPage, user, onLogout, onNavigate }) => {
         </nav>
 
         <div className="header-actions">
+          <LanguageSwitcher
+            currentLanguage={currentLanguage}
+            onLanguageChange={handleLanguageChange}
+          />
+
           {user ? (
             <>
               <span className="user-name">Welcome, {user.name}</span>
