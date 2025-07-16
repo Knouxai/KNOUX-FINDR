@@ -375,7 +375,7 @@ const DesktopApp = () => {
             </div>
             <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden">
               <div
-                className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-300 ease-out"
+                className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-300 ease-out gradient-shimmer"
                 style={{ width: `${indexingProgress.progress || 0}%` }}
               ></div>
             </div>
