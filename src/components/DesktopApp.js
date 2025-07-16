@@ -19,6 +19,8 @@ import DuplicateManager from "./DuplicateManager";
 
 const DesktopApp = () => {
   const [isElectron, setIsElectron] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showLoginScreen, setShowLoginScreen] = useState(true);
   const [searchQuery, setSearchQuery] = useState("تقارير العمل");
   const [searchResults, setSearchResults] = useState([
     {
