@@ -5,6 +5,9 @@ import Stats from "./Stats";
 import Timeline from "./Timeline";
 import DuplicateManager from "./DuplicateManager";
 import SocialLogin from "./SocialLogin";
+import ProfessionalDashboard from "./ProfessionalDashboard";
+import DatabaseManager from "./DatabaseManager";
+import LanguageManager from "./LanguageManager";
 
 /**
  * KNOUX FINDR Desktop App UI
@@ -561,7 +564,7 @@ const DesktopApp = () => {
           {/* Divider */}
           <div className="flex items-center my-6">
             <div className="flex-1 border-t border-white/20"></div>
-            <span className="px-4 text-gray-400 text-sm">أ��</span>
+            <span className="px-4 text-gray-400 text-sm">أو</span>
             <div className="flex-1 border-t border-white/20"></div>
           </div>
 
