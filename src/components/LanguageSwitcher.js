@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 
+// BUILDER.IO REQUIREMENT: Language switcher (Arabic/English)
+// Ready for future i18n implementation with react-i18next
 const LanguageSwitcher = ({ currentLanguage = "en", onLanguageChange }) => {
   const [isOpen, setIsOpen] = useState(false);
 
+  // Currently placeholder - ready for full i18n integration
   const languages = [
     { code: "en", name: "English", flag: "🇺🇸" },
     { code: "ar", name: "العربية", flag: "🇸🇦" },
