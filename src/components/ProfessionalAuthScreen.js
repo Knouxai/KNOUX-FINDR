@@ -200,23 +200,6 @@ const ProfessionalAuthScreen = ({ onAuthSuccess }) => {
               Instant local file search. Organized by KNOUX AI.
             </p>
 
-            {/* Professor Attribution */}
-            <div className="glass-card rounded-lg p-3 mb-6 border border-amber-500/30 bg-amber-500/5">
-              <div
-                className="text-amber-400 font-bold tracking-wider"
-                style={{
-                  fontFamily: '"Playfair Display", serif',
-                  fontStyle: "italic",
-                  fontSize: "14px",
-                }}
-              >
-                Powered by Prof. Sadek Elgazar
-              </div>
-              <div className="text-xs text-amber-300/80 mt-1">
-                AI Research Director & Project Supervisor
-              </div>
-            </div>
-
             {/* Auth Mode Title */}
             <h2 className="text-xl font-semibold text-white mb-2">
               {authMode === "signup" ? "Create Your Account" : "Welcome Back"}
@@ -474,6 +457,23 @@ const ProfessionalAuthScreen = ({ onAuthSuccess }) => {
               <span>💬</span>
               Need help? Contact Support
             </button>
+          </div>
+
+          {/* Professor Attribution - Moved to bottom */}
+          <div className="glass-card rounded-lg p-3 mt-4 border border-amber-500/30 bg-amber-500/5">
+            <div
+              className="text-amber-400 font-bold tracking-wider text-center"
+              style={{
+                fontFamily: '"Playfair Display", serif',
+                fontStyle: "italic",
+                fontSize: "14px",
+              }}
+            >
+              Powered by Prof. Sadek Elgazar
+            </div>
+            <div className="text-xs text-amber-300/80 mt-1 text-center">
+              AI Research Director & Project Supervisor
+            </div>
           </div>
 
           {/* Version Info */}
