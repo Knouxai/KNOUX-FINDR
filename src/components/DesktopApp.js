@@ -224,23 +224,58 @@ const DesktopApp = () => {
   if (!isElectron) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#0F123B] via-[#090D2E] to-[#020515] font-jakarta flex items-center justify-center">
-        <div className="text-center text-white">
-          <div className="text-6xl mb-4 animate-bounce">🚀</div>
-          <h1 className="text-3xl font-bold mb-4 gradient-text">
-            KNOUX FINDR Desktop
-          </h1>
-          <p className="text-gray-400 text-lg">
-            يرجى تشغيل التطبيق من Electron للوصول للميزات الكاملة
-          </p>
-          <div className="mt-8 glass-card rounded-xl p-6 max-w-md mx-auto">
-            <h3 className="text-xl font-bold mb-4">🎯 الميزات المتقدمة</h3>
-            <ul className="text-sm text-gray-300 space-y-2">
-              <li>🤖 بحث مدعوم بالذكاء الاصطناعي</li>
-              <li>🔍 كشف متقدم للملفات المكررة</li>
-              <li>📁 تصنيف ذكي للملفات</li>
-              <li>📊 إحصائيات شاملة ومتقدمة</li>
-              <li>⚡ واجهة سريعة وجميلة</li>
-            </ul>
+        <div className="text-center text-white relative">
+          {/* Animated background elements */}
+          <div className="absolute top-10 left-10 w-32 h-32 bg-blue-500/10 rounded-full blur-xl floating-orb"></div>
+          <div
+            className="absolute top-20 right-20 w-24 h-24 bg-purple-500/10 rounded-full blur-lg floating-orb"
+            style={{ animationDelay: "2s" }}
+          ></div>
+          <div
+            className="absolute bottom-10 left-1/3 w-20 h-20 bg-green-500/10 rounded-full blur-md floating-orb"
+            style={{ animationDelay: "4s" }}
+          ></div>
+
+          <div className="relative z-10">
+            <div className="text-6xl mb-6 animate-bounce">🚀</div>
+            <h1 className="text-4xl font-bold mb-6 gradient-text">
+              KNOUX FINDR Desktop
+            </h1>
+            <p className="text-gray-400 text-lg mb-8">
+              محرك البحث المحلي الأكثر قوة مع التنظيم المدعوم بالذكاء الاصطناعي
+            </p>
+
+            <div className="glass-card rounded-xl p-8 max-w-md mx-auto">
+              <h3 className="text-xl font-bold mb-6 text-blue-400">
+                🎯 الميزات المتقدمة
+              </h3>
+              <ul className="text-sm text-gray-300 space-y-3 text-right">
+                <li className="flex items-center gap-3">
+                  <span>🤖</span>
+                  <span>بحث مدعوم بالذكاء الاصطناعي</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <span>🔍</span>
+                  <span>كشف متقدم للملفات المكررة</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <span>📁</span>
+                  <span>تصنيف ذكي للملفات</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <span>📊</span>
+                  <span>إحصائيات شاملة ومتقدمة</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <span>⚡</span>
+                  <span>واجهة سريعة وجميلة</span>
+                </li>
+              </ul>
+            </div>
+
+            <p className="text-gray-500 mt-6 text-sm">
+              يرجى تشغيل التطبيق من Electron للوصول للميزات الكاملة
+            </p>
           </div>
         </div>
       </div>
