@@ -456,21 +456,43 @@ const DesktopApp = () => {
             KNOUX FINDR
           </h1>
           <p className="text-xl text-gray-300 mb-2">Desktop Search Engine</p>
-          <p className="text-lg text-blue-400 font-semibold mb-4">
+          <p className="text-lg text-blue-400 font-semibold mb-6">
             محرك البحث المحلي المدعوم بالذكاء الاصطناعي
           </p>
 
-          {/* Developer Credit */}
-          <div className="glass-card rounded-lg p-4 mb-6 border border-amber-500/30 bg-amber-500/5">
-            <div className="flex items-center justify-center gap-3">
-              <div className="text-2xl">👨‍🎓</div>
-              <div className="text-center">
-                <div className="text-lg font-bold text-amber-400 tracking-wide">
-                  Prof S adek Elgazar
-                </div>
-                <div className="text-xs text-amber-300/80 font-semibold">
-                  Project Supervisor • AI Research Director
-                </div>
+          {/* Professor Name - Large Advertisement Style */}
+          <div className="glass-card rounded-2xl p-8 mb-6 border-2 border-amber-400/50 bg-gradient-to-br from-amber-500/10 to-orange-500/10 shadow-2xl">
+            <div className="text-center">
+              <div
+                className="text-6xl font-black tracking-widest mb-2"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #FCD34D 0%, #F59E0B 50%, #D97706 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  textShadow: "0 0 30px rgba(251, 191, 36, 0.5)",
+                  fontFamily: 'Impact, "Arial Black", sans-serif',
+                }}
+              >
+                Prof S
+              </div>
+              <div
+                className="text-6xl font-black tracking-widest"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #FCD34D 0%, #F59E0B 50%, #D97706 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  textShadow: "0 0 30px rgba(251, 191, 36, 0.5)",
+                  fontFamily: 'Impact, "Arial Black", sans-serif',
+                }}
+              >
+                adek Elgazar
+              </div>
+              <div className="mt-4 text-lg text-amber-200 font-bold tracking-wider">
+                🎓 PROJECT SUPERVISOR & AI RESEARCH DIRECTOR 🎓
               </div>
             </div>
           </div>
@@ -936,7 +958,7 @@ const DesktopApp = () => {
               📁 {fileStats.totalFiles?.toLocaleString() || 0} ملف
             </span>
             <span className="text-green-400">
-              ��� {formatFileSize(fileStats.totalSize || 0)}
+              💾 {formatFileSize(fileStats.totalSize || 0)}
             </span>
             <span className="text-purple-400">
               🏷️ {fileStats.totalTypes || 0} نوع
