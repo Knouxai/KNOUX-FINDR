@@ -330,7 +330,7 @@ const DesktopApp = () => {
       }
     } catch (error) {
       console.error("Search failed:", error);
-      addNotification("فشل في ال��حث", "error");
+      addNotification("فشل في البحث", "error");
     } finally {
       setIsSearching(false);
     }
@@ -552,21 +552,34 @@ const DesktopApp = () => {
             </div>
           </div>
 
-          {/* Action Buttons */}
-          <div className="space-y-4">
+          {/* Social Login */}
+          <SocialLogin
+            onLoginSuccess={handleSocialLoginSuccess}
+            onLoginError={handleSocialLoginError}
+          />
+
+          {/* Divider */}
+          <div className="flex items-center my-6">
+            <div className="flex-1 border-t border-white/20"></div>
+            <span className="px-4 text-gray-400 text-sm">أ��</span>
+            <div className="flex-1 border-t border-white/20"></div>
+          </div>
+
+          {/* Quick Actions */}
+          <div className="space-y-3">
             <button
               onClick={handleQuickStart}
-              className="w-full py-4 px-6 primary-button rounded-xl text-lg font-semibold hover:scale-105 transition-all duration-200 shadow-lg"
+              className="w-full py-3 px-6 glass-button rounded-xl text-lg font-semibold hover:scale-105 transition-all duration-200"
             >
               🚀 ابدأ الاستخدام فوراً
             </button>
 
-            <div className="flex gap-4">
+            <div className="flex gap-3">
               <button
                 onClick={() => {
                   /* Handle demo */
                 }}
-                className="flex-1 py-3 px-4 glass-button rounded-lg text-sm font-semibold hover:scale-105 transition-all duration-200"
+                className="flex-1 py-2 px-3 glass-button rounded-lg text-sm font-semibold hover:scale-105 transition-all duration-200"
               >
                 📖 جولة تعريفية
               </button>
@@ -574,7 +587,7 @@ const DesktopApp = () => {
                 onClick={() => {
                   /* Handle settings */
                 }}
-                className="flex-1 py-3 px-4 glass-button rounded-lg text-sm font-semibold hover:scale-105 transition-all duration-200"
+                className="flex-1 py-2 px-3 glass-button rounded-lg text-sm font-semibold hover:scale-105 transition-all duration-200"
               >
                 ⚙️ الإعدادات
               </button>
