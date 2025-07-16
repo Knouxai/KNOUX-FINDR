@@ -64,6 +64,7 @@ export const useSplashScreen = (duration = 2500, showOnMount = true) => {
 export const useNavigationSplash = (currentPage, transitionDuration = 1500) => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [previousPage, setPreviousPage] = useState(currentPage);
+  const [transitionMessage, setTransitionMessage] = useState("Loading...");
 
   useEffect(() => {
     // إذا تغيرت الصفحة وكانت صفحة محمية
@@ -77,7 +78,19 @@ export const useNavigationSplash = (currentPage, transitionDuration = 1500) => {
       "cloudsync",
     ];
 
+    // رسائل مخصصة لكل قسم
+    const pageMessages = {
+      dashboard: "Loading dashboard...",
+      search: "Initializing search engine...",
+      timeline: "Loading timeline data...",
+      stats: "Calculating statistics...",
+      powerops: "Loading power operations...",
+      encryption: "Preparing encryption tools...",
+      cloudsync: "Connecting to cloud services...",
+    };
+
     if (currentPage !== previousPage && protectedPages.includes(currentPage)) {
+      setTransitionMessage(pageMessages[currentPage] || "Loading section...");
       setIsTransitioning(true);
 
       const timer = setTimeout(() => {
@@ -93,6 +106,7 @@ export const useNavigationSplash = (currentPage, transitionDuration = 1500) => {
 
   return {
     isTransitioning,
+    transitionMessage,
   };
 };
 
