@@ -171,6 +171,23 @@
   color: #ffffff;
 }
 
+.social-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.social-button:disabled:hover {
+  transform: none;
+  border-color: rgba(255, 255, 255, 0.2);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  box-shadow: none;
+}
+
 /* Divider */
 .divider {
   text-align: center;
