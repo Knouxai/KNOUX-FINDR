@@ -33,15 +33,19 @@ const DEFAULT_CONFIG = {
 
 // Detect environment
 const getEnvironment = () => {
+  // Safely check NODE_ENV
+  const nodeEnv = getEnvVar("NODE_ENV", "production");
+
   // Check if we're in development
-  if (process.env.NODE_ENV === "development") {
+  if (nodeEnv === "development") {
     return "development";
   }
 
   // Check if localhost is accessible (for local development)
   if (
-    window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1"
+    typeof window !== "undefined" &&
+    (window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1")
   ) {
     return "development";
   }
