@@ -210,9 +210,14 @@ const DesktopApp = () => {
   const handleSocialLoginSuccess = (user) => {
     setIsLoggedIn(true);
     setShowLoginScreen(false);
+    setShowSplashScreen(false);
     // Store user info (could be in context/state management)
     sessionStorage.setItem("knouxUser", JSON.stringify(user));
     initializeApp();
+  };
+
+  const handleSplashComplete = () => {
+    setShowSplashScreen(false);
   };
 
   const handleSocialLoginError = (error) => {
@@ -418,7 +423,7 @@ const DesktopApp = () => {
         return "📊";
       case ".ppt":
       case ".pptx":
-        return "📽️";
+        return "���️";
       case ".zip":
       case ".rar":
       case ".7z":
@@ -433,6 +438,13 @@ const DesktopApp = () => {
         return "📄";
     }
   };
+
+  // Show splash screen first
+  if (showSplashScreen) {
+    return (
+      <SplashScreen onComplete={handleSplashComplete} isElectron={isElectron} />
+    );
+  }
 
   // Use Professional Auth Screen instead of basic login
   if (!isElectron || showLoginScreen) {
@@ -627,7 +639,7 @@ const DesktopApp = () => {
             </div>
           </div>
           <div className="text-xs text-gray-500">
-            KNOUX FINDR Desktop v1.0.0 • Powered by AI • Made with ❤️
+            KNOUX FINDR Desktop v1.0.0 • Powered by AI ��� Made with ❤️
           </div>
         </div>
       </div>
