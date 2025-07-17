@@ -43,6 +43,10 @@ module.exports = {
         process.env.REACT_APP_API_BASE_URL || "",
       ),
     }),
+    new webpack.ProvidePlugin({
+      process: "process/browser",
+      Buffer: ["buffer", "Buffer"],
+    }),
   ],
   resolve: {
     extensions: [".js", ".jsx"],
