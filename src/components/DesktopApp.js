@@ -957,7 +957,7 @@ const DesktopApp = () => {
                 fileStats={fileStats}
                 onRefreshStats={async () => {
                   const stats = await window.electronAPI.getFileStats();
-                  setFileStats(stats);
+                  updateFileStats(stats);
                 }}
                 duplicateGroups={duplicateGroups}
                 onRunDuplicateAnalysis={handleRunDuplicateAnalysis}
@@ -975,7 +975,7 @@ const DesktopApp = () => {
                 isAnalysisRunning={isDuplicateAnalysisRunning}
                 onRefreshStats={async () => {
                   const stats = await window.electronAPI.getFileStats();
-                  setFileStats(stats);
+                  updateFileStats(stats);
                 }}
               />
             </div>
