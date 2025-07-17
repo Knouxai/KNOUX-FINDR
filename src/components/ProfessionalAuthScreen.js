@@ -418,6 +418,16 @@ const ProfessionalAuthScreen = ({ onAuthSuccess }) => {
                   >
                     SIGN UP
                   </button>
+
+                  {/* Offline/Demo Login Button */}
+                  <button
+                    type="button"
+                    onClick={handleOfflineLogin}
+                    disabled={isLoading}
+                    className="w-full mt-4 px-6 py-3 bg-gray-600/20 hover:bg-gray-500/30 border border-gray-500/30 hover:border-gray-400/50 rounded-lg font-medium text-gray-300 hover:text-white transition-all duration-300 disabled:opacity-50"
+                  >
+                    {isLoading ? "⏳ جارٍ الاتصال..." : "🔄 تجربة بدون تسجيل"}
+                  </button>
                 </div>
               </div>
             )}
