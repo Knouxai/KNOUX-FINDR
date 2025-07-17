@@ -62,7 +62,6 @@ const DesktopApp = () => {
   // Real initialization flag
   const [isRealDataLoaded, setIsRealDataLoaded] = useState(false);
   const [indexingStatus, setIndexingStatus] = useState({});
-  const [activeView, setActiveView] = useState("professional");
   const [searchFilters, setSearchFilters] = useState({
     useAI: true,
     category: "all",
@@ -70,10 +69,6 @@ const DesktopApp = () => {
     dateTo: "",
     fileType: "all",
   });
-  const [duplicateGroups, setDuplicateGroups] = useState([]);
-  const [isDuplicateAnalysisRunning, setIsDuplicateAnalysisRunning] =
-    useState(false);
-  const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     if (window.electronAPI) {
@@ -116,7 +111,7 @@ const DesktopApp = () => {
 
   const handleSocialLoginError = (error) => {
     console.error("Social login failed:", error);
-    addNotification(`فشل تسجيل الدخول: ${error}`, "error");
+    addNotification(`فشل تسج��ل الدخول: ${error}`, "error");
   };
 
   const initializeApp = async () => {
@@ -220,7 +215,7 @@ const DesktopApp = () => {
 
   const handleAIAnalyzeContent = async () => {
     try {
-      addNotification("جاري تشغيل التحليل الذ��ي للمحتوى...", "info");
+      addNotification("جاري تشغيل التحليل الذكي للمحتوى...", "info");
       // Get AI suggestions based on current content
       await loadAISuggestions();
 
