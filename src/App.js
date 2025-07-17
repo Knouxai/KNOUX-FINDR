@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import { SessionProvider } from "./context/SessionContext";
 import SignupForm from "./components/SignupForm";
 import Dashboard from "./components/Dashboard";
 import DesktopApp from "./components/DesktopApp";
