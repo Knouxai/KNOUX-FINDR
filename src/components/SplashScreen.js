@@ -1,1 +1,263 @@
-import React, { useState, useEffect } from "react";\n\nconst SplashScreen = ({ onComplete, isElectron }) => {\n  const [loadingProgress, setLoadingProgress] = useState(0);\n  const [currentStep, setCurrentStep] = useState(\"initializing\");\n  const [indexingStats, setIndexingStats] = useState({});\n  const [animationPhase, setAnimationPhase] = useState(\"loading\"); // loading, ready, complete\n\n  const loadingSteps = [\n    { key: \"initializing\", label: \"تهيئة التطبيق...\", duration: 800 },\n    { key: \"checking-system\", label: \"فحص النظام...\", duration: 600 },\n    { key: \"loading-database\", label: \"تحميل قاعدة البيانات...\", duration: 1000 },\n    { key: \"preparing-indexer\", label: \"تحضير محرك الفهرسة...\", duration: 700 },\n    { key: \"loading-ai\", label: \"تحميل الذكاء الاصطناعي...\", duration: 900 },\n    { key: \"finalizing\", label: \"اللمسات الأخيرة...\", duration: 500 },\n  ];\n\n  useEffect(() => {\n    let currentStepIndex = 0;\n    let progressTimer;\n    let stepTimer;\n\n    const processStep = () => {\n      if (currentStepIndex >= loadingSteps.length) {\n        setAnimationPhase(\"ready\");\n        setTimeout(() => {\n          setAnimationPhase(\"complete\");\n          setTimeout(onComplete, 500);\n        }, 1000);\n        return;\n      }\n\n      const step = loadingSteps[currentStepIndex];\n      setCurrentStep(step.key);\n\n      // تحديث التقدم تدريجياً\n      const startProgress = (currentStepIndex / loadingSteps.length) * 100;\n      const endProgress = ((currentStepIndex + 1) / loadingSteps.length) * 100;\n      let currentProgress = startProgress;\n\n      progressTimer = setInterval(() => {\n        currentProgress += (endProgress - startProgress) / (step.duration / 50);\n        if (currentProgress >= endProgress) {\n          currentProgress = endProgress;\n          clearInterval(progressTimer);\n        }\n        setLoadingProgress(Math.min(currentProgress, 100));\n      }, 50);\n\n      // الانتقال للخطوة التالية\n      stepTimer = setTimeout(() => {\n        currentStepIndex++;\n        processStep();\n      }, step.duration);\n    };\n\n    // بدء عملية التحميل\n    setTimeout(processStep, 300);\n\n    return () => {\n      clearInterval(progressTimer);\n      clearTimeout(stepTimer);\n    };\n  }, [onComplete]);\n\n  // تحميل إحصائيات الفهرسة إذا كان متاحاً\n  useEffect(() => {\n    if (isElectron && window.electronAPI) {\n      window.electronAPI.getFileStats().then((stats) => {\n        setIndexingStats(stats);\n      }).catch(console.error);\n    }\n  }, [isElectron]);\n\n  const getStepLabel = (stepKey) => {\n    const step = loadingSteps.find(s => s.key === stepKey);\n    return step ? step.label : \"تحميل...\";\n  };\n\n  const formatNumber = (num) => {\n    if (!num) return \"0\";\n    return new Intl.NumberFormat('ar-SA').format(num);\n  };\n\n  const formatFileSize = (bytes) => {\n    if (!bytes) return \"0 بايت\";\n    const sizes = ['بايت', 'كيلوبايت', 'ميجابايت', 'جيجابايت', 'تيرابايت'];\n    const i = Math.floor(Math.log(bytes) / Math.log(1024));\n    return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];\n  };\n\n  return (\n    <div className={`fixed inset-0 z-50 flex items-center justify-center transition-all duration-1000 ${\n      animationPhase === \"complete\" ? \"opacity-0 scale-110\" : \"opacity-100 scale-100\"\n    }`}>\n      {/* Background */}\n      <div className=\"absolute inset-0 bg-gradient-to-br from-[#1a1b54] via-[#0d0e38] to-[#020515]\">\n        {/* Animated Background Elements */}\n        <div className=\"absolute inset-0 overflow-hidden\">\n          <div className=\"floating-orb absolute top-20 left-20 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse\"></div>\n          <div className=\"floating-orb absolute top-40 right-32 w-64 h-64 bg-purple-500/8 rounded-full blur-2xl animate-pulse\" style={{animationDelay: \"2s\"}}></div>\n          <div className=\"floating-orb absolute bottom-32 left-1/3 w-48 h-48 bg-cyan-500/6 rounded-full blur-xl animate-pulse\" style={{animationDelay: \"4s\"}}></div>\n          <div className=\"floating-orb absolute bottom-20 right-20 w-56 h-56 bg-indigo-500/8 rounded-full blur-xl animate-pulse\" style={{animationDelay: \"6s\"}}></div>\n        </div>\n\n        {/* Grid Pattern */}\n        <div className=\"absolute inset-0 opacity-5\">\n          <div className=\"w-full h-full\" style={{\n            backgroundImage: \"radial-gradient(circle at 2px 2px, rgba(100, 200, 255, 0.4) 1px, transparent 0)\",\n            backgroundSize: \"80px 80px\",\n            animation: \"float 30s ease-in-out infinite\",\n          }}></div>\n        </div>\n      </div>\n\n      {/* Main Content */}\n      <div className=\"relative z-10 text-center max-w-lg mx-auto px-8\">\n        {/* Logo & Brand */}\n        <div className=\"mb-12\">\n          <div className={`text-8xl mb-6 transition-all duration-1000 ${\n            animationPhase === \"ready\" ? \"animate-bounce\" : \"\"\n          }`}>\n            🚀\n          </div>\n          <h1 className={`text-5xl font-bold mb-4 tracking-wider transition-all duration-1000 ${\n            animationPhase === \"loading\" ? \"login-brand-title\" : \"text-white\"\n          }`}>\n            KNOUX FINDR\n          </h1>\n          <p className=\"text-xl text-gray-300 mb-2\">\n            محرك البحث الذكي للملفات المحلية\n          </p>\n          <p className=\"text-sm text-gray-400 mb-8\">\n            مدعوم بالذكاء الاصطناعي المتقدم\n          </p>\n        </div>\n\n        {/* Loading Progress */}\n        <div className=\"mb-8\">\n          <div className=\"relative w-full h-2 bg-white/10 rounded-full overflow-hidden mb-4\">\n            <div \n              className=\"absolute top-0 left-0 h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all duration-300 ease-out\"\n              style={{ width: `${loadingProgress}%` }}\n            >\n              <div className=\"absolute inset-0 bg-white/20 animate-pulse\"></div>\n            </div>\n          </div>\n          \n          <div className=\"text-center\">\n            <p className=\"text-lg text-white mb-2\">\n              {getStepLabel(currentStep)}\n            </p>\n            <p className=\"text-sm text-gray-400\">\n              {Math.round(loadingProgress)}% مكتمل\n            </p>\n          </div>\n        </div>\n\n        {/* Stats Preview */}\n        {indexingStats.totalFiles && (\n          <div className=\"glass-card rounded-2xl p-6 mb-8 border border-white/10\">\n            <h3 className=\"text-lg font-semibold text-white mb-4\">\n              إحصائيات سريعة\n            </h3>\n            <div className=\"grid grid-cols-2 gap-4 text-center\">\n              <div>\n                <div className=\"text-2xl font-bold text-blue-400\">\n                  {formatNumber(indexingStats.totalFiles)}\n                </div>\n                <div className=\"text-xs text-gray-400\">ملف مفهرس</div>\n              </div>\n              <div>\n                <div className=\"text-2xl font-bold text-purple-400\">\n                  {formatFileSize(indexingStats.totalSize)}\n                </div>\n                <div className=\"text-xs text-gray-400\">إجمالي الحجم</div>\n              </div>\n              <div>\n                <div className=\"text-2xl font-bold text-green-400\">\n                  {indexingStats.totalTypes || 0}\n                </div>\n                <div className=\"text-xs text-gray-400\">نوع ملف</div>\n              </div>\n              <div>\n                <div className=\"text-2xl font-bold text-yellow-400\">\n                  {indexingStats.analyzedFiles || 0}\n                </div>\n                <div className=\"text-xs text-gray-400\">ملف محلل</div>\n              </div>\n            </div>\n          </div>\n        )}\n\n        {/* Features Preview */}\n        <div className=\"text-center text-sm text-gray-400 mb-8\">\n          <p className=\"mb-2\">مميزات متقدمة:</p>\n          <div className=\"flex flex-wrap justify-center gap-2 text-xs\">\n            <span className=\"px-2 py-1 bg-blue-500/20 rounded border border-blue-500/30\">بحث فوري</span>\n            <span className=\"px-2 py-1 bg-purple-500/20 rounded border border-purple-500/30\">ذكاء اصطناعي</span>\n            <span className=\"px-2 py-1 bg-green-500/20 rounded border border-green-500/30\">كشف المكررات</span>\n            <span className=\"px-2 py-1 bg-yellow-500/20 rounded border border-yellow-500/30\">تنظيم تلقائي</span>\n          </div>\n        </div>\n\n        {/* Professor Attribution */}\n        <div className=\"text-center\">\n          <div className=\"inline-block glass-card rounded-lg p-3 border border-amber-500/30 bg-amber-500/5\">\n            <div className=\"text-amber-400 font-bold text-sm\" style={{\n              fontFamily: '\"Playfair Display\", serif',\n              fontStyle: \"italic\",\n            }}>\n              Powered by Prof. Sadek Elgazar\n            </div>\n            <div className=\"text-xs text-amber-300/70 mt-1\">\n              AI Research Director\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  );\n};\n\nexport default SplashScreen;\n
+import React, { useState, useEffect } from "react";
+
+const SplashScreen = ({ onComplete, isElectron }) => {
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [currentStep, setCurrentStep] = useState("initializing");
+  const [indexingStats, setIndexingStats] = useState({});
+  const [animationPhase, setAnimationPhase] = useState("loading"); // loading, ready, complete
+
+  const loadingSteps = [
+    { key: "initializing", label: "تهيئة التطبيق...", duration: 800 },
+    { key: "checking-system", label: "فحص النظام...", duration: 600 },
+    {
+      key: "loading-database",
+      label: "تحميل قاعدة البيانات...",
+      duration: 1000,
+    },
+    { key: "preparing-indexer", label: "تحضير محرك الفهرسة...", duration: 700 },
+    { key: "loading-ai", label: "تحميل الذكاء الاصطناعي...", duration: 900 },
+    { key: "finalizing", label: "اللمسات الأخيرة...", duration: 500 },
+  ];
+
+  useEffect(() => {
+    let currentStepIndex = 0;
+    let progressTimer;
+    let stepTimer;
+
+    const processStep = () => {
+      if (currentStepIndex >= loadingSteps.length) {
+        setAnimationPhase("ready");
+        setTimeout(() => {
+          setAnimationPhase("complete");
+          setTimeout(onComplete, 500);
+        }, 1000);
+        return;
+      }
+
+      const step = loadingSteps[currentStepIndex];
+      setCurrentStep(step.key);
+
+      // تحديث التقدم تدريجياً
+      const startProgress = (currentStepIndex / loadingSteps.length) * 100;
+      const endProgress = ((currentStepIndex + 1) / loadingSteps.length) * 100;
+      let currentProgress = startProgress;
+
+      progressTimer = setInterval(() => {
+        currentProgress += (endProgress - startProgress) / (step.duration / 50);
+        if (currentProgress >= endProgress) {
+          currentProgress = endProgress;
+          clearInterval(progressTimer);
+        }
+        setLoadingProgress(Math.min(currentProgress, 100));
+      }, 50);
+
+      // الانتقال للخطوة التالية
+      stepTimer = setTimeout(() => {
+        currentStepIndex++;
+        processStep();
+      }, step.duration);
+    };
+
+    // بدء عملية التحميل
+    setTimeout(processStep, 300);
+
+    return () => {
+      clearInterval(progressTimer);
+      clearTimeout(stepTimer);
+    };
+  }, [onComplete]);
+
+  // تحميل إحصائيات الفهرسة إذا كان متاحاً
+  useEffect(() => {
+    if (isElectron && window.electronAPI) {
+      window.electronAPI
+        .getFileStats()
+        .then((stats) => {
+          setIndexingStats(stats);
+        })
+        .catch(console.error);
+    }
+  }, [isElectron]);
+
+  const getStepLabel = (stepKey) => {
+    const step = loadingSteps.find((s) => s.key === stepKey);
+    return step ? step.label : "تحميل...";
+  };
+
+  const formatNumber = (num) => {
+    if (!num) return "0";
+    return new Intl.NumberFormat("ar-SA").format(num);
+  };
+
+  const formatFileSize = (bytes) => {
+    if (!bytes) return "0 بايت";
+    const sizes = ["بايت", "كيلوبايت", "ميجابايت", "جيجابايت", "تيرابايت"];
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+    return Math.round((bytes / Math.pow(1024, i)) * 100) / 100 + " " + sizes[i];
+  };
+
+  return (
+    <div
+      className={`fixed inset-0 z-50 flex items-center justify-center transition-all duration-1000 ${
+        animationPhase === "complete"
+          ? "opacity-0 scale-110"
+          : "opacity-100 scale-100"
+      }`}
+    >
+      {/* Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#1a1b54] via-[#0d0e38] to-[#020515]">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="floating-orb absolute top-20 left-20 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+          <div
+            className="floating-orb absolute top-40 right-32 w-64 h-64 bg-purple-500/8 rounded-full blur-2xl animate-pulse"
+            style={{ animationDelay: "2s" }}
+          ></div>
+          <div
+            className="floating-orb absolute bottom-32 left-1/3 w-48 h-48 bg-cyan-500/6 rounded-full blur-xl animate-pulse"
+            style={{ animationDelay: "4s" }}
+          ></div>
+          <div
+            className="floating-orb absolute bottom-20 right-20 w-56 h-56 bg-indigo-500/8 rounded-full blur-xl animate-pulse"
+            style={{ animationDelay: "6s" }}
+          ></div>
+        </div>
+
+        {/* Grid Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div
+            className="w-full h-full"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 2px 2px, rgba(100, 200, 255, 0.4) 1px, transparent 0)",
+              backgroundSize: "80px 80px",
+              animation: "float 30s ease-in-out infinite",
+            }}
+          ></div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="relative z-10 text-center max-w-lg mx-auto px-8">
+        {/* Logo & Brand */}
+        <div className="mb-12">
+          <div
+            className={`text-8xl mb-6 transition-all duration-1000 ${
+              animationPhase === "ready" ? "animate-bounce" : ""
+            }`}
+          >
+            🚀
+          </div>
+          <h1
+            className={`text-5xl font-bold mb-4 tracking-wider transition-all duration-1000 ${
+              animationPhase === "loading" ? "login-brand-title" : "text-white"
+            }`}
+          >
+            KNOUX FINDR
+          </h1>
+          <p className="text-xl text-gray-300 mb-2">
+            محرك البحث الذكي للملفات المحلية
+          </p>
+          <p className="text-sm text-gray-400 mb-8">
+            مدعوم بالذكاء الاصطناعي المتقدم
+          </p>
+        </div>
+
+        {/* Loading Progress */}
+        <div className="mb-8">
+          <div className="relative w-full h-2 bg-white/10 rounded-full overflow-hidden mb-4">
+            <div
+              className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all duration-300 ease-out"
+              style={{ width: `${loadingProgress}%` }}
+            >
+              <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <p className="text-lg text-white mb-2">
+              {getStepLabel(currentStep)}
+            </p>
+            <p className="text-sm text-gray-400">
+              {Math.round(loadingProgress)}% مكتمل
+            </p>
+          </div>
+        </div>
+
+        {/* Stats Preview */}
+        {indexingStats.totalFiles && (
+          <div className="glass-card rounded-2xl p-6 mb-8 border border-white/10">
+            <h3 className="text-lg font-semibold text-white mb-4">
+              إحصائيات سريعة
+            </h3>
+            <div className="grid grid-cols-2 gap-4 text-center">
+              <div>
+                <div className="text-2xl font-bold text-blue-400">
+                  {formatNumber(indexingStats.totalFiles)}
+                </div>
+                <div className="text-xs text-gray-400">ملف مفهرس</div>
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-purple-400">
+                  {formatFileSize(indexingStats.totalSize)}
+                </div>
+                <div className="text-xs text-gray-400">إجمالي الحجم</div>
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-green-400">
+                  {indexingStats.totalTypes || 0}
+                </div>
+                <div className="text-xs text-gray-400">نوع ملف</div>
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-yellow-400">
+                  {indexingStats.analyzedFiles || 0}
+                </div>
+                <div className="text-xs text-gray-400">ملف محلل</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Features Preview */}
+        <div className="text-center text-sm text-gray-400 mb-8">
+          <p className="mb-2">مميزات متقدمة:</p>
+          <div className="flex flex-wrap justify-center gap-2 text-xs">
+            <span className="px-2 py-1 bg-blue-500/20 rounded border border-blue-500/30">
+              بحث فوري
+            </span>
+            <span className="px-2 py-1 bg-purple-500/20 rounded border border-purple-500/30">
+              ذكاء اصطناعي
+            </span>
+            <span className="px-2 py-1 bg-green-500/20 rounded border border-green-500/30">
+              كشف المكررات
+            </span>
+            <span className="px-2 py-1 bg-yellow-500/20 rounded border border-yellow-500/30">
+              تنظيم تلقائي
+            </span>
+          </div>
+        </div>
+
+        {/* Professor Attribution */}
+        <div className="text-center">
+          <div className="inline-block glass-card rounded-lg p-3 border border-amber-500/30 bg-amber-500/5">
+            <div
+              className="text-amber-400 font-bold text-sm"
+              style={{
+                fontFamily: '"Playfair Display", serif',
+                fontStyle: "italic",
+              }}
+            >
+              Powered by Prof. Sadek Elgazar
+            </div>
+            <div className="text-xs text-amber-300/70 mt-1">
+              AI Research Director
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SplashScreen;
