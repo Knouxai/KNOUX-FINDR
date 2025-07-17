@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import LocalAuthForm from "./LocalAuthForm";
 import { API_ENDPOINTS, apiCall } from "../config/api";
+import {
+  handleFallbackAuth,
+  isAuthServerAvailable,
+  showOfflineNotification,
+} from "../utils/authFallback";
 
 /**
  * KNOUX FINDR Professional Authentication Screen
