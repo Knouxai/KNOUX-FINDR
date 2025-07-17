@@ -33,15 +33,12 @@ module.exports = {
       title: "KNOUX FINDR",
     }),
     new webpack.DefinePlugin({
-      "process.env": {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV || "production"),
-        REACT_APP_AUTH_SERVER_URL: JSON.stringify(
-          process.env.REACT_APP_AUTH_SERVER_URL || "",
-        ),
-        REACT_APP_API_BASE_URL: JSON.stringify(
-          process.env.REACT_APP_API_BASE_URL || "",
-        ),
-      },
+      "process.env.REACT_APP_AUTH_SERVER_URL": JSON.stringify(
+        process.env.REACT_APP_AUTH_SERVER_URL || "",
+      ),
+      "process.env.REACT_APP_API_BASE_URL": JSON.stringify(
+        process.env.REACT_APP_API_BASE_URL || "",
+      ),
     }),
     new webpack.ProvidePlugin({
       process: "process/browser",
