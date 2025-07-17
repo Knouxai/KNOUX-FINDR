@@ -82,7 +82,7 @@ const DesktopApp = () => {
   const initializeRealData = async () => {
     try {
       console.log("🚀 Initializing real data and services...");
-      addNotification("جارٍ تهيئة الخدمات...", "info");
+      addNotification("جارٍ تهيئة الخدما��...", "info");
 
       // Initialize AI processor
       const aiInitialized = await aiProcessor.initialize();
@@ -246,7 +246,7 @@ const DesktopApp = () => {
 
   const handleRunDuplicateAnalysis = async () => {
     setIsDuplicateAnalysisRunning(true);
-    addNotification("ج��ري تشغيل تحلي�� ا��ملفات المكررة المتقدم...", "info");
+    addNotification("ج��ري تشغيل تحلي�� الملفات المكررة المتقدم...", "info");
 
     try {
       const duplicates = await window.electronAPI.findAdvancedDuplicates({
@@ -287,7 +287,7 @@ const DesktopApp = () => {
 
   const handleGetSmartSuggestions = async () => {
     try {
-      addNotification("جاري تحليل اقتراحات الذكاء الاصطناعي...", "info");
+      addNotification("جا��ي تحليل اقتراحات الذكاء الاصطناعي...", "info");
       const suggestions = await window.electronAPI.getSmartSuggestions(
         searchQuery || "organization",
       );
@@ -320,7 +320,7 @@ const DesktopApp = () => {
         const stats = await window.electronAPI.getFileStats();
         updateFileStats(stats);
       } else {
-        addNotification(result.message || "فشل في التنظيم التلقائي", "error");
+        addNotification(result.message || "فشل في التنظيم ا��تلقائي", "error");
       }
     } catch (error) {
       console.error("Auto categorize failed:", error);
@@ -742,7 +742,7 @@ const DesktopApp = () => {
                   ? "primary-button shadow-lg animate-pulse-glow"
                   : "glass-button hover:bg-white/10"
               }`}
-              onClick={() => setActiveView(tab.id)}
+              onClick={() => setCurrentView(tab.id)}
             >
               <span className="text-lg mr-2">{tab.icon}</span>
               {tab.label}
