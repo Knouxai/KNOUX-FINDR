@@ -155,6 +155,11 @@ const AppContent = () => {
     return <DesktopApp user={user} onLogout={handleLogout} />;
   }
 
+  // Force desktop app for any Electron environment
+  if (window.electronAPI && isAuthenticated) {
+    return <DesktopApp user={user} onLogout={handleLogout} />;
+  }
+
   // Show splash screen initially
   if (showSplash && currentPage === "splash") {
     return (
