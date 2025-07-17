@@ -71,18 +71,34 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error("Token verification failed:", error);
 
-      // Try fallback authentication if server is unavailable
-      try {
-        const fallbackResult = await handleFallbackAuth("demo");
-        if (fallbackResult.success) {
-          setUser(fallbackResult.user);
-          setIsAuthenticated(true);
-          setAuthToken(fallbackResult.token);
-        } else {
+      // Check if it's a network/fetch error
+      const isNetworkError =
+        error.name === "TypeError" ||
+        error.message.includes("fetch") ||
+        error.message.includes("Failed to fetch") ||
+        error.message.includes("Network") ||
+        error.message.includes("ERR_NETWORK");
+
+      if (isNetworkError) {
+        // Try fallback authentication if server is unavailable
+        try {
+          const fallbackResult = await handleFallbackAuth("demo");
+          if (fallbackResult.success) {
+            setUser(fallbackResult.user);
+            setIsAuthenticated(true);
+            setAuthToken(fallbackResult.token);
+            console.log(
+              "🔄 Using fallback authentication due to network error",
+            );
+          } else {
+            logout();
+          }
+        } catch (fallbackError) {
+          console.error("Fallback authentication failed:", fallbackError);
           logout();
         }
-      } catch (fallbackError) {
-        console.error("Fallback authentication failed:", fallbackError);
+      } else {
+        // For non-network errors, just logout
         logout();
       }
     } finally {
