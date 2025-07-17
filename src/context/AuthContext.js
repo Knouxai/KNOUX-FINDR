@@ -30,11 +30,10 @@ export const AuthProvider = ({ children }) => {
 
   const verifyToken = async (token) => {
     try {
-      const response = await fetch("http://localhost:3001/api/verify-token", {
+      const response = await apiCall(API_ENDPOINTS.VERIFY_TOKEN, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
         },
         body: JSON.stringify({ token }),
       });
