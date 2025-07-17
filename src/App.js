@@ -218,7 +218,7 @@ const AppContent = () => {
   );
 };
 
-// Wrapper App component with AuthProvider and ErrorBoundary
+// Wrapper App component with SessionProvider, AuthProvider and ErrorBoundary
 function App() {
   const handleOfflineMode = async () => {
     try {
@@ -236,9 +236,11 @@ function App() {
 
   return (
     <ErrorBoundary onOfflineMode={handleOfflineMode}>
-      <AuthProvider>
-        <AppContent />
-      </AuthProvider>
+      <SessionProvider>
+        <AuthProvider>
+          <AppContent />
+        </AuthProvider>
+      </SessionProvider>
     </ErrorBoundary>
   );
 }
