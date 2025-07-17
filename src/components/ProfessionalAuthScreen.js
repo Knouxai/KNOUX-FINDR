@@ -227,10 +227,7 @@ const ProfessionalAuthScreen = ({ onAuthSuccess }) => {
                     className="social-icon-btn bg-white/10 hover:bg-blue-600/20 border border-white/20 hover:border-blue-500/40 group"
                     onClick={() => {
                       handleOAuthSuccess("Facebook");
-                      window.open(
-                        "http://localhost:3001/auth/facebook",
-                        "_self",
-                      );
+                      window.open(API_ENDPOINTS.OAUTH_FACEBOOK, "_self");
                     }}
                   >
                     <svg
