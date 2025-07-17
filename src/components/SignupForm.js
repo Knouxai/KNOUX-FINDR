@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { API_ENDPOINTS } from "../config/api";
 
 const SignupForm = ({ onSignupSuccess, onSignIn }) => {
   const { shouldShowAuthElements, isAuthenticated, user } = useAuth();
@@ -254,10 +255,7 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
                         <div
                           className="w-[75px] h-[75px] rounded-[20px] glass-button flex items-center justify-center cursor-pointer group relative overflow-hidden"
                           onClick={() =>
-                            window.open(
-                              "http://localhost:3001/auth/facebook",
-                              "_blank",
-                            )
+                            window.open(API_ENDPOINTS.OAUTH_FACEBOOK, "_blank")
                           }
                         >
                           <div className="absolute inset-0 bg-gradient-to-br from-[#1877F2]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -289,10 +287,7 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
                         <div
                           className="w-[75px] h-[75px] rounded-[20px] glass-button flex items-center justify-center cursor-pointer group relative overflow-hidden"
                           onClick={() =>
-                            window.open(
-                              "http://localhost:3001/auth/apple",
-                              "_blank",
-                            )
+                            window.open(API_ENDPOINTS.OAUTH_APPLE, "_blank")
                           }
                         >
                           <div className="absolute inset-0 bg-gradient-to-br from-gray-800/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -316,10 +311,7 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
                         <div
                           className="w-[75px] h-[75px] rounded-[20px] glass-button flex items-center justify-center cursor-pointer group relative overflow-hidden"
                           onClick={() =>
-                            window.open(
-                              "http://localhost:3001/auth/google",
-                              "_blank",
-                            )
+                            window.open(API_ENDPOINTS.OAUTH_GOOGLE, "_blank")
                           }
                         >
                           <div className="absolute inset-0 bg-gradient-to-br from-[#4285F4]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -339,10 +331,7 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
                         <div
                           className="w-[75px] h-[75px] rounded-[20px] glass-button flex items-center justify-center cursor-pointer group relative overflow-hidden"
                           onClick={() =>
-                            window.open(
-                              "http://localhost:3001/auth/github",
-                              "_blank",
-                            )
+                            window.open(API_ENDPOINTS.OAUTH_GITHUB, "_blank")
                           }
                         >
                           <div className="absolute inset-0 bg-gradient-to-br from-gray-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -359,10 +348,7 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
                         <div
                           className="w-[75px] h-[75px] rounded-[20px] glass-button flex items-center justify-center cursor-pointer group relative overflow-hidden"
                           onClick={() =>
-                            window.open(
-                              "http://localhost:3001/auth/microsoft",
-                              "_blank",
-                            )
+                            window.open(API_ENDPOINTS.OAUTH_MICROSOFT, "_blank")
                           }
                         >
                           <div className="absolute inset-0 bg-gradient-to-br from-[#00BCF2]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>

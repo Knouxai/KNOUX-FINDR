@@ -288,6 +288,184 @@ ipcMain.handle("get-duplicate-files", async () => {
   }
 });
 
+// AI-powered suggestions and analysis
+ipcMain.handle("get-ai-suggestions", async (event, filePath) => {
+  try {
+    return smartIndexer && smartIndexer.aiProcessor
+      ? await smartIndexer.aiProcessor.getSmartSuggestions(filePath)
+      : [];
+  } catch (error) {
+    console.error("AI suggestions error:", error);
+    return [];
+  }
+});
+
+ipcMain.handle("get-smart-suggestions", async (event, query) => {
+  try {
+    return smartIndexer && smartIndexer.aiProcessor
+      ? await smartIndexer.aiProcessor.generateSmartSuggestions(query)
+      : [];
+  } catch (error) {
+    console.error("Smart suggestions error:", error);
+    return [];
+  }
+});
+
+ipcMain.handle("analyze-file-content", async (event, filePath) => {
+  try {
+    return smartIndexer && smartIndexer.aiProcessor
+      ? await smartIndexer.aiProcessor.analyzeContent(filePath)
+      : {};
+  } catch (error) {
+    console.error("Content analysis error:", error);
+    return {};
+  }
+});
+
+// Auto Organization
+ipcMain.handle(
+  "auto-organize-files",
+  async (event, directoryPath, options = {}) => {
+    try {
+      if (smartIndexer && smartIndexer.intelligentCategorizer) {
+        const result =
+          await smartIndexer.intelligentCategorizer.autoOrganizeDirectory(
+            directoryPath,
+            options,
+          );
+        mainWindow.webContents.send("organization-complete", result);
+        return result;
+      }
+      return { success: false, message: "Categorizer not available" };
+    } catch (error) {
+      console.error("Auto organize error:", error);
+      return { success: false, error: error.message };
+    }
+  },
+);
+
+ipcMain.handle("categorize-file", async (event, filePath) => {
+  try {
+    return smartIndexer && smartIndexer.intelligentCategorizer
+      ? await smartIndexer.intelligentCategorizer.categorizeFile(filePath)
+      : "Unknown";
+  } catch (error) {
+    console.error("Categorize file error:", error);
+    return "Unknown";
+  }
+});
+
+ipcMain.handle("suggest-categories", async (event, filePath) => {
+  try {
+    return smartIndexer && smartIndexer.intelligentCategorizer
+      ? await smartIndexer.intelligentCategorizer.suggestCategories(filePath)
+      : [];
+  } catch (error) {
+    console.error("Suggest categories error:", error);
+    return [];
+  }
+});
+
+// Advanced Duplicate Detection
+ipcMain.handle("find-advanced-duplicates", async (event, options = {}) => {
+  try {
+    if (smartIndexer && smartIndexer.duplicateDetector) {
+      return await smartIndexer.duplicateDetector.findAllDuplicates(
+        (progress) => {
+          mainWindow.webContents.send("indexing-progress", {
+            ...progress,
+            type: "duplicate-detection",
+          });
+        },
+      );
+    }
+    return [];
+  } catch (error) {
+    console.error("Advanced duplicates error:", error);
+    return [];
+  }
+});
+
+ipcMain.handle("analyze-similarity", async (event, file1, file2) => {
+  try {
+    return smartIndexer && smartIndexer.duplicateDetector
+      ? await smartIndexer.duplicateDetector.calculateSimilarity(file1, file2)
+      : 0;
+  } catch (error) {
+    console.error("Similarity analysis error:", error);
+    return 0;
+  }
+});
+
+// Indexing Control
+ipcMain.handle("start-indexing", async (event, directoryPath) => {
+  try {
+    if (smartIndexer) {
+      await smartIndexer.indexDirectory(directoryPath, (progress) => {
+        mainWindow.webContents.send("indexing-progress", progress);
+      });
+      return { success: true };
+    }
+    return { success: false, message: "Indexer not available" };
+  } catch (error) {
+    console.error("Start indexing error:", error);
+    return { success: false, error: error.message };
+  }
+});
+
+ipcMain.handle("stop-indexing", async () => {
+  try {
+    if (smartIndexer && smartIndexer.stopIndexing) {
+      smartIndexer.stopIndexing();
+      return { success: true };
+    }
+    return { success: false, message: "Cannot stop indexing" };
+  } catch (error) {
+    console.error("Stop indexing error:", error);
+    return { success: false, error: error.message };
+  }
+});
+
+ipcMain.handle("get-indexing-status", async () => {
+  try {
+    return smartIndexer
+      ? {
+          isIndexing: smartIndexer.isIndexing || false,
+          progress: smartIndexer.getIndexingProgress
+            ? smartIndexer.getIndexingProgress()
+            : {},
+          stats: smartIndexer.getStats(),
+        }
+      : { isIndexing: false, progress: {}, stats: {} };
+  } catch (error) {
+    console.error("Get indexing status error:", error);
+    return { isIndexing: false, progress: {}, stats: {} };
+  }
+});
+
+// File Encryption (placeholder - to be implemented)
+ipcMain.handle("encrypt-file", async (event, filePath, password) => {
+  try {
+    // TODO: Implement actual file encryption
+    console.log("File encryption requested for:", filePath);
+    return { success: false, message: "Encryption feature coming soon" };
+  } catch (error) {
+    console.error("Encrypt file error:", error);
+    return { success: false, error: error.message };
+  }
+});
+
+ipcMain.handle("decrypt-file", async (event, filePath, password) => {
+  try {
+    // TODO: Implement actual file decryption
+    console.log("File decryption requested for:", filePath);
+    return { success: false, message: "Decryption feature coming soon" };
+  } catch (error) {
+    console.error("Decrypt file error:", error);
+    return { success: false, error: error.message };
+  }
+});
+
 ipcMain.handle("open-file-location", async (event, filePath) => {
   const { shell } = require("electron");
   try {

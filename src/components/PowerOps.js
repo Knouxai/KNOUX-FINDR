@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import DuplicateManager from "./DuplicateManager";
+import fileOrganizer from "../services/fileOrganizer";
+import duplicateDetector from "../services/duplicateDetector";
+import { useSession } from "../context/SessionContext";
 
 const PowerOps = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -560,7 +563,7 @@ const PowerOps = () => {
 
     // تحديث قائمة الملفات بناءً على الحل المطبق
     if (resolutionData.strategy === "smart") {
-      // إزالة الملفات المحذوفة من القائمة
+      // إزالة الملفات المحذوفة من ا��قائمة
       setFileList((prev) =>
         prev.filter(
           (file) =>
@@ -780,7 +783,7 @@ const PowerOps = () => {
                   <option value="docx">مستندات Word</option>
                   <option value="pdf">ملفات PDF</option>
                   <option value="zip">أرشيف مضغوط</option>
-                  <option value="db">قواعد بيانات</option>
+                  <option value="db">قواعد بيا��ات</option>
                 </select>
               </div>
 
@@ -1155,7 +1158,7 @@ const PowerOps = () => {
               </div>
             </div>
 
-            {/* علامات التبويب */}
+            {/* علام��ت التبويب */}
             <div className="flex gap-2 mb-4">
               {[
                 { id: "organize", name: "🗂️ تنظيم ذكي", color: "blue" },

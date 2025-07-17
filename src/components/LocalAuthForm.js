@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { API_ENDPOINTS, apiCall } from "../config/api";
 
 const LocalAuthForm = ({ onAuthSuccess, mode = "signin" }) => {
   const [authMode, setAuthMode] = useState(mode);
@@ -74,12 +75,10 @@ const LocalAuthForm = ({ onAuthSuccess, mode = "signin" }) => {
     setIsLoading(true);
 
     try {
-      const endpoint = authMode === "signup" ? "/auth/register" : "/auth/login";
-      const response = await fetch(`http://localhost:3001${endpoint}`, {
+      const endpoint =
+        authMode === "signup" ? API_ENDPOINTS.REGISTER : API_ENDPOINTS.LOGIN;
+      const response = await apiCall(endpoint, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,

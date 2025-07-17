@@ -9,6 +9,12 @@ import ProfessionalAuthScreen from "./ProfessionalAuthScreen";
 import ProfessionalDashboard from "./ProfessionalDashboard";
 import DatabaseManager from "./DatabaseManager";
 import LanguageManager from "./LanguageManager";
+import { useSession } from "../context/SessionContext";
+import aiProcessor from "../services/aiProcessor";
+import duplicateDetector from "../services/duplicateDetector";
+import fileOrganizer from "../services/fileOrganizer";
+import statisticsService from "../services/statisticsService";
+import Settings from "./Settings";
 
 /**
  * KNOUX FINDR Desktop App UI
@@ -23,135 +29,42 @@ import LanguageManager from "./LanguageManager";
  */
 
 const DesktopApp = () => {
-  const [isElectron, setIsElectron] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [showLoginScreen, setShowLoginScreen] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("تقارير العمل");
-  const [searchResults, setSearchResults] = useState([
-    {
-      id: "search_1",
-      name: "تقرير المبيعات الربعي 2024.pdf",
-      path: "/Users/Desktop/Reports/Q4_Sales_Report_2024.pdf",
-      size: 3847293,
-      modified_at: "2024-01-15T10:30:00Z",
-      extension: ".pdf",
-      mime_type: "application/pdf",
-      category: "Work",
-      aiRelevanceScore: 0.95,
-    },
-    {
-      id: "search_2",
-      name: "عرض تقديمي - استراتيجية المنتج.pptx",
-      path: "/Users/Documents/Presentations/Product_Strategy_2024.pptx",
-      size: 18472938,
-      modified_at: "2024-01-14T16:45:00Z",
-      extension: ".pptx",
-      mime_type:
-        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-      category: "Work",
-      aiRelevanceScore: 0.89,
-    },
-    {
-      id: "search_3",
-      name: "صور_مؤتمر_التقنية_2024",
-      path: "/Users/Pictures/Conference/Tech_Conference_2024/IMG_0847.jpg",
-      size: 6293847,
-      modified_at: "2024-01-13T14:22:00Z",
-      extension: ".jpg",
-      mime_type: "image/jpeg",
-      category: "Work",
-      aiRelevanceScore: 0.82,
-    },
-  ]);
+  // Use Session Context instead of local state
+  const {
+    user,
+    isAuthenticated,
+    appInitialized,
+    currentView,
+    setCurrentView,
+    isElectronMode,
+    fileStats,
+    updateFileStats,
+    recentFiles,
+    addRecentFile,
+    aiSuggestions,
+    updateAiSuggestions,
+    activeOperations,
+    addOperation,
+    updateOperation,
+    completeOperation,
+    addNotification,
+    notifications,
+    addToSearchHistory,
+    searchHistory,
+  } = useSession();
+
+  // Local component state
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
-  const [fileStats, setFileStats] = useState({
-    totalFiles: 147832,
-    totalSize: 2847291840000,
-    totalTypes: 67,
-    analyzedFiles: 139284,
-    categories: {
-      Documents: 45231,
-      Images: 32847,
-      Videos: 8934,
-      Audio: 12847,
-      Code: 15983,
-      Archives: 4821,
-      Work: 18472,
-      Personal: 22631,
-    },
-  });
-  const [recentFiles, setRecentFiles] = useState([
-    {
-      id: 1,
-      name: "تقرير المبيعات Q4 2024.pdf",
-      path: "/Users/Desktop/Reports/تقرير المبيعات Q4 2024.pdf",
-      size: 2847293,
-      modified_at: "2024-01-15T10:30:00Z",
-      extension: ".pdf",
-      mime_type: "application/pdf",
-      category: "Work",
-    },
-    {
-      id: 2,
-      name: "عرض تقديمي - استراتيجية التسويق.pptx",
-      path: "/Users/Documents/Presentations/عرض تقديمي - استراتيجية التسويق.pptx",
-      size: 15847293,
-      modified_at: "2024-01-14T16:45:00Z",
-      extension: ".pptx",
-      mime_type:
-        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-      category: "Work",
-    },
-    {
-      id: 3,
-      name: "صور العطلة الصيفية",
-      path: "/Users/Pictures/Summer_2024/IMG_001.jpg",
-      size: 4293847,
-      modified_at: "2024-01-13T14:22:00Z",
-      extension: ".jpg",
-      mime_type: "image/jpeg",
-      category: "Personal",
-    },
-    {
-      id: 4,
-      name: "مشروع React النهائي",
-      path: "/Users/Dev/Projects/knoux-findr/src/App.js",
-      size: 23847,
-      modified_at: "2024-01-13T09:15:00Z",
-      extension: ".js",
-      mime_type: "text/javascript",
-      category: "Code",
-    },
-  ]);
-  const [indexingStatus, setIndexingStatus] = useState({
-    status: "completed",
-    message: "تم فهرسة 147,832 ملف بنجاح",
-    filesProcessed: 147832,
-    totalFiles: 147832,
-  });
-  const [indexingProgress, setIndexingProgress] = useState(null);
-  const [aiSuggestions, setAiSuggestions] = useState([
-    {
-      title: "🔍 اقتراحات البحث الذكية",
-      items: [
-        { text: "تقارير العمل الأخيرة", confidence: 95, category: "Work" },
-        { text: "صور العطلة الصيفية", confidence: 89, category: "Personal" },
-        { text: "مشاريع React والبرمجة", confidence: 92, category: "Code" },
-      ],
-    },
-    {
-      title: "📁 تصنيفات مقترحة",
-      items: [
-        {
-          text: "ملفات التصميم غير المصنفة",
-          confidence: 94,
-          category: "Design",
-        },
-        { text: "مقاطع فيديو الاجتماعات", confidence: 91, category: "Work" },
-      ],
-    },
-  ]);
-  const [activeView, setActiveView] = useState("professional");
+  const [isIndexing, setIsIndexing] = useState(false);
+  const [indexingProgress, setIndexingProgress] = useState({});
+  const [duplicateGroups, setDuplicateGroups] = useState([]);
+  const [isDuplicateAnalysisRunning, setIsDuplicateAnalysisRunning] =
+    useState(false);
+  // Real initialization flag
+  const [isRealDataLoaded, setIsRealDataLoaded] = useState(false);
+  const [indexingStatus, setIndexingStatus] = useState({});
   const [searchFilters, setSearchFilters] = useState({
     useAI: true,
     category: "all",
@@ -159,122 +72,67 @@ const DesktopApp = () => {
     dateTo: "",
     fileType: "all",
   });
-  const [duplicateGroups, setDuplicateGroups] = useState([
-    {
-      id: "dup_1",
-      algorithm: "exactHash",
-      confidence: 100,
-      files: [
-        {
-          path: "/Users/Downloads/document.pdf",
-          size: 2847293,
-          hash: "a1b2c3d4",
-          modified_at: "2024-01-15T10:30:00Z",
-        },
-        {
-          path: "/Users/Desktop/document.pdf",
-          size: 2847293,
-          hash: "a1b2c3d4",
-          modified_at: "2024-01-15T10:30:00Z",
-        },
-        {
-          path: "/Users/Backup/document.pdf",
-          size: 2847293,
-          hash: "a1b2c3d4",
-          modified_at: "2024-01-15T10:30:00Z",
-        },
-      ],
-      totalSize: 8541879,
-      potentialSavings: 5694586,
-    },
-    {
-      id: "dup_2",
-      algorithm: "fuzzyHash",
-      confidence: 95,
-      files: [
-        {
-          path: "/Users/Pictures/vacation_photo_1.jpg",
-          size: 4293847,
-          hash: "e5f6g7h8",
-          modified_at: "2024-01-10T14:22:00Z",
-        },
-        {
-          path: "/Users/Pictures/vacation_photo_1_edited.jpg",
-          size: 4298473,
-          hash: "e5f6g7h9",
-          modified_at: "2024-01-11T16:30:00Z",
-        },
-      ],
-      totalSize: 8592320,
-      potentialSavings: 4293847,
-    },
-  ]);
-  const [isDuplicateAnalysisRunning, setIsDuplicateAnalysisRunning] =
-    useState(false);
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      message: "تم اكتشاف 2 مجموعة من الملفات المكررة",
-      type: "info",
-      timestamp: new Date(Date.now() - 30000),
-    },
-    {
-      id: 2,
-      message: "تم تصنيف 1,247 ملف جديد بالذكاء الاصطناعي",
-      type: "success",
-      timestamp: new Date(Date.now() - 120000),
-    },
-  ]);
 
   useEffect(() => {
-    if (window.electronAPI) {
-      setIsElectron(true);
-      // Show login screen first for Electron, skip for web
-      setShowLoginScreen(true);
+    if (appInitialized && !isRealDataLoaded) {
+      initializeRealData();
     }
-  }, []);
+  }, [appInitialized]);
 
-  const handleLogin = async (credentials) => {
+  const initializeRealData = async () => {
     try {
-      // Simulate login process
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      setIsLoggedIn(true);
-      setShowLoginScreen(false);
-      initializeApp();
+      console.log("🚀 Initializing real data and services...");
+      addNotification("جارٍ تهيئة الخدمات...", "info");
+
+      // Initialize AI processor
+      const aiInitialized = await aiProcessor.initialize();
+      if (aiInitialized) {
+        addNotification("تم تفعيل الذكاء الاصطناعي", "success");
+      }
+
+      // Load real file data if available
+      await loadRealFileData();
+
+      setIsRealDataLoaded(true);
+      addNotification("تم تهيئة التطبيق بنجاح", "success");
+      console.log("✅ Real data initialization completed");
     } catch (error) {
-      console.error("Login failed:", error);
+      console.error("❌ Real data initialization failed:", error);
+      addNotification("فشل في تهيئة بعض الخدمات", "error");
     }
   };
 
-  const handleQuickStart = () => {
-    setIsLoggedIn(true);
-    setShowLoginScreen(false);
-    initializeApp();
-  };
-
-  const handleSocialLoginSuccess = (user) => {
-    setIsLoggedIn(true);
-    setShowLoginScreen(false);
-    // Store user info (could be in context/state management)
-    sessionStorage.setItem("knouxUser", JSON.stringify(user));
-    initializeApp();
-  };
-
-  const handleSocialLoginError = (error) => {
-    console.error("Social login failed:", error);
-    addNotification(`فشل تسجيل الدخول: ${error}`, "error");
-  };
-
-  const initializeApp = async () => {
+  const loadRealFileData = async () => {
     try {
-      // Get initial file statistics
-      const stats = await window.electronAPI.getFileStats();
-      setFileStats(stats);
+      if (window.electronAPI) {
+        // Load real file stats from Electron
+        const stats = await window.electronAPI.getFileStats();
+        updateFileStats(stats);
 
-      // Get recent files
-      const recent = await window.electronAPI.getRecentFiles(10);
-      setRecentFiles(recent);
+        // Load recent files
+        const recent = await window.electronAPI.getRecentFiles(20);
+        recent.forEach((file) => addRecentFile(file));
 
+        console.log("📊 Loaded real file data from Electron");
+      } else {
+        // Web environment - use simulated data
+        updateFileStats({
+          totalFiles: 1247,
+          totalSize: 15728640000, // ~15GB
+          totalTypes: 25,
+          analyzedFiles: 892,
+          duplicateGroups: 0,
+        });
+      }
+    } catch (error) {
+      console.error("Failed to load file data:", error);
+    }
+  };
+
+  const setupElectronListeners = async () => {
+    if (!window.electronAPI) return;
+
+    try {
       // Setup event listeners for real-time updates
       if (window.electronAPI.onIndexingStatus) {
         window.electronAPI.onIndexingStatus((status) => {
@@ -292,25 +150,30 @@ const DesktopApp = () => {
         });
       }
 
-      // Initial AI suggestions
-      await loadAISuggestions();
+      console.log("🔗 Electron event listeners setup completed");
     } catch (error) {
-      console.error("App initialization failed:", error);
-      addNotification("تعذر تهيئة التطبيق", "error");
+      console.error("Failed to setup Electron listeners:", error);
     }
   };
 
   const loadAISuggestions = async () => {
     try {
-      if (window.electronAPI.getFileSuggestions) {
-        const suggestions = await window.electronAPI.getFileSuggestions({
-          recentSearches: [searchQuery],
-          fileCategories: fileStats.categories,
-        });
-        setAiSuggestions(suggestions);
-      }
+      const context = {
+        recentFiles: recentFiles.slice(0, 10),
+        searchHistory: searchHistory.slice(0, 5),
+        fileStats: fileStats,
+      };
+
+      const suggestions = await aiProcessor.generateSmartSuggestions(
+        searchQuery,
+        context,
+      );
+      updateAiSuggestions(suggestions);
+
+      console.log(`🧠 Generated ${suggestions.length} AI suggestions`);
     } catch (error) {
       console.error("Error loading AI suggestions:", error);
+      updateAiSuggestions([]);
     }
   };
 
@@ -321,35 +184,81 @@ const DesktopApp = () => {
     }
 
     setIsSearching(true);
+    const operationId = addOperation({
+      type: "search",
+      name: `البحث عن: ${searchQuery}`,
+      description: "جارٍ البحث في الملفات...",
+    });
+
     try {
-      const results = await window.electronAPI.searchFiles(
-        searchQuery,
-        searchFilters,
-      );
+      // Add to search history
+      addToSearchHistory(searchQuery);
+
+      let results = [];
+
+      if (window.electronAPI && window.electronAPI.searchFiles) {
+        // Use Electron search if available
+        results = await window.electronAPI.searchFiles(
+          searchQuery,
+          searchFilters,
+        );
+      } else {
+        // Use local search for web environment
+        results = await performLocalSearch(searchQuery, searchFilters);
+      }
+
       setSearchResults(results);
 
       // Update AI suggestions based on search
       if (searchFilters.useAI) {
         await loadAISuggestions();
       }
+
+      completeOperation(operationId, { resultsFound: results.length });
+      addNotification(`تم العثور على ${results.length} نتيجة`, "success");
     } catch (error) {
       console.error("Search failed:", error);
+      updateOperation(operationId, { status: "failed", error: error.message });
       addNotification("فشل في البحث", "error");
     } finally {
       setIsSearching(false);
     }
   };
 
+  const performLocalSearch = async (query, filters) => {
+    // Simulated local search using recent files
+    const queryLower = query.toLowerCase();
+
+    return recentFiles
+      .filter((file) => {
+        const nameMatch = file.name.toLowerCase().includes(queryLower);
+        const pathMatch = file.path.toLowerCase().includes(queryLower);
+
+        let categoryMatch = true;
+        if (filters.category !== "all") {
+          categoryMatch = file.category === filters.category;
+        }
+
+        return (nameMatch || pathMatch) && categoryMatch;
+      })
+      .slice(0, 50); // Limit results
+  };
+
   const handleRunDuplicateAnalysis = async () => {
     setIsDuplicateAnalysisRunning(true);
-    addNotification("ج��ري تشغيل تحليل الملفات المكررة المتقدم...", "info");
+    addNotification("ج��ري تشغيل تحلي�� الملفات المكررة المتقدم...", "info");
 
     try {
-      const duplicates = await window.electronAPI.getAdvancedDuplicates();
+      const duplicates = await window.electronAPI.findAdvancedDuplicates({
+        includeImages: true,
+        includeSimilarNames: true,
+        threshold: 0.85,
+      });
       setDuplicateGroups(duplicates);
+      // Duplicate files are stored in duplicateGroups state
       addNotification(
-        `تم العثور على ${duplicates.length} مجموعة من الملفات المكررة`,
-        "success",
+        `تم العثور على ${duplicates.length} مجموعة من المل��ات المكررة`,
+        duplicates.length > 0 ? "warning" : "success",
       );
     } catch (error) {
       console.error("Duplicate analysis failed:", error);
@@ -362,36 +271,64 @@ const DesktopApp = () => {
   const handleAIAnalyzeContent = async () => {
     try {
       addNotification("جاري تشغيل التحليل الذكي للمحتوى...", "info");
-      const result = await window.electronAPI.categorizeFiles();
+      // Get AI suggestions based on current content
+      await loadAISuggestions();
 
       // Refresh file stats
       const stats = await window.electronAPI.getFileStats();
-      setFileStats(stats);
+      updateFileStats(stats);
 
-      addNotification(
-        `تم تصنيف ${result.categorizedCount} ملف بالذكاء الاصطناعي`,
-        "success",
-      );
+      addNotification("تم إكمال التحليل الذكي للمحتوى", "success");
     } catch (error) {
       console.error("AI analysis failed:", error);
       addNotification("فشل في التحليل الذكي", "error");
     }
   };
 
-  const addNotification = (message, type = "info") => {
-    const notification = {
-      id: Date.now(),
-      message,
-      type,
-      timestamp: new Date(),
-    };
-    setNotifications((prev) => [notification, ...prev.slice(0, 4)]);
-
-    // Auto-remove after 5 seconds
-    setTimeout(() => {
-      setNotifications((prev) => prev.filter((n) => n.id !== notification.id));
-    }, 5000);
+  const handleGetSmartSuggestions = async () => {
+    try {
+      addNotification("جاري تحليل اقتراحات الذكاء الاصطناعي...", "info");
+      const suggestions = await window.electronAPI.getSmartSuggestions(
+        searchQuery || "organization",
+      );
+      updateAiSuggestions(suggestions);
+      addNotification(`تم إنشاء ${suggestions.length} اقتراح ذكي`, "success");
+    } catch (error) {
+      console.error("Smart suggestions failed:", error);
+      addNotification("فشل في إنشاء الاقتراحات الذكية", "error");
+    }
   };
+
+  const handleAIAutoCategorize = async () => {
+    try {
+      addNotification("جاري تنظيم الملفات تلقائياً...", "info");
+
+      // Auto-organize current directory or use a default path
+      const result = await window.electronAPI.autoOrganizeFiles(".", {
+        createSubfolders: true,
+        useAI: true,
+        preserveOriginals: false,
+      });
+
+      if (result.success) {
+        addNotification(
+          `تم تنظيم ${result.processedFiles || 0} ملف تلقائياً`,
+          "success",
+        );
+
+        // Refresh stats after organization
+        const stats = await window.electronAPI.getFileStats();
+        updateFileStats(stats);
+      } else {
+        addNotification(result.message || "فشل في التنظيم التلقائي", "error");
+      }
+    } catch (error) {
+      console.error("Auto categorize failed:", error);
+      addNotification("فشل في التنظ��م التلقائي", "error");
+    }
+  };
+
+  // addNotification is now provided by SessionContext
 
   const formatFileSize = (bytes) => {
     if (bytes === 0) return "0 Bytes";
@@ -404,7 +341,7 @@ const DesktopApp = () => {
   const getFileIcon = (extension, mimeType) => {
     if (mimeType?.startsWith("image/")) return "🖼️";
     if (mimeType?.startsWith("video/")) return "🎥";
-    if (mimeType?.startsWith("audio/")) return "🎵";
+    if (mimeType?.startsWith("audio/")) return "����";
 
     switch (extension?.toLowerCase()) {
       case ".pdf":
@@ -434,8 +371,15 @@ const DesktopApp = () => {
   };
 
   // Use Professional Auth Screen instead of basic login
-  if (!isElectron || showLoginScreen) {
-    return <ProfessionalAuthScreen onAuthSuccess={handleSocialLoginSuccess} />;
+  if (!isAuthenticated) {
+    return (
+      <ProfessionalAuthScreen
+        onAuthSuccess={(userData) => {
+          // Handle successful authentication
+          console.log("Authentication successful:", userData);
+        }}
+      />
+    );
   }
 
   // Legacy Login Screen Component (for reference)
@@ -542,11 +486,11 @@ const DesktopApp = () => {
             <div className="text-center p-4 bg-white/5 rounded-lg">
               <div className="text-3xl mb-2">🤖</div>
               <div className="text-sm font-semibold">ذكاء اصطناعي</div>
-              <div className="text-xs text-gray-400">بحث متقدم</div>
+              <div className="text-xs text-gray-400">بحث متقد��</div>
             </div>
             <div className="text-center p-4 bg-white/5 rounded-lg">
               <div className="text-3xl mb-2">🔍</div>
-              <div className="text-sm font-semibold">كشف المكررات</div>
+              <div className="text-sm font-semibold">كشف ال��كررات</div>
               <div className="text-xs text-gray-400">توفير المساحة</div>
             </div>
             <div className="text-center p-4 bg-white/5 rounded-lg">
@@ -563,8 +507,14 @@ const DesktopApp = () => {
 
           {/* Social Login */}
           <SocialLogin
-            onLoginSuccess={handleSocialLoginSuccess}
-            onLoginError={handleSocialLoginError}
+            onLoginSuccess={(userData) => {
+              // Handle successful login
+              console.log("Social login successful:", userData);
+            }}
+            onLoginError={(error) => {
+              // Handle login error
+              console.error("Social login error:", error);
+            }}
           />
 
           {/* Divider */}
@@ -577,7 +527,10 @@ const DesktopApp = () => {
           {/* Quick Actions */}
           <div className="space-y-3">
             <button
-              onClick={handleQuickStart}
+              onClick={() => {
+                // Handle quick start
+                console.log("Quick start clicked");
+              }}
               className="w-full py-3 px-6 glass-button rounded-xl text-lg font-semibold hover:scale-105 transition-all duration-200"
             >
               🚀 ابدأ الاستخدام فوراً
@@ -776,21 +729,20 @@ const DesktopApp = () => {
               icon: "🏢",
             },
             { id: "search", label: "🔍 Intelligent Search", icon: "🔍" },
-            { id: "database", label: "🗄️ Database Management", icon: "🗄️" },
-            { id: "languages", label: "🌐 Language Center", icon: "🌐" },
-            { id: "powerops", label: "⚡ Advanced Operations", icon: "⚡" },
-            { id: "duplicates", label: "🔄 Duplicate Analysis", icon: "🔄" },
             { id: "analytics", label: "📊 Enterprise Analytics", icon: "📊" },
+            { id: "duplicates", label: "🔄 Duplicate Analysis", icon: "🔄" },
+            { id: "powerops", label: "⚡ Advanced Operations", icon: "⚡" },
             { id: "timeline", label: "📅 Activity Timeline", icon: "📅" },
+            { id: "settings", label: "⚙️ Settings", icon: "⚙️" },
           ].map((tab) => (
             <button
               key={tab.id}
               className={`px-6 py-3 rounded-lg font-semibold transition-all hover:scale-105 ${
-                activeView === tab.id
+                currentView === tab.id
                   ? "primary-button shadow-lg animate-pulse-glow"
                   : "glass-button hover:bg-white/10"
               }`}
-              onClick={() => setActiveView(tab.id)}
+              onClick={() => setCurrentView(tab.id)}
             >
               <span className="text-lg mr-2">{tab.icon}</span>
               {tab.label}
@@ -803,31 +755,34 @@ const DesktopApp = () => {
       <main className="relative z-10 flex-1 p-4 overflow-hidden">
         <div className="h-[calc(100vh-200px)] overflow-y-auto">
           {/* Professional Dashboard View */}
-          {activeView === "professional" && (
+          {currentView === "professional" && (
             <div className="fade-in">
               <ProfessionalDashboard
                 user={{ name: "Enterprise User", email: "admin@knoux.com" }}
-                onLogout={() => setShowLoginScreen(true)}
+                onLogout={() => {
+                  // Handle logout
+                  console.log("User logged out");
+                }}
               />
             </div>
           )}
 
           {/* Database Management View */}
-          {activeView === "database" && (
+          {currentView === "database" && (
             <div className="fade-in">
               <DatabaseManager />
             </div>
           )}
 
           {/* Language Center View */}
-          {activeView === "languages" && (
+          {currentView === "languages" && (
             <div className="fade-in">
               <LanguageManager />
             </div>
           )}
 
           {/* Enterprise Analytics View */}
-          {activeView === "analytics" && (
+          {currentView === "analytics" && (
             <div className="fade-in">
               <Stats
                 fileStats={fileStats}
@@ -839,7 +794,7 @@ const DesktopApp = () => {
           )}
 
           {/* Intelligent Search View */}
-          {activeView === "search" && (
+          {currentView === "search" && (
             <div className="space-y-6 fade-in">
               <div className="glass-card rounded-xl p-6">
                 <h2 className="text-2xl font-bold mb-4 gradient-text">
@@ -903,7 +858,7 @@ const DesktopApp = () => {
                     <option value="Documents">مستندات</option>
                     <option value="Images">صور</option>
                     <option value="Videos">فيديوهات</option>
-                    <option value="Audio">صوتيات</option>
+                    <option value="Audio">صوتي��ت</option>
                   </select>
                 </div>
 
@@ -996,13 +951,13 @@ const DesktopApp = () => {
           )}
 
           {/* PowerOps View */}
-          {activeView === "powerops" && (
+          {currentView === "powerops" && (
             <div className="fade-in">
               <PowerOps
                 fileStats={fileStats}
                 onRefreshStats={async () => {
                   const stats = await window.electronAPI.getFileStats();
-                  setFileStats(stats);
+                  updateFileStats(stats);
                 }}
                 duplicateGroups={duplicateGroups}
                 onRunDuplicateAnalysis={handleRunDuplicateAnalysis}
@@ -1012,7 +967,7 @@ const DesktopApp = () => {
           )}
 
           {/* Duplicates View */}
-          {activeView === "duplicates" && (
+          {currentView === "duplicates" && (
             <div className="fade-in">
               <DuplicateManager
                 duplicateGroups={duplicateGroups}
@@ -1020,14 +975,14 @@ const DesktopApp = () => {
                 isAnalysisRunning={isDuplicateAnalysisRunning}
                 onRefreshStats={async () => {
                   const stats = await window.electronAPI.getFileStats();
-                  setFileStats(stats);
+                  updateFileStats(stats);
                 }}
               />
             </div>
           )}
 
           {/* Statistics View */}
-          {activeView === "stats" && (
+          {currentView === "stats" && (
             <div className="fade-in">
               <Stats
                 fileStats={fileStats}
@@ -1038,9 +993,16 @@ const DesktopApp = () => {
           )}
 
           {/* Timeline View */}
-          {activeView === "timeline" && (
+          {currentView === "timeline" && (
             <div className="fade-in">
               <Timeline />
+            </div>
+          )}
+
+          {/* Settings View */}
+          {currentView === "settings" && (
+            <div className="fade-in">
+              <Settings />
             </div>
           )}
         </div>

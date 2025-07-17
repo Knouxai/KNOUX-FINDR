@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { API_CONFIG, API_ENDPOINTS } from "../config/api";
 
 /**
  * Social Login Component for KNOUX FINDR
@@ -9,8 +10,7 @@ const SocialLogin = ({ onLoginSuccess, onLoginError }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingProvider, setLoadingProvider] = useState(null);
 
-  const AUTH_SERVER_URL =
-    process.env.REACT_APP_AUTH_SERVER_URL || "http://localhost:3001";
+  const AUTH_SERVER_URL = API_CONFIG.AUTH_SERVER_URL;
 
   // Check for authentication status on component mount
   useEffect(() => {

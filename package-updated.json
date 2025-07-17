@@ -1,21 +1,28 @@
 {
   "name": "knoux-findr",
-  "version": "1.0.0",
-  "description": "KNOUX FINDR - Desktop AI-Powered File Search Engine",
+  "version": "2.0.0",
+  "description": "KNOUX FINDR - Desktop AI-Powered File Search Engine with Enhanced Auth Server",
   "main": "electron/main.js",
   "scripts": {
     "start": "node server.js",
     "dev": "concurrently \"npm run server\" \"npm run build:watch\"",
     "server": "node server.js",
     "auth-server": "node auth-server.js",
-    "dev-full": "concurrently \"npm run server\" \"npm run auth-server\" \"npm run build:watch\"",
+    "auth-server-v2": "node auth-server-v2.js",
+    "dev-full": "concurrently \"npm run server\" \"npm run auth-server-v2\" \"npm run build:watch\"",
     "build": "webpack --mode production",
     "build:watch": "webpack --mode development --watch",
     "electron": "electron .",
     "electron-dev": "concurrently \"npm run build:watch\" \"wait-on dist/index.html && electron .\"",
     "electron-build": "npm run build && electron .",
     "package": "electron-builder",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:reset": "prisma db push --force-reset",
+    "db:studio": "prisma studio",
+    "logs:clear": "rm -rf logs/*.log",
+    "auth:test": "node test-config.js"
   },
   "keywords": [
     "search",
@@ -24,7 +31,11 @@
     "react",
     "electron",
     "ai",
-    "desktop"
+    "desktop",
+    "authentication",
+    "oauth",
+    "jwt",
+    "security"
   ],
   "author": "KNOUX FINDR Team",
   "license": "ISC",
@@ -34,11 +45,7 @@
     "directories": {
       "output": "release"
     },
-    "files": [
-      "dist/**/*",
-      "electron/**/*",
-      "node_modules/**/*"
-    ],
+    "files": ["dist/**/*", "electron/**/*", "node_modules/**/*"],
     "mac": {
       "category": "public.app-category.productivity"
     },
@@ -63,12 +70,12 @@
     "dotenv": "^16.3.1",
     "electron": "^28.1.3",
     "express": "^4.18.2",
-    "express-rate-limit": "^8.0.1",
+    "express-rate-limit": "^7.3.1",
     "express-session": "^1.17.3",
     "franc": "^6.1.0",
     "fs-extra": "^11.2.0",
     "fuse.js": "^7.0.0",
-    "helmet": "^8.1.0",
+    "helmet": "^7.1.0",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "mammoth": "^1.6.0",
@@ -92,19 +99,17 @@
     "sqlite3": "^5.1.7",
     "uuid": "^9.0.1",
     "vis-timeline": "^7.7.3",
-    "winston": "^3.17.0"
+    "winston": "^3.11.0"
   },
   "devDependencies": {
     "@babel/core": "^7.23.6",
     "@babel/preset-env": "^7.23.6",
     "@babel/preset-react": "^7.23.3",
     "babel-loader": "^9.1.3",
-    "buffer": "^6.0.3",
     "concurrently": "^8.2.2",
     "css-loader": "^6.8.1",
     "electron-builder": "^24.9.1",
     "html-webpack-plugin": "^5.6.0",
-    "process": "^0.11.10",
     "style-loader": "^3.3.3",
     "wait-on": "^7.2.0",
     "webpack": "^5.89.0",

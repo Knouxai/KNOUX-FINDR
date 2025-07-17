@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KNOUX FINDR - Test New Design</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      .login-brand-title {
+        background: linear-gradient(
+          135deg,
+          #ffffff 0%,
+          #e0e7ff 25%,
+          #c7d2fe 50%,
+          #a5b4fc 75%,
+          #8b5cf6 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: gradient-flow 4s ease-in-out infinite;
+        background-size: 300% 300%;
+        text-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+      }
+
+      @keyframes gradient-flow {
+        0%,
+        100% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+      }
+
+      .auth-glass-card {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.03) 0%,
+          rgba(255, 255, 255, 0.08) 30%,
+          rgba(255, 255, 255, 0.05) 100%
+        );
+        backdrop-filter: blur(40px) saturate(200%);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        box-shadow:
+          0 8px 32px rgba(15, 18, 59, 0.5),
+          inset 0 1px 0 rgba(255, 255, 255, 0.2),
+          0 0 0 1px rgba(139, 92, 246, 0.1),
+          0 20px 40px rgba(0, 0, 0, 0.3);
+        position: relative;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .floating-orb {
+        position: absolute;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(0, 117, 255, 0.1) 0%,
+          transparent 70%
+        );
+        animation: float 6s ease-in-out infinite;
+        pointer-events: none;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-20px) rotate(180deg);
+        }
+      }
+
+      .social-icon-btn {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+      }
+
+      .social-icon-btn:hover {
+        transform: translateY(-2px) scale(1.1);
+        border-color: rgba(255, 255, 255, 0.3);
+        box-shadow:
+          0 8px 25px rgba(0, 0, 0, 0.3),
+          0 0 20px rgba(255, 255, 255, 0.1);
+      }
+
+      .auth-input {
+        width: 100%;
+        padding: 12px 16px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 12px;
+        color: white;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+      }
+
+      .auth-input::placeholder {
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .auth-input:focus {
+        outline: none;
+        border-color: rgba(59, 130, 246, 0.5);
+        background: rgba(255, 255, 255, 0.08);
+        box-shadow:
+          0 0 0 3px rgba(59, 130, 246, 0.1),
+          0 0 20px rgba(59, 130, 246, 0.2),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        transform: scale(1.02);
+      }
+
+      .auth-primary-btn {
+        width: 100%;
+        padding: 12px 24px;
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        border: none;
+        border-radius: 12px;
+        color: white;
+        font-weight: 600;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        box-shadow:
+          0 4px 15px rgba(59, 130, 246, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      }
+
+      .auth-primary-btn:hover {
+        transform: translateY(-2px) scale(1.05);
+        box-shadow:
+          0 8px 25px rgba(59, 130, 246, 0.4),
+          0 0 30px rgba(59, 130, 246, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      class="min-h-screen bg-gradient-to-br from-[#1a1b54] via-[#0d0e38] to-[#020515] font-jakarta flex overflow-hidden"
+    >
+      <!-- Animated Background Elements -->
+      <div class="absolute inset-0 overflow-hidden">
+        <div
+          class="floating-orb absolute top-20 left-20 w-80 h-80 bg-blue-500/8 rounded-full blur-3xl"
+        ></div>
+        <div
+          class="floating-orb absolute top-40 right-32 w-64 h-64 bg-purple-500/6 rounded-full blur-2xl"
+          style="animation-delay: 2s"
+        ></div>
+        <div
+          class="floating-orb absolute bottom-32 left-1/3 w-48 h-48 bg-cyan-500/5 rounded-full blur-xl"
+          style="animation-delay: 4s"
+        ></div>
+        <div
+          class="floating-orb absolute bottom-20 right-20 w-56 h-56 bg-indigo-500/6 rounded-full blur-xl"
+          style="animation-delay: 6s"
+        ></div>
+
+        <!-- Grid Pattern -->
+        <div class="absolute inset-0 opacity-10">
+          <div
+            class="w-full h-full"
+            style="
+              background-image: radial-gradient(
+                circle at 2px 2px,
+                rgba(100, 200, 255, 0.3) 1px,
+                transparent 0
+              );
+              background-size: 80px 80px;
+              animation: float 30s ease-in-out infinite;
+            "
+          ></div>
+        </div>
+      </div>
+
+      <!-- Left Side - Brand Section -->
+      <div class="flex-1 flex items-center justify-center px-12">
+        <div class="text-left max-w-lg">
+          <div class="mb-8">
+            <div class="text-sm font-medium text-gray-400 mb-4 tracking-widest">
+              INSPIRED BY THE FUTURE
+            </div>
+            <h1
+              class="text-6xl font-bold login-brand-title mb-6 tracking-wider leading-tight"
+            >
+              KNOUX FINDR<br />
+              <span class="text-5xl">SEARCH</span>
+            </h1>
+            <p class="text-gray-300 text-lg leading-relaxed mb-8">
+              The most powerful local file search engine with AI-powered
+              organization.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Side - Auth Card -->
+      <div class="w-[480px] flex items-center justify-center px-8">
+        <div class="w-full max-w-sm">
+          <!-- Main Auth Card -->
+          <div
+            class="auth-glass-card rounded-3xl p-8 border border-white/15 shadow-2xl backdrop-blur-3xl"
+          >
+            <!-- Welcome Header -->
+            <div class="text-center mb-8">
+              <h2 class="text-2xl font-bold text-white mb-2">Welcome!</h2>
+              <p class="text-gray-400 text-sm mb-6">
+                Use these awesome forms to login or create new account in your
+                project for free.
+              </p>
+
+              <div class="text-center mb-6">
+                <span class="text-sm font-medium text-white">
+                  Register with
+                </span>
+              </div>
+            </div>
+
+            <!-- Social Login Buttons Row -->
+            <div class="flex justify-center gap-4 mb-6">
+              <!-- Facebook -->
+              <button type="button" class="social-icon-btn group">
+                <svg
+                  class="w-6 h-6 text-blue-500 group-hover:text-blue-400"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
+                  />
+                </svg>
+              </button>
+
+              <!-- Apple -->
+              <button type="button" class="social-icon-btn group">
+                <svg
+                  class="w-6 h-6 text-white group-hover:text-gray-300"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"
+                  />
+                </svg>
+              </button>
+
+              <!-- Google -->
+              <button type="button" class="social-icon-btn group">
+                <svg
+                  class="w-6 h-6 text-red-500 group-hover:text-red-400"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                  />
+                  <path
+                    fill="currentColor"
+                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                  />
+                  <path
+                    fill="currentColor"
+                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                  />
+                  <path
+                    fill="currentColor"
+                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <!-- Divider -->
+            <div class="flex items-center my-6">
+              <div class="flex-1 border-t border-white/20"></div>
+              <span class="px-4 text-gray-400 text-sm">or</span>
+              <div class="flex-1 border-t border-white/20"></div>
+            </div>
+
+            <!-- Email/Password Form Fields -->
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2"
+                  >Name</label
+                >
+                <input
+                  type="text"
+                  placeholder="Your full name"
+                  class="auth-input"
+                />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2"
+                  >Email</label
+                >
+                <input
+                  type="email"
+                  placeholder="Your email address"
+                  class="auth-input"
+                />
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2"
+                  >Password</label
+                >
+                <div class="relative">
+                  <input
+                    type="password"
+                    placeholder="Your password"
+                    class="auth-input pr-12"
+                  />
+                  <button
+                    type="button"
+                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                  >
+                    <svg
+                      class="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="remember"
+                  class="w-4 h-4 rounded border-white/20 bg-white/5 text-blue-500 focus:ring-blue-500/20"
+                />
+                <label for="remember" class="text-sm text-gray-300">
+                  Remember me
+                </label>
+              </div>
+
+              <button type="button" class="auth-primary-btn">SIGN UP</button>
+            </div>
+
+            <!-- Footer -->
+            <div class="text-center mt-8 pt-6">
+              <p class="text-xs text-gray-500 mb-4">
+                Already have an account?
+                <button
+                  class="text-blue-400 hover:text-blue-300 ml-1 font-medium"
+                >
+                  Sign in
+                </button>
+              </p>
+
+              <!-- Professor Attribution -->
+              <div
+                class="auth-glass-card rounded-lg p-3 border border-amber-500/30 bg-amber-500/5 mb-4"
+              >
+                <div
+                  class="text-amber-400 font-bold tracking-wider text-center"
+                  style="
+                    font-family: &quot;Playfair Display&quot;, serif;
+                    font-style: italic;
+                    font-size: 12px;
+                  "
+                >
+                  Powered by Prof. Sadek Elgazar
+                </div>
+                <div class="text-xs text-amber-300/70 mt-1 text-center">
+                  AI Research Director
+                </div>
+              </div>
+
+              <div class="text-xs text-gray-500">
+                KNOUX FINDR Professional v1.0
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
