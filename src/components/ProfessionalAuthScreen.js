@@ -245,7 +245,7 @@ const ProfessionalAuthScreen = ({ onAuthSuccess }) => {
                     className="social-icon-btn bg-white/10 hover:bg-gray-600/20 border border-white/20 hover:border-gray-400/40 group"
                     onClick={() => {
                       handleOAuthSuccess("Apple");
-                      window.open("http://localhost:3001/auth/apple", "_self");
+                      window.open(API_ENDPOINTS.OAUTH_APPLE, "_self");
                     }}
                   >
                     <svg
