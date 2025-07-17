@@ -132,10 +132,17 @@ const AppContent = () => {
 
   const handleSplashComplete = () => {
     setShowSplash(false);
-    if (isElectron) {
-      setCurrentPage("desktop");
-    } else {
-      setCurrentPage("auth");
+    // Force show desktop for demo
+    setCurrentPage("desktop");
+
+    // Auto-authenticate for demo
+    if (!isAuthenticated) {
+      login({
+        name: "مستخدم تجريبي",
+        email: "demo@knouxfindr.com",
+        provider: "demo",
+        authMethod: "auto",
+      });
     }
   };
 
