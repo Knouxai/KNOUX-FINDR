@@ -154,6 +154,38 @@ const AppContent = () => {
 
   return (
     <div className="min-h-screen w-screen bg-gradient-to-br from-[#0F123B] via-[#090D2E] to-[#020515] font-jakarta">
+      {/* Offline Mode Notification */}
+      {offlineNotification && (
+        <div
+          className={`fixed top-4 right-4 z-50 max-w-md p-4 rounded-lg shadow-lg transition-all duration-300 ${
+            offlineNotification.type === "warning"
+              ? "bg-orange-500/20 border border-orange-500/30 text-orange-400"
+              : offlineNotification.type === "info"
+                ? "bg-blue-500/20 border border-blue-500/30 text-blue-400"
+                : "bg-gray-500/20 border border-gray-500/30 text-gray-400"
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <span className="text-sm font-medium">
+              {offlineNotification.message}
+            </span>
+            <button
+              onClick={() => setOfflineNotification(null)}
+              className="text-xs opacity-70 hover:opacity-100"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Offline Mode Indicator */}
+      {offlineMode && (
+        <div className="fixed bottom-4 left-4 z-40 px-3 py-2 bg-orange-500/20 border border-orange-500/30 rounded-lg text-orange-400 text-xs">
+          📱 وضع تجريبي
+        </div>
+      )}
+
       {/* Authentication Pages */}
       {(currentPage === "auth" || currentPage === "signin") &&
         !isAuthenticated && (
