@@ -38,7 +38,19 @@ export const AuthProvider = ({ children }) => {
 
   const verifyToken = async (token) => {
     try {
-      const response = await apiCall(API_ENDPOINTS.VERIFY_TOKEN, {
+      // Check if we're in fallback mode
+      if (isFallbackMode()) {
+        const fallbackUser = getFallbackUser();
+        if (fallbackUser) {
+          setUser(fallbackUser);
+          setIsAuthenticated(true);
+          setAuthToken(token);
+          setIsLoading(false);
+          return;
+        }
+      }
+
+      const response = await apiCallWithFallback(API_ENDPOINTS.VERIFY_TOKEN, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -58,7 +70,21 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Token verification failed:", error);
-      logout();
+
+      // Try fallback authentication if server is unavailable
+      try {
+        const fallbackResult = await handleFallbackAuth("demo");
+        if (fallbackResult.success) {
+          setUser(fallbackResult.user);
+          setIsAuthenticated(true);
+          setAuthToken(fallbackResult.token);
+        } else {
+          logout();
+        }
+      } catch (fallbackError) {
+        console.error("Fallback authentication failed:", fallbackError);
+        logout();
+      }
     } finally {
       setIsLoading(false);
     }
