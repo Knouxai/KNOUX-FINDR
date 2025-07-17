@@ -341,7 +341,7 @@ const DesktopApp = () => {
   const getFileIcon = (extension, mimeType) => {
     if (mimeType?.startsWith("image/")) return "🖼️";
     if (mimeType?.startsWith("video/")) return "🎥";
-    if (mimeType?.startsWith("audio/")) return "������";
+    if (mimeType?.startsWith("audio/")) return "����";
 
     switch (extension?.toLowerCase()) {
       case ".pdf":
@@ -720,12 +720,11 @@ const DesktopApp = () => {
               icon: "🏢",
             },
             { id: "search", label: "🔍 Intelligent Search", icon: "🔍" },
-            { id: "database", label: "🗄️ Database Management", icon: "🗄️" },
-            { id: "languages", label: "🌐 Language Center", icon: "🌐" },
-            { id: "powerops", label: "⚡ Advanced Operations", icon: "⚡" },
-            { id: "duplicates", label: "🔄 Duplicate Analysis", icon: "🔄" },
             { id: "analytics", label: "📊 Enterprise Analytics", icon: "📊" },
+            { id: "duplicates", label: "🔄 Duplicate Analysis", icon: "🔄" },
+            { id: "powerops", label: "⚡ Advanced Operations", icon: "⚡" },
             { id: "timeline", label: "📅 Activity Timeline", icon: "📅" },
+            { id: "settings", label: "⚙️ Settings", icon: "⚙️" },
           ].map((tab) => (
             <button
               key={tab.id}
