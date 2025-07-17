@@ -84,27 +84,6 @@ const DesktopApp = () => {
     filesProcessed: 147832,
     totalFiles: 147832,
   });
-  const [aiSuggestions, setAiSuggestions] = useState([
-    {
-      title: "🔍 اقتراحات البحث الذكية",
-      items: [
-        { text: "تقارير العمل الأخيرة", confidence: 95, category: "Work" },
-        { text: "صور العطلة الصيفية", confidence: 89, category: "Personal" },
-        { text: "مشاريع React والبرمجة", confidence: 92, category: "Code" },
-      ],
-    },
-    {
-      title: "📁 تصنيفات مقترحة",
-      items: [
-        {
-          text: "ملفات التصميم غير المصنفة",
-          confidence: 94,
-          category: "Design",
-        },
-        { text: "مقاطع فيديو الاجتماعات", confidence: 91, category: "Work" },
-      ],
-    },
-  ]);
   const [activeView, setActiveView] = useState("professional");
   const [searchFilters, setSearchFilters] = useState({
     useAI: true,
