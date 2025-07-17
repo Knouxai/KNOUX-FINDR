@@ -26,6 +26,14 @@ const AppContent = () => {
 
   useEffect(() => {
     const initializeApp = async () => {
+      // Run environment checks first
+      const environmentOk = initializeEnvironmentChecks();
+      if (!environmentOk) {
+        console.warn(
+          "⚠️ Environment checks failed - some features may not work correctly",
+        );
+      }
+
       // Check if running in Electron environment
       if (window.electronAPI) {
         setIsElectron(true);
