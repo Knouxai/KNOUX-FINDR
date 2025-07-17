@@ -6,6 +6,7 @@ import Dashboard from "./components/Dashboard";
 import DesktopApp from "./components/DesktopApp";
 import ProfessionalAuthScreen from "./components/ProfessionalAuthScreen";
 import SplashScreen from "./components/SplashScreen";
+import WorkingSplashScreen from "./components/WorkingSplashScreen";
 import ErrorBoundary from "./components/ErrorBoundary";
 import InstantSearch from "./components/InstantSearch";
 import Timeline from "./components/Timeline";
