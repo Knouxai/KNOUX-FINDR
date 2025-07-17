@@ -77,11 +77,10 @@ export const AuthProvider = ({ children }) => {
     if (!token) return;
 
     try {
-      const response = await fetch("http://localhost:3001/api/user", {
+      const response = await apiCall(API_ENDPOINTS.GET_USER, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
         },
       });
 
