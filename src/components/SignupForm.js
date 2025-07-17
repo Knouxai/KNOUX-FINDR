@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { API_ENDPOINTS } from "../config/api";
 
 const SignupForm = ({ onSignupSuccess, onSignIn }) => {
   const { shouldShowAuthElements, isAuthenticated, user } = useAuth();
