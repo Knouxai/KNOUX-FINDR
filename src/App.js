@@ -221,6 +221,11 @@ const AppContent = () => {
         />
       )}
 
+      {/* Desktop App for demo */}
+      {currentPage === "desktop" && (
+        <DesktopApp user={user} onLogout={handleLogout} />
+      )}
+
       {/* Dashboard for authenticated users */}
       {currentPage === "dashboard" && isAuthenticated && (
         <Dashboard user={user} onLogout={handleLogout} />
