@@ -134,7 +134,7 @@ const ProfessionalAuthScreen = ({ onAuthSuccess }) => {
             <div className="text-sm font-medium text-gray-400 mb-4 tracking-widest">
               INSPIRED BY THE FUTURE
             </div>
-            <h1 className="text-6xl font-bold gradient-text mb-6 tracking-wider leading-tight">
+            <h1 className="text-6xl font-bold login-brand-title mb-6 tracking-wider leading-tight">
               KNOUX FINDR
               <br />
               <span className="text-5xl">SEARCH</span>
@@ -151,7 +151,7 @@ const ProfessionalAuthScreen = ({ onAuthSuccess }) => {
       <div className="w-[480px] flex items-center justify-center px-8">
         <div className="w-full max-w-sm">
           {/* Main Auth Card */}
-          <div className="glass-card rounded-3xl p-8 border border-white/15 shadow-2xl backdrop-blur-3xl">
+          <div className="auth-glass-card rounded-3xl p-8 border border-white/15 shadow-2xl backdrop-blur-3xl">
             {/* Welcome Header */}
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-white mb-2">Welcome!</h2>
@@ -180,7 +180,7 @@ const ProfessionalAuthScreen = ({ onAuthSuccess }) => {
                   {/* Facebook */}
                   <button
                     type="button"
-                    className="w-12 h-12 bg-white/10 hover:bg-blue-600/20 border border-white/20 hover:border-blue-500/40 rounded-xl transition-all duration-300 hover:scale-110 flex items-center justify-center group"
+                    className="social-icon-btn bg-white/10 hover:bg-blue-600/20 border border-white/20 hover:border-blue-500/40 group"
                     onClick={() => {
                       handleOAuthSuccess("Facebook");
                       window.open(
@@ -201,7 +201,7 @@ const ProfessionalAuthScreen = ({ onAuthSuccess }) => {
                   {/* Apple */}
                   <button
                     type="button"
-                    className="w-12 h-12 bg-white/10 hover:bg-gray-600/20 border border-white/20 hover:border-gray-400/40 rounded-xl transition-all duration-300 hover:scale-110 flex items-center justify-center group"
+                    className="social-icon-btn bg-white/10 hover:bg-gray-600/20 border border-white/20 hover:border-gray-400/40 group"
                     onClick={() => {
                       handleOAuthSuccess("Apple");
                       window.open("http://localhost:3001/auth/apple", "_self");
@@ -219,7 +219,7 @@ const ProfessionalAuthScreen = ({ onAuthSuccess }) => {
                   {/* Google */}
                   <button
                     type="button"
-                    className="w-12 h-12 bg-white/10 hover:bg-red-600/20 border border-white/20 hover:border-red-500/40 rounded-xl transition-all duration-300 hover:scale-110 flex items-center justify-center group"
+                    className="social-icon-btn bg-white/10 hover:bg-red-600/20 border border-white/20 hover:border-red-500/40 group"
                     onClick={() => {
                       handleOAuthSuccess("Google");
                       window.open("http://localhost:3001/auth/google", "_self");
@@ -265,7 +265,7 @@ const ProfessionalAuthScreen = ({ onAuthSuccess }) => {
                     <input
                       type="text"
                       placeholder="Your full name"
-                      className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all duration-300"
+                      className="auth-input"
                     />
                   </div>
 
@@ -276,7 +276,7 @@ const ProfessionalAuthScreen = ({ onAuthSuccess }) => {
                     <input
                       type="email"
                       placeholder="Your email address"
-                      className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all duration-300"
+                      className="auth-input"
                     />
                   </div>
 
@@ -288,7 +288,7 @@ const ProfessionalAuthScreen = ({ onAuthSuccess }) => {
                       <input
                         type="password"
                         placeholder="Your password"
-                        className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all duration-300 pr-12"
+                        className="auth-input pr-12"
                       />
                       <button
                         type="button"
@@ -331,7 +331,7 @@ const ProfessionalAuthScreen = ({ onAuthSuccess }) => {
                   <button
                     type="button"
                     onClick={toggleLocalAuth}
-                    className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 rounded-xl font-semibold text-white transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-blue-500/25"
+                    className="auth-primary-btn"
                   >
                     SIGN UP
                   </button>
