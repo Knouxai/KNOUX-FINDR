@@ -4,6 +4,7 @@ import SignupForm from "./components/SignupForm";
 import Dashboard from "./components/Dashboard";
 import DesktopApp from "./components/DesktopApp";
 import ProfessionalAuthScreen from "./components/ProfessionalAuthScreen";
+import SplashScreen from "./components/SplashScreen";
 import InstantSearch from "./components/InstantSearch";
 import Timeline from "./components/Timeline";
 import Stats from "./components/Stats";
