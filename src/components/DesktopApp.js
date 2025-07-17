@@ -84,7 +84,6 @@ const DesktopApp = () => {
     filesProcessed: 147832,
     totalFiles: 147832,
   });
-  const [indexingProgress, setIndexingProgress] = useState(null);
   const [aiSuggestions, setAiSuggestions] = useState([
     {
       title: "🔍 اقتراحات البحث الذكية",
@@ -423,7 +422,7 @@ const DesktopApp = () => {
         return "📊";
       case ".ppt":
       case ".pptx":
-        return "���️";
+        return "📽️";
       case ".zip":
       case ".rar":
       case ".7z":
@@ -639,7 +638,7 @@ const DesktopApp = () => {
             </div>
           </div>
           <div className="text-xs text-gray-500">
-            KNOUX FINDR Desktop v1.0.0 • Powered by AI ��� Made with ❤️
+            KNOUX FINDR Desktop v1.0.0 • Powered by AI • Made with ❤️
           </div>
         </div>
       </div>
