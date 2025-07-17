@@ -372,7 +372,14 @@ const DesktopApp = () => {
 
   // Use Professional Auth Screen instead of basic login
   if (!isAuthenticated) {
-    return <ProfessionalAuthScreen onAuthSuccess={handleSocialLoginSuccess} />;
+    return (
+      <ProfessionalAuthScreen
+        onAuthSuccess={(userData) => {
+          // Handle successful authentication
+          console.log("Authentication successful:", userData);
+        }}
+      />
+    );
   }
 
   // Legacy Login Screen Component (for reference)
