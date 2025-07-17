@@ -243,7 +243,7 @@ const DesktopApp = () => {
 
   const handleRunDuplicateAnalysis = async () => {
     setIsDuplicateAnalysisRunning(true);
-    addNotification("ج��ري تشغيل تحلي�� الملفات المكررة المتقدم...", "info");
+    addNotification("ج��ري تشغيل تحلي�� الملفات ال��كررة المتقدم...", "info");
 
     try {
       const duplicates = await window.electronAPI.findAdvancedDuplicates({
@@ -278,7 +278,7 @@ const DesktopApp = () => {
       addNotification("تم إكمال التحليل الذكي للمحتوى", "success");
     } catch (error) {
       console.error("AI analysis failed:", error);
-      addNotification("فشل في التحليل الذكي", "error");
+      addNotification("ف��ل في التحليل الذكي", "error");
     }
   };
 
@@ -325,20 +325,7 @@ const DesktopApp = () => {
     }
   };
 
-  const addNotification = (message, type = "info") => {
-    const notification = {
-      id: Date.now(),
-      message,
-      type,
-      timestamp: new Date(),
-    };
-    setNotifications((prev) => [notification, ...prev.slice(0, 4)]);
-
-    // Auto-remove after 5 seconds
-    setTimeout(() => {
-      setNotifications((prev) => prev.filter((n) => n.id !== notification.id));
-    }, 5000);
-  };
+  // addNotification is now provided by SessionContext
 
   const formatFileSize = (bytes) => {
     if (bytes === 0) return "0 Bytes";
