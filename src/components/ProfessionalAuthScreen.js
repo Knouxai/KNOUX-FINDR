@@ -38,11 +38,10 @@ const ProfessionalAuthScreen = ({ onAuthSuccess }) => {
       localStorage.setItem("knoux_token", token);
 
       // Fetch user data from /api/user
-      fetch("http://localhost:3001/api/user", {
+      apiCall(API_ENDPOINTS.GET_USER, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
         },
       })
         .then((res) => res.json())
