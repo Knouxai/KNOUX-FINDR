@@ -67,9 +67,8 @@ const DesktopApp = () => {
       mime_type: "image/jpeg",
       category: "Personal",
     },
-    {
-        ]);
-    const [indexingStatus, setIndexingStatus] = useState({});
+  ]);
+  const [indexingStatus, setIndexingStatus] = useState({});
   const [activeView, setActiveView] = useState("professional");
   const [searchFilters, setSearchFilters] = useState({
     useAI: true,
@@ -204,7 +203,7 @@ const DesktopApp = () => {
 
   const handleRunDuplicateAnalysis = async () => {
     setIsDuplicateAnalysisRunning(true);
-    addNotification("ج��ري تشغيل تحليل الملفات المكررة المتقدم...", "info");
+    addNotification("ج��ري تشغيل تحلي�� الملفات المكررة المتقدم...", "info");
 
     try {
       const duplicates = await window.electronAPI.findAdvancedDuplicates({
@@ -312,7 +311,7 @@ const DesktopApp = () => {
   const getFileIcon = (extension, mimeType) => {
     if (mimeType?.startsWith("image/")) return "🖼️";
     if (mimeType?.startsWith("video/")) return "🎥";
-    if (mimeType?.startsWith("audio/")) return "🎵";
+    if (mimeType?.startsWith("audio/")) return "����";
 
     switch (extension?.toLowerCase()) {
       case ".pdf":
