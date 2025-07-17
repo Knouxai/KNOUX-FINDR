@@ -276,7 +276,7 @@ const DesktopApp = () => {
 
       // Refresh file stats
       const stats = await window.electronAPI.getFileStats();
-      setFileStats(stats);
+      updateFileStats(stats);
 
       addNotification("تم إكمال التحليل الذكي للمحتوى", "success");
     } catch (error) {
@@ -428,7 +428,7 @@ const DesktopApp = () => {
           </h1>
           <p className="text-xl text-gray-300 mb-2">Desktop Search Engine</p>
           <p className="text-lg text-blue-400 font-semibold mb-6">
-            محرك البحث المحلي المدعوم بالذكاء الا��طناعي
+            محرك البحث المحلي المدعوم بالذكاء الاصطناعي
           </p>
 
           {/* Professor Name - Large Advertisement Style */}
@@ -545,7 +545,7 @@ const DesktopApp = () => {
         <div className="glass-card rounded-lg p-4 border border-green-500/20 bg-green-500/5">
           <div className="flex items-center justify-center gap-3 text-green-400">
             <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-            <span className="text-sm font-semibold">الن��ام جاهز ومتصل</span>
+            <span className="text-sm font-semibold">النظام جاهز ومتصل</span>
           </div>
         </div>
 
