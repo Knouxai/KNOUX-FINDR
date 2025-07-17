@@ -5,12 +5,16 @@ import Dashboard from "./components/Dashboard";
 import DesktopApp from "./components/DesktopApp";
 import ProfessionalAuthScreen from "./components/ProfessionalAuthScreen";
 import SplashScreen from "./components/SplashScreen";
+import ErrorBoundary from "./components/ErrorBoundary";
 import InstantSearch from "./components/InstantSearch";
 import Timeline from "./components/Timeline";
 import Stats from "./components/Stats";
 import NaturalQueryProcessor from "./components/NaturalQueryProcessor";
 import PowerOps from "./components/PowerOps";
-import { isAuthServerAvailable } from "./utils/authFallback";
+import {
+  isAuthServerAvailable,
+  handleFallbackAuth,
+} from "./utils/authFallback";
 
 // Main App Component that handles routing and authentication state
 const AppContent = () => {
