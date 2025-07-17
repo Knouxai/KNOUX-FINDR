@@ -102,11 +102,10 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       if (authToken) {
-        await fetch("http://localhost:3001/api/logout", {
+        await apiCall(API_ENDPOINTS.LOGOUT, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${authToken}`,
-            "Content-Type": "application/json",
           },
           body: JSON.stringify({ token: authToken }),
         });
