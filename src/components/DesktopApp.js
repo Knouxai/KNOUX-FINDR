@@ -312,7 +312,7 @@ const DesktopApp = () => {
 
       if (result.success) {
         addNotification(
-          `تم تنظيم ${result.processedFiles || 0} ملف تلقائياً`,
+          `تم ��نظيم ${result.processedFiles || 0} ملف تلقائياً`,
           "success",
         );
 
@@ -507,8 +507,14 @@ const DesktopApp = () => {
 
           {/* Social Login */}
           <SocialLogin
-            onLoginSuccess={handleSocialLoginSuccess}
-            onLoginError={handleSocialLoginError}
+            onLoginSuccess={(userData) => {
+              // Handle successful login
+              console.log("Social login successful:", userData);
+            }}
+            onLoginError={(error) => {
+              // Handle login error
+              console.error("Social login error:", error);
+            }}
           />
 
           {/* Divider */}
@@ -928,7 +934,7 @@ const DesktopApp = () => {
                           {fileStats.totalFiles.toLocaleString()} ملف
                         </div>
                         <button className="glass-button px-6 py-3 rounded-lg hover:scale-105 transition-transform">
-                          تحميل المزيد من النتائج...
+                          ت��ميل المزيد من النتائج...
                         </button>
                       </div>
                     </>
