@@ -67,17 +67,20 @@ class ErrorBoundary extends React.Component {
             </p>
 
             {/* Error Details (in development) */}
-            {process.env.NODE_ENV === "development" && this.state.error && (
-              <details className="text-left bg-red-900/20 border border-red-500/30 rounded-lg p-4 mb-6">
-                <summary className="text-red-400 cursor-pointer mb-2 font-semibold">
-                  تفاصيل الخطأ (وضع التطوير)
-                </summary>
-                <pre className="text-xs text-gray-300 overflow-auto">
-                  {this.state.error.toString()}
-                  {this.state.errorInfo.componentStack}
-                </pre>
-              </details>
-            )}
+            {typeof process !== "undefined" &&
+              process.env &&
+              process.env.NODE_ENV === "development" &&
+              this.state.error && (
+                <details className="text-left bg-red-900/20 border border-red-500/30 rounded-lg p-4 mb-6">
+                  <summary className="text-red-400 cursor-pointer mb-2 font-semibold">
+                    تفاصيل الخطأ (وضع التطوير)
+                  </summary>
+                  <pre className="text-xs text-gray-300 overflow-auto">
+                    {this.state.error.toString()}
+                    {this.state.errorInfo.componentStack}
+                  </pre>
+                </details>
+              )}
 
             {/* Action Buttons */}
             <div className="space-y-3">
