@@ -71,12 +71,10 @@ const DesktopApp = () => {
   });
 
   useEffect(() => {
-    if (window.electronAPI) {
-      setIsElectron(true);
-      // Show login screen first for Electron, skip for web
-      setShowLoginScreen(true);
+    if (appInitialized && !isRealDataLoaded) {
+      initializeRealData();
     }
-  }, []);
+  }, [appInitialized]);
 
   const handleLogin = async (credentials) => {
     try {
@@ -111,7 +109,7 @@ const DesktopApp = () => {
 
   const handleSocialLoginError = (error) => {
     console.error("Social login failed:", error);
-    addNotification(`فشل تسج��ل الدخول: ${error}`, "error");
+    addNotification(`فشل تسجيل الدخول: ${error}`, "error");
   };
 
   const initializeApp = async () => {
@@ -246,7 +244,7 @@ const DesktopApp = () => {
 
   const handleAIAutoCategorize = async () => {
     try {
-      addNotification("جاري تنظيم الملفات تلقائياً...", "info");
+      addNotification("جاري تنظيم الملف��ت تلقائياً...", "info");
 
       // Auto-organize current directory or use a default path
       const result = await window.electronAPI.autoOrganizeFiles(".", {
@@ -393,7 +391,7 @@ const DesktopApp = () => {
           </h1>
           <p className="text-xl text-gray-300 mb-2">Desktop Search Engine</p>
           <p className="text-lg text-blue-400 font-semibold mb-6">
-            محرك البحث المحلي المدعوم بالذكاء الاصطناعي
+            مح��ك البحث المحلي المدعوم بالذكاء الاصطناعي
           </p>
 
           {/* Professor Name - Large Advertisement Style */}
@@ -482,7 +480,7 @@ const DesktopApp = () => {
               onClick={handleQuickStart}
               className="w-full py-3 px-6 glass-button rounded-xl text-lg font-semibold hover:scale-105 transition-all duration-200"
             >
-              🚀 ابدأ الاستخدام فوراً
+              🚀 اب��أ الاستخدام فوراً
             </button>
 
             <div className="flex gap-3">
