@@ -56,13 +56,47 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const login = (userData) => {
+  const login = async (userData) => {
     setUser(userData);
     setIsAuthenticated(true);
 
     if (userData.token) {
       setAuthToken(userData.token);
       localStorage.setItem("knoux_token", userData.token);
+
+      // Fetch complete user data from /api/user after OAuth login
+      try {
+        await fetchUserData(userData.token);
+      } catch (error) {
+        console.error("Failed to fetch user data after login:", error);
+      }
+    }
+  };
+
+  const fetchUserData = async (token = authToken) => {
+    if (!token) return;
+
+    try {
+      const response = await fetch("http://localhost:3001/api/user", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        const userData = await response.json();
+        setUser((prevUser) => ({
+          ...prevUser,
+          ...userData,
+          // Preserve OAuth provider info if it exists
+          provider: prevUser?.provider || userData.provider,
+          authMethod: prevUser?.authMethod || userData.authMethod,
+        }));
+      }
+    } catch (error) {
+      console.error("Failed to fetch user data:", error);
     }
   };
 
