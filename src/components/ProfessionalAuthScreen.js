@@ -263,7 +263,7 @@ const ProfessionalAuthScreen = ({ onAuthSuccess }) => {
                     className="social-icon-btn bg-white/10 hover:bg-red-600/20 border border-white/20 hover:border-red-500/40 group"
                     onClick={() => {
                       handleOAuthSuccess("Google");
-                      window.open("http://localhost:3001/auth/google", "_self");
+                      window.open(API_ENDPOINTS.OAUTH_GOOGLE, "_self");
                     }}
                   >
                     <svg
