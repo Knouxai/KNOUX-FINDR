@@ -320,7 +320,7 @@ const DesktopApp = () => {
         const stats = await window.electronAPI.getFileStats();
         updateFileStats(stats);
       } else {
-        addNotification(result.message || "ف��ل في التنظيم التلقائي", "error");
+        addNotification(result.message || "فشل في التنظيم التلقائي", "error");
       }
     } catch (error) {
       console.error("Auto categorize failed:", error);
@@ -551,7 +551,7 @@ const DesktopApp = () => {
                 }}
                 className="flex-1 py-2 px-3 glass-button rounded-lg text-sm font-semibold hover:scale-105 transition-all duration-200"
               >
-                ⚙️ ��لإعدادات
+                ⚙️ الإعدادات
               </button>
             </div>
           </div>
@@ -759,7 +759,10 @@ const DesktopApp = () => {
             <div className="fade-in">
               <ProfessionalDashboard
                 user={{ name: "Enterprise User", email: "admin@knoux.com" }}
-                onLogout={() => setShowLoginScreen(true)}
+                onLogout={() => {
+                  // Handle logout
+                  console.log("User logged out");
+                }}
               />
             </div>
           )}
