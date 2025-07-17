@@ -12,6 +12,39 @@ contextBridge.exposeInMainWorld("electronAPI", {
   getRecentFiles: (limit) => ipcRenderer.invoke("get-recent-files", limit),
   getDuplicateFiles: () => ipcRenderer.invoke("get-duplicate-files"),
 
+  // AI-powered features
+  getAISuggestions: (filePath) =>
+    ipcRenderer.invoke("get-ai-suggestions", filePath),
+  getSmartSuggestions: (query) =>
+    ipcRenderer.invoke("get-smart-suggestions", query),
+  analyzeFileContent: (filePath) =>
+    ipcRenderer.invoke("analyze-file-content", filePath),
+
+  // Auto Organization
+  autoOrganizeFiles: (directoryPath, options) =>
+    ipcRenderer.invoke("auto-organize-files", directoryPath, options),
+  categorizeFile: (filePath) => ipcRenderer.invoke("categorize-file", filePath),
+  suggestCategories: (filePath) =>
+    ipcRenderer.invoke("suggest-categories", filePath),
+
+  // Advanced Duplicate Detection
+  findAdvancedDuplicates: (options) =>
+    ipcRenderer.invoke("find-advanced-duplicates", options),
+  analyzeSimilarity: (file1, file2) =>
+    ipcRenderer.invoke("analyze-similarity", file1, file2),
+
+  // Indexing and Monitoring
+  startIndexing: (directoryPath) =>
+    ipcRenderer.invoke("start-indexing", directoryPath),
+  stopIndexing: () => ipcRenderer.invoke("stop-indexing"),
+  getIndexingStatus: () => ipcRenderer.invoke("get-indexing-status"),
+
+  // File Encryption (placeholder for future)
+  encryptFile: (filePath, password) =>
+    ipcRenderer.invoke("encrypt-file", filePath, password),
+  decryptFile: (filePath, password) =>
+    ipcRenderer.invoke("decrypt-file", filePath, password),
+
   // File management
   openFileLocation: (filePath) =>
     ipcRenderer.invoke("open-file-location", filePath),
@@ -52,6 +85,21 @@ contextBridge.exposeInMainWorld("electronAPI", {
   },
   onShowSystemInfo: (callback) => {
     ipcRenderer.on("show-system-info", (event, info) => callback(info));
+  },
+  onAISuggestionsReady: (callback) => {
+    ipcRenderer.on("ai-suggestions-ready", (event, suggestions) =>
+      callback(suggestions),
+    );
+  },
+  onOrganizationComplete: (callback) => {
+    ipcRenderer.on("organization-complete", (event, result) =>
+      callback(result),
+    );
+  },
+  onEncryptionProgress: (callback) => {
+    ipcRenderer.on("encryption-progress", (event, progress) =>
+      callback(progress),
+    );
   },
 
   // Remove listeners
