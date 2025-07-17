@@ -176,6 +176,7 @@ export const AuthProvider = ({ children }) => {
     logout,
     logoutAllDevices,
     verifyToken,
+    fetchUserData,
 
     // UI helpers
     shouldShowAuthElements,
