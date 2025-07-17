@@ -163,9 +163,7 @@ const AppContent = () => {
 
   // Show splash screen initially
   if (showSplash && currentPage === "splash") {
-    return (
-      <SplashScreen onComplete={handleSplashComplete} isElectron={isElectron} />
-    );
+    return <WorkingSplashScreen onComplete={handleSplashComplete} />;
   }
 
   return (
