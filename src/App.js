@@ -73,6 +73,14 @@ const AppContent = () => {
     };
 
     initializeApp();
+
+    // Start connection monitoring
+    connectionMonitor.startMonitoring();
+
+    return () => {
+      // Clean up connection monitoring
+      connectionMonitor.stopMonitoring();
+    };
   }, [isAuthenticated, isElectron, login]);
 
   // Listen for offline mode events
