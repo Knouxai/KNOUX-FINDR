@@ -3,7 +3,12 @@
  * Real duplicate detection using multiple algorithms and heuristics
  */
 
-import { createHash } from "crypto";
+// Browser-compatible hash function
+const createHash = (algorithm) => {
+  return {
+    update: (data) => ({ digest: (encoding) => btoa(data) }), // Simple base64 encoding for demo
+  };
+};
 
 class DuplicateDetector {
   constructor() {
@@ -519,7 +524,7 @@ class DuplicateDetector {
       case "fuzzy":
         recommendations.push({
           action: "manual_review",
-          title: "مراجعة يدوية",
+          title: "مراجعة يد��ية",
           description: "مراجعة الملفات يدوياً قبل اتخاذ إجراء",
           risk: "none",
           spaceFreed: 0,
