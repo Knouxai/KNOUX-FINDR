@@ -92,72 +92,10 @@ const DesktopApp = () => {
     dateTo: "",
     fileType: "all",
   });
-  const [duplicateGroups, setDuplicateGroups] = useState([
-    {
-      id: "dup_1",
-      algorithm: "exactHash",
-      confidence: 100,
-      files: [
-        {
-          path: "/Users/Downloads/document.pdf",
-          size: 2847293,
-          hash: "a1b2c3d4",
-          modified_at: "2024-01-15T10:30:00Z",
-        },
-        {
-          path: "/Users/Desktop/document.pdf",
-          size: 2847293,
-          hash: "a1b2c3d4",
-          modified_at: "2024-01-15T10:30:00Z",
-        },
-        {
-          path: "/Users/Backup/document.pdf",
-          size: 2847293,
-          hash: "a1b2c3d4",
-          modified_at: "2024-01-15T10:30:00Z",
-        },
-      ],
-      totalSize: 8541879,
-      potentialSavings: 5694586,
-    },
-    {
-      id: "dup_2",
-      algorithm: "fuzzyHash",
-      confidence: 95,
-      files: [
-        {
-          path: "/Users/Pictures/vacation_photo_1.jpg",
-          size: 4293847,
-          hash: "e5f6g7h8",
-          modified_at: "2024-01-10T14:22:00Z",
-        },
-        {
-          path: "/Users/Pictures/vacation_photo_1_edited.jpg",
-          size: 4298473,
-          hash: "e5f6g7h9",
-          modified_at: "2024-01-11T16:30:00Z",
-        },
-      ],
-      totalSize: 8592320,
-      potentialSavings: 4293847,
-    },
-  ]);
+  const [duplicateGroups, setDuplicateGroups] = useState([]);
   const [isDuplicateAnalysisRunning, setIsDuplicateAnalysisRunning] =
     useState(false);
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      message: "تم اكتشاف 2 مجموعة من الملفات المكررة",
-      type: "info",
-      timestamp: new Date(Date.now() - 30000),
-    },
-    {
-      id: 2,
-      message: "تم تصنيف 1,247 ملف جديد بالذكاء الاصطناعي",
-      type: "success",
-      timestamp: new Date(Date.now() - 120000),
-    },
-  ]);
+  const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     if (window.electronAPI) {
@@ -537,7 +475,7 @@ const DesktopApp = () => {
             </div>
             <div className="text-center p-4 bg-white/5 rounded-lg">
               <div className="text-3xl mb-2">🔍</div>
-              <div className="text-sm font-semibold">كشف المكررات</div>
+              <div className="text-sm font-semibold">كشف ال��كررات</div>
               <div className="text-xs text-gray-400">توفير المساحة</div>
             </div>
             <div className="text-center p-4 bg-white/5 rounded-lg">
