@@ -95,7 +95,7 @@ const DesktopApp = () => {
       console.log("✅ Real data initialization completed");
     } catch (error) {
       console.error("❌ Real data initialization failed:", error);
-      addNotification("فشل ف�� تهيئة بعض الخدمات", "error");
+      addNotification("فشل في تهيئة بعض الخدمات", "error");
     }
   };
 
@@ -181,23 +181,64 @@ const DesktopApp = () => {
     }
 
     setIsSearching(true);
+    const operationId = addOperation({
+      type: "search",
+      name: `البحث عن: ${searchQuery}`,
+      description: "جارٍ البحث في الملفات...",
+    });
+
     try {
-      const results = await window.electronAPI.searchFiles(
-        searchQuery,
-        searchFilters,
-      );
+      // Add to search history
+      addToSearchHistory(searchQuery);
+
+      let results = [];
+
+      if (window.electronAPI && window.electronAPI.searchFiles) {
+        // Use Electron search if available
+        results = await window.electronAPI.searchFiles(
+          searchQuery,
+          searchFilters,
+        );
+      } else {
+        // Use local search for web environment
+        results = await performLocalSearch(searchQuery, searchFilters);
+      }
+
       setSearchResults(results);
 
       // Update AI suggestions based on search
       if (searchFilters.useAI) {
         await loadAISuggestions();
       }
+
+      completeOperation(operationId, { resultsFound: results.length });
+      addNotification(`تم العثور على ${results.length} نتيجة`, "success");
     } catch (error) {
       console.error("Search failed:", error);
+      updateOperation(operationId, { status: "failed", error: error.message });
       addNotification("فشل في البحث", "error");
     } finally {
       setIsSearching(false);
     }
+  };
+
+  const performLocalSearch = async (query, filters) => {
+    // Simulated local search using recent files
+    const queryLower = query.toLowerCase();
+
+    return recentFiles
+      .filter((file) => {
+        const nameMatch = file.name.toLowerCase().includes(queryLower);
+        const pathMatch = file.path.toLowerCase().includes(queryLower);
+
+        let categoryMatch = true;
+        if (filters.category !== "all") {
+          categoryMatch = file.category === filters.category;
+        }
+
+        return (nameMatch || pathMatch) && categoryMatch;
+      })
+      .slice(0, 50); // Limit results
   };
 
   const handleRunDuplicateAnalysis = async () => {
@@ -816,7 +857,7 @@ const DesktopApp = () => {
                     <option value="Documents">مستندات</option>
                     <option value="Images">صور</option>
                     <option value="Videos">فيديوهات</option>
-                    <option value="Audio">صوتيات</option>
+                    <option value="Audio">صوتي��ت</option>
                   </select>
                 </div>
 
