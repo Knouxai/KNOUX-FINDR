@@ -23,6 +23,8 @@ const AppContent = () => {
   const [currentPage, setCurrentPage] = useState("splash");
   const [isElectron, setIsElectron] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
+  const [offlineMode, setOfflineMode] = useState(false);
+  const [offlineNotification, setOfflineNotification] = useState(null);
 
   useEffect(() => {
     const initializeApp = async () => {
