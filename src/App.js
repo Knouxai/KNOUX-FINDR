@@ -82,6 +82,13 @@ const AppContent = () => {
     return <DesktopApp user={user} onLogout={handleLogout} />;
   }
 
+  // Show splash screen initially
+  if (showSplash && currentPage === "splash") {
+    return (
+      <SplashScreen onComplete={handleSplashComplete} isElectron={isElectron} />
+    );
+  }
+
   return (
     <div className="min-h-screen w-screen bg-gradient-to-br from-[#0F123B] via-[#090D2E] to-[#020515] font-jakarta">
       {/* Authentication Pages */}
