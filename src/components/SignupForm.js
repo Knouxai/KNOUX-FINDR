@@ -287,10 +287,7 @@ const SignupForm = ({ onSignupSuccess, onSignIn }) => {
                         <div
                           className="w-[75px] h-[75px] rounded-[20px] glass-button flex items-center justify-center cursor-pointer group relative overflow-hidden"
                           onClick={() =>
-                            window.open(
-                              "http://localhost:3001/auth/apple",
-                              "_blank",
-                            )
+                            window.open(API_ENDPOINTS.OAUTH_APPLE, "_blank")
                           }
                         >
                           <div className="absolute inset-0 bg-gradient-to-br from-gray-800/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
