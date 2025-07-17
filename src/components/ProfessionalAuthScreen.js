@@ -69,11 +69,10 @@ const ProfessionalAuthScreen = ({ onAuthSuccess }) => {
     const existingToken = localStorage.getItem("knoux_token");
     if (existingToken) {
       // Verify token with server
-      fetch("http://localhost:3001/api/verify-token", {
+      apiCall(API_ENDPOINTS.VERIFY_TOKEN, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${existingToken}`,
-          "Content-Type": "application/json",
         },
         body: JSON.stringify({ token: existingToken }),
       })
