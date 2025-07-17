@@ -134,12 +134,28 @@ const AppContent = () => {
   );
 };
 
-// Wrapper App component with AuthProvider
+// Wrapper App component with AuthProvider and ErrorBoundary
 function App() {
+  const handleOfflineMode = async () => {
+    try {
+      // Force fallback authentication
+      const result = await handleFallbackAuth("demo");
+      if (result.success) {
+        localStorage.setItem("knoux_token", result.token);
+        localStorage.setItem("knoux_user", JSON.stringify(result.user));
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("Failed to enter offline mode:", error);
+    }
+  };
+
   return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
+    <ErrorBoundary onOfflineMode={handleOfflineMode}>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
 
