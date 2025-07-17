@@ -215,7 +215,7 @@ const DesktopApp = () => {
       }
 
       completeOperation(operationId, { resultsFound: results.length });
-      addNotification(`تم العث��ر على ${results.length} نتيجة`, "success");
+      addNotification(`تم العثور على ${results.length} نتيجة`, "success");
     } catch (error) {
       console.error("Search failed:", error);
       updateOperation(operationId, { status: "failed", error: error.message });
@@ -318,7 +318,7 @@ const DesktopApp = () => {
 
         // Refresh stats after organization
         const stats = await window.electronAPI.getFileStats();
-        setFileStats(stats);
+        updateFileStats(stats);
       } else {
         addNotification(result.message || "فشل في التنظيم التلقائي", "error");
       }
