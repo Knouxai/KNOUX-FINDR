@@ -56,6 +56,15 @@ const AppContent = () => {
     setCurrentPage("auth");
   };
 
+  const handleSplashComplete = () => {
+    setShowSplash(false);
+    if (isElectron) {
+      setCurrentPage("desktop");
+    } else {
+      setCurrentPage("auth");
+    }
+  };
+
   // Show loading spinner while checking authentication
   if (isLoading) {
     return (
