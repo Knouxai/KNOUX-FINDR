@@ -74,6 +74,37 @@ const AppContent = () => {
     initializeApp();
   }, [isAuthenticated, isElectron, login]);
 
+  // Listen for offline mode events
+  useEffect(() => {
+    const handleOfflineMode = (event) => {
+      setOfflineMode(true);
+      setOfflineNotification({
+        type: "warning",
+        message: `⚠️ ${event.detail.message || "تم التبديل للوضع التجريبي"}`,
+      });
+
+      // Auto-hide notification after 5 seconds
+      setTimeout(() => setOfflineNotification(null), 5000);
+    };
+
+    const handleAuthFallback = (event) => {
+      setOfflineNotification({
+        type: "info",
+        message: `ℹ️ ${event.detail.message || "استخدام الوضع التجريبي"}`,
+      });
+
+      setTimeout(() => setOfflineNotification(null), 5000);
+    };
+
+    window.addEventListener("app:offline-mode", handleOfflineMode);
+    window.addEventListener("app:auth-fallback", handleAuthFallback);
+
+    return () => {
+      window.removeEventListener("app:offline-mode", handleOfflineMode);
+      window.removeEventListener("app:auth-fallback", handleAuthFallback);
+    };
+  }, []);
+
   const handleAuthSuccess = (userData) => {
     login(userData);
     setCurrentPage(isElectron ? "desktop" : "dashboard");
