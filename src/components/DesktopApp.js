@@ -95,7 +95,7 @@ const DesktopApp = () => {
       console.log("✅ Real data initialization completed");
     } catch (error) {
       console.error("❌ Real data initialization failed:", error);
-      addNotification("فشل في تهيئة بعض الخدمات", "error");
+      addNotification("فشل ف�� تهيئة بعض الخدمات", "error");
     }
   };
 
@@ -155,15 +155,22 @@ const DesktopApp = () => {
 
   const loadAISuggestions = async () => {
     try {
-      if (window.electronAPI.getFileSuggestions) {
-        const suggestions = await window.electronAPI.getFileSuggestions({
-          recentSearches: [searchQuery],
-          fileCategories: fileStats.categories,
-        });
-        setAiSuggestions(suggestions);
-      }
+      const context = {
+        recentFiles: recentFiles.slice(0, 10),
+        searchHistory: searchHistory.slice(0, 5),
+        fileStats: fileStats,
+      };
+
+      const suggestions = await aiProcessor.generateSmartSuggestions(
+        searchQuery,
+        context,
+      );
+      updateAiSuggestions(suggestions);
+
+      console.log(`🧠 Generated ${suggestions.length} AI suggestions`);
     } catch (error) {
       console.error("Error loading AI suggestions:", error);
+      updateAiSuggestions([]);
     }
   };
 
@@ -828,7 +835,7 @@ const DesktopApp = () => {
                           🔍 النتائج ({searchResults.length})
                         </h3>
                         <div className="text-sm text-gray-400">
-                          وجد في 0.23 ثانية • م��تب حسب الصلة
+                          وجد في 0.23 ثانية • مرتب حسب الصلة
                         </div>
                       </div>
                       {searchResults.map((file, index) => (
