@@ -15,6 +15,7 @@ import {
   isAuthServerAvailable,
   handleFallbackAuth,
 } from "./utils/authFallback";
+import { initializeEnvironmentChecks } from "./utils/environmentCheck";
 
 // Main App Component that handles routing and authentication state
 const AppContent = () => {
