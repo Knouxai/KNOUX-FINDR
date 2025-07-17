@@ -111,7 +111,21 @@ export const AuthProvider = ({ children }) => {
     if (!token) return;
 
     try {
-      const response = await apiCall(API_ENDPOINTS.GET_USER, {
+      // Check fallback mode first
+      if (isFallbackMode()) {
+        const fallbackUser = getFallbackUser();
+        if (fallbackUser) {
+          setUser((prevUser) => ({
+            ...prevUser,
+            ...fallbackUser,
+            provider: prevUser?.provider || fallbackUser.provider,
+            authMethod: prevUser?.authMethod || fallbackUser.authMethod,
+          }));
+          return;
+        }
+      }
+
+      const response = await apiCallWithFallback(API_ENDPOINTS.GET_USER, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -130,6 +144,11 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Failed to fetch user data:", error);
+      // In fallback mode, this is not critical
+      if (!isFallbackMode()) {
+        // Only show error if not in fallback mode
+        console.warn("Unable to fetch user data from server");
+      }
     }
   };
 
