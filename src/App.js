@@ -10,6 +10,7 @@ import Timeline from "./components/Timeline";
 import Stats from "./components/Stats";
 import NaturalQueryProcessor from "./components/NaturalQueryProcessor";
 import PowerOps from "./components/PowerOps";
+import { isAuthServerAvailable } from "./utils/authFallback";
 
 // Main App Component that handles routing and authentication state
 const AppContent = () => {
