@@ -59,39 +59,8 @@ const DesktopApp = () => {
   const [duplicateGroups, setDuplicateGroups] = useState([]);
   const [isDuplicateAnalysisRunning, setIsDuplicateAnalysisRunning] =
     useState(false);
-  const [recentFiles, setRecentFiles] = useState([
-    {
-      id: 1,
-      name: "تقرير المبيعات Q4 2024.pdf",
-      path: "/Users/Desktop/Reports/تقرير المبيعات Q4 2024.pdf",
-      size: 2847293,
-      modified_at: "2024-01-15T10:30:00Z",
-      extension: ".pdf",
-      mime_type: "application/pdf",
-      category: "Work",
-    },
-    {
-      id: 2,
-      name: "عرض تقديمي - استراتيجية التسويق.pptx",
-      path: "/Users/Documents/Presentations/عرض تقديمي - استراتيجية التسويق.pptx",
-      size: 15847293,
-      modified_at: "2024-01-14T16:45:00Z",
-      extension: ".pptx",
-      mime_type:
-        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-      category: "Work",
-    },
-    {
-      id: 3,
-      name: "صور العطلة الصيفية",
-      path: "/Users/Pictures/Summer_2024/IMG_001.jpg",
-      size: 4293847,
-      modified_at: "2024-01-13T14:22:00Z",
-      extension: ".jpg",
-      mime_type: "image/jpeg",
-      category: "Personal",
-    },
-  ]);
+  // Real initialization flag
+  const [isRealDataLoaded, setIsRealDataLoaded] = useState(false);
   const [indexingStatus, setIndexingStatus] = useState({});
   const [activeView, setActiveView] = useState("professional");
   const [searchFilters, setSearchFilters] = useState({
@@ -251,7 +220,7 @@ const DesktopApp = () => {
 
   const handleAIAnalyzeContent = async () => {
     try {
-      addNotification("جاري تشغيل التحليل الذكي للمحتوى...", "info");
+      addNotification("جاري تشغيل التحليل الذ��ي للمحتوى...", "info");
       // Get AI suggestions based on current content
       await loadAISuggestions();
 
@@ -714,7 +683,7 @@ const DesktopApp = () => {
               icon: "🏢",
             },
             { id: "search", label: "🔍 Intelligent Search", icon: "🔍" },
-            { id: "database", label: "����️ Database Management", icon: "🗄️" },
+            { id: "database", label: "🗄️ Database Management", icon: "🗄️" },
             { id: "languages", label: "🌐 Language Center", icon: "🌐" },
             { id: "powerops", label: "⚡ Advanced Operations", icon: "⚡" },
             { id: "duplicates", label: "🔄 Duplicate Analysis", icon: "🔄" },
