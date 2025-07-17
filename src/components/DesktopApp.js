@@ -986,6 +986,13 @@ const DesktopApp = () => {
               <Timeline />
             </div>
           )}
+
+          {/* Settings View */}
+          {currentView === "settings" && (
+            <div className="fade-in">
+              <Settings />
+            </div>
+          )}
         </div>
       </main>
 
