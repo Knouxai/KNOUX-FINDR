@@ -1,5 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { API_ENDPOINTS, apiCall } from "../config/api";
+import {
+  isAuthServerAvailable,
+  handleFallbackAuth,
+  isFallbackMode,
+  getFallbackUser,
+  apiCallWithFallback,
+  showOfflineNotification,
+} from "../utils/authFallback";
 
 const AuthContext = createContext();
 
