@@ -65,6 +65,7 @@ const ProfessionalAuthScreen = ({ onAuthSuccess }) => {
 
     // OAuth providers will redirect to their respective endpoints
     // The server will handle the authentication and redirect back
+    // After successful OAuth, the server should redirect to /dashboard with session data
   };
 
   // Handle local auth success
