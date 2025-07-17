@@ -3,6 +3,14 @@
  * Handles different environments (development, production, etc.)
  */
 
+// Safe way to access environment variables
+const getEnvVar = (varName, defaultValue = "") => {
+  if (typeof process !== "undefined" && process.env) {
+    return process.env[varName] || defaultValue;
+  }
+  return defaultValue;
+};
+
 // Default configuration
 const DEFAULT_CONFIG = {
   development: {
@@ -11,9 +19,15 @@ const DEFAULT_CONFIG = {
   },
   production: {
     AUTH_SERVER_URL:
-      process.env.REACT_APP_AUTH_SERVER_URL || window.location.origin,
+      getEnvVar("REACT_APP_AUTH_SERVER_URL") ||
+      (typeof window !== "undefined"
+        ? window.location.origin
+        : "https://localhost:3001"),
     API_BASE_URL:
-      process.env.REACT_APP_API_BASE_URL || window.location.origin + "/api",
+      getEnvVar("REACT_APP_API_BASE_URL") ||
+      (typeof window !== "undefined"
+        ? window.location.origin + "/api"
+        : "https://localhost:3001/api"),
   },
 };
 
