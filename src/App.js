@@ -14,8 +14,9 @@ import PowerOps from "./components/PowerOps";
 // Main App Component that handles routing and authentication state
 const AppContent = () => {
   const { isAuthenticated, isLoading, user, login, logout } = useAuth();
-  const [currentPage, setCurrentPage] = useState("auth");
+  const [currentPage, setCurrentPage] = useState("splash");
   const [isElectron, setIsElectron] = useState(false);
+  const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
     // Check if running in Electron environment
