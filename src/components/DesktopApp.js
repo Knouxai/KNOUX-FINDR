@@ -76,40 +76,54 @@ const DesktopApp = () => {
     }
   }, [appInitialized]);
 
-  const handleLogin = async (credentials) => {
+  const initializeRealData = async () => {
     try {
-      // Simulate login process
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      setIsLoggedIn(true);
-      setShowLoginScreen(false);
-      initializeApp();
+      console.log("🚀 Initializing real data and services...");
+      addNotification("جارٍ تهيئة الخدمات...", "info");
+
+      // Initialize AI processor
+      const aiInitialized = await aiProcessor.initialize();
+      if (aiInitialized) {
+        addNotification("تم تفعيل الذكاء الاصطناعي", "success");
+      }
+
+      // Load real file data if available
+      await loadRealFileData();
+
+      setIsRealDataLoaded(true);
+      addNotification("تم تهيئة التطبيق بنجاح", "success");
+      console.log("✅ Real data initialization completed");
     } catch (error) {
-      console.error("Login failed:", error);
+      console.error("❌ Real data initialization failed:", error);
+      addNotification("فشل في تهيئة بعض الخدمات", "error");
     }
   };
 
-  const handleQuickStart = () => {
-    setIsLoggedIn(true);
-    setShowLoginScreen(false);
-    initializeApp();
-  };
+  const loadRealFileData = async () => {
+    try {
+      if (window.electronAPI) {
+        // Load real file stats from Electron
+        const stats = await window.electronAPI.getFileStats();
+        updateFileStats(stats);
 
-  const handleSocialLoginSuccess = (user) => {
-    setIsLoggedIn(true);
-    setShowLoginScreen(false);
-    setShowSplashScreen(false);
-    // Store user info (could be in context/state management)
-    sessionStorage.setItem("knouxUser", JSON.stringify(user));
-    initializeApp();
-  };
+        // Load recent files
+        const recent = await window.electronAPI.getRecentFiles(20);
+        recent.forEach((file) => addRecentFile(file));
 
-  const handleSplashComplete = () => {
-    setShowSplashScreen(false);
-  };
-
-  const handleSocialLoginError = (error) => {
-    console.error("Social login failed:", error);
-    addNotification(`فشل تسجيل الدخول: ${error}`, "error");
+        console.log("📊 Loaded real file data from Electron");
+      } else {
+        // Web environment - use simulated data
+        updateFileStats({
+          totalFiles: 1247,
+          totalSize: 15728640000, // ~15GB
+          totalTypes: 25,
+          analyzedFiles: 892,
+          duplicateGroups: 0,
+        });
+      }
+    } catch (error) {
+      console.error("Failed to load file data:", error);
+    }
   };
 
   const initializeApp = async () => {
@@ -244,7 +258,7 @@ const DesktopApp = () => {
 
   const handleAIAutoCategorize = async () => {
     try {
-      addNotification("جاري تنظيم الملف��ت تلقائياً...", "info");
+      addNotification("جاري تنظيم الملفات تلقائياً...", "info");
 
       // Auto-organize current directory or use a default path
       const result = await window.electronAPI.autoOrganizeFiles(".", {
@@ -267,7 +281,7 @@ const DesktopApp = () => {
       }
     } catch (error) {
       console.error("Auto categorize failed:", error);
-      addNotification("فشل في التنظ��م التلقائي", "error");
+      addNotification("فشل ��ي التنظ��م التلقائي", "error");
     }
   };
 
@@ -385,13 +399,13 @@ const DesktopApp = () => {
         </div>
         {/* Logo and Title */}
         <div className="mb-12">
-          <div className="text-8xl mb-6 animate-pulse-glow">🚀</div>
+          <div className="text-8xl mb-6 animate-pulse-glow">���</div>
           <h1 className="text-5xl font-bold mb-4 gradient-text tracking-wider">
             KNOUX FINDR
           </h1>
           <p className="text-xl text-gray-300 mb-2">Desktop Search Engine</p>
           <p className="text-lg text-blue-400 font-semibold mb-6">
-            مح��ك البحث المحلي المدعوم بالذكاء الاصطناعي
+            محرك البحث المحلي المدعوم بالذكاء الاصطناعي
           </p>
 
           {/* Professor Name - Large Advertisement Style */}
@@ -480,7 +494,7 @@ const DesktopApp = () => {
               onClick={handleQuickStart}
               className="w-full py-3 px-6 glass-button rounded-xl text-lg font-semibold hover:scale-105 transition-all duration-200"
             >
-              🚀 اب��أ الاستخدام فوراً
+              🚀 ابدأ الاستخدام فوراً
             </button>
 
             <div className="flex gap-3">
