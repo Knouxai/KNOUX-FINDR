@@ -26,18 +26,39 @@ import duplicateDetector from "../services/duplicateDetector";
  */
 
 const DesktopApp = () => {
-  const [isElectron, setIsElectron] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [showLoginScreen, setShowLoginScreen] = useState(true);
+  // Use Session Context instead of local state
+  const {
+    user,
+    isAuthenticated,
+    appInitialized,
+    currentView,
+    setCurrentView,
+    isElectronMode,
+    fileStats,
+    updateFileStats,
+    recentFiles,
+    addRecentFile,
+    aiSuggestions,
+    updateAiSuggestions,
+    activeOperations,
+    addOperation,
+    updateOperation,
+    completeOperation,
+    addNotification,
+    notifications,
+    addToSearchHistory,
+    searchHistory,
+  } = useSession();
+
+  // Local component state
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [isIndexing, setIsIndexing] = useState(false);
   const [indexingProgress, setIndexingProgress] = useState({});
-  const [duplicateFiles, setDuplicateFiles] = useState([]);
-  const [aiSuggestions, setAiSuggestions] = useState([]);
-  const [fileStats, setFileStats] = useState({});
-  const [isLoadingStats, setIsLoadingStats] = useState(true);
+  const [duplicateGroups, setDuplicateGroups] = useState([]);
+  const [isDuplicateAnalysisRunning, setIsDuplicateAnalysisRunning] =
+    useState(false);
   const [recentFiles, setRecentFiles] = useState([
     {
       id: 1,
@@ -693,7 +714,7 @@ const DesktopApp = () => {
               icon: "🏢",
             },
             { id: "search", label: "🔍 Intelligent Search", icon: "🔍" },
-            { id: "database", label: "🗄️ Database Management", icon: "🗄️" },
+            { id: "database", label: "����️ Database Management", icon: "🗄️" },
             { id: "languages", label: "🌐 Language Center", icon: "🌐" },
             { id: "powerops", label: "⚡ Advanced Operations", icon: "⚡" },
             { id: "duplicates", label: "🔄 Duplicate Analysis", icon: "🔄" },
@@ -836,7 +857,7 @@ const DesktopApp = () => {
                     <>
                       <div className="flex justify-between items-center mb-4">
                         <h3 className="text-xl font-bold">
-                          🔍 النتا��ج ({searchResults.length})
+                          🔍 النتائج ({searchResults.length})
                         </h3>
                         <div className="text-sm text-gray-400">
                           وجد في 0.23 ثانية • مرتب حسب الصلة
