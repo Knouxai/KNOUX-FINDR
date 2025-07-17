@@ -82,7 +82,7 @@ const DesktopApp = () => {
   const initializeRealData = async () => {
     try {
       console.log("🚀 Initializing real data and services...");
-      addNotification("جارٍ تهيئة الخدما��...", "info");
+      addNotification("جارٍ تهيئة الخدمات...", "info");
 
       // Initialize AI processor
       const aiInitialized = await aiProcessor.initialize();
@@ -257,7 +257,7 @@ const DesktopApp = () => {
       setDuplicateGroups(duplicates);
       // Duplicate files are stored in duplicateGroups state
       addNotification(
-        `تم العثور على ${duplicates.length} مجموعة من الملفات المكررة`,
+        `تم العثور على ${duplicates.length} مجموعة من المل��ات المكررة`,
         duplicates.length > 0 ? "warning" : "success",
       );
     } catch (error) {
@@ -287,7 +287,7 @@ const DesktopApp = () => {
 
   const handleGetSmartSuggestions = async () => {
     try {
-      addNotification("جا��ي تحليل اقتراحات الذكاء الاصطناعي...", "info");
+      addNotification("جاري تحليل اقتراحات الذكاء الاصطناعي...", "info");
       const suggestions = await window.electronAPI.getSmartSuggestions(
         searchQuery || "organization",
       );
@@ -320,7 +320,7 @@ const DesktopApp = () => {
         const stats = await window.electronAPI.getFileStats();
         updateFileStats(stats);
       } else {
-        addNotification(result.message || "فشل في التنظيم ا��تلقائي", "error");
+        addNotification(result.message || "فشل في التنظيم التلقائي", "error");
       }
     } catch (error) {
       console.error("Auto categorize failed:", error);
@@ -755,7 +755,7 @@ const DesktopApp = () => {
       <main className="relative z-10 flex-1 p-4 overflow-hidden">
         <div className="h-[calc(100vh-200px)] overflow-y-auto">
           {/* Professional Dashboard View */}
-          {activeView === "professional" && (
+          {currentView === "professional" && (
             <div className="fade-in">
               <ProfessionalDashboard
                 user={{ name: "Enterprise User", email: "admin@knoux.com" }}
@@ -768,21 +768,21 @@ const DesktopApp = () => {
           )}
 
           {/* Database Management View */}
-          {activeView === "database" && (
+          {currentView === "database" && (
             <div className="fade-in">
               <DatabaseManager />
             </div>
           )}
 
           {/* Language Center View */}
-          {activeView === "languages" && (
+          {currentView === "languages" && (
             <div className="fade-in">
               <LanguageManager />
             </div>
           )}
 
           {/* Enterprise Analytics View */}
-          {activeView === "analytics" && (
+          {currentView === "analytics" && (
             <div className="fade-in">
               <Stats
                 fileStats={fileStats}
@@ -794,7 +794,7 @@ const DesktopApp = () => {
           )}
 
           {/* Intelligent Search View */}
-          {activeView === "search" && (
+          {currentView === "search" && (
             <div className="space-y-6 fade-in">
               <div className="glass-card rounded-xl p-6">
                 <h2 className="text-2xl font-bold mb-4 gradient-text">
@@ -951,7 +951,7 @@ const DesktopApp = () => {
           )}
 
           {/* PowerOps View */}
-          {activeView === "powerops" && (
+          {currentView === "powerops" && (
             <div className="fade-in">
               <PowerOps
                 fileStats={fileStats}
@@ -967,7 +967,7 @@ const DesktopApp = () => {
           )}
 
           {/* Duplicates View */}
-          {activeView === "duplicates" && (
+          {currentView === "duplicates" && (
             <div className="fade-in">
               <DuplicateManager
                 duplicateGroups={duplicateGroups}
@@ -982,7 +982,7 @@ const DesktopApp = () => {
           )}
 
           {/* Statistics View */}
-          {activeView === "stats" && (
+          {currentView === "stats" && (
             <div className="fade-in">
               <Stats
                 fileStats={fileStats}
@@ -993,7 +993,7 @@ const DesktopApp = () => {
           )}
 
           {/* Timeline View */}
-          {activeView === "timeline" && (
+          {currentView === "timeline" && (
             <div className="fade-in">
               <Timeline />
             </div>
