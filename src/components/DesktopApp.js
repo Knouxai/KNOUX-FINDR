@@ -246,7 +246,7 @@ const DesktopApp = () => {
 
   const handleRunDuplicateAnalysis = async () => {
     setIsDuplicateAnalysisRunning(true);
-    addNotification("ج��ري تشغيل تحلي�� الملفات المكررة المتقدم...", "info");
+    addNotification("ج��ري تشغيل تحلي�� ا��ملفات المكررة المتقدم...", "info");
 
     try {
       const duplicates = await window.electronAPI.findAdvancedDuplicates({
@@ -738,7 +738,7 @@ const DesktopApp = () => {
             <button
               key={tab.id}
               className={`px-6 py-3 rounded-lg font-semibold transition-all hover:scale-105 ${
-                activeView === tab.id
+                currentView === tab.id
                   ? "primary-button shadow-lg animate-pulse-glow"
                   : "glass-button hover:bg-white/10"
               }`}
