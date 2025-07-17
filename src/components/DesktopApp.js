@@ -126,16 +126,10 @@ const DesktopApp = () => {
     }
   };
 
-  const initializeApp = async () => {
+  const setupElectronListeners = async () => {
+    if (!window.electronAPI) return;
+
     try {
-      // Get initial file statistics
-      const stats = await window.electronAPI.getFileStats();
-      setFileStats(stats);
-
-      // Get recent files
-      const recent = await window.electronAPI.getRecentFiles(10);
-      setRecentFiles(recent);
-
       // Setup event listeners for real-time updates
       if (window.electronAPI.onIndexingStatus) {
         window.electronAPI.onIndexingStatus((status) => {
@@ -153,11 +147,9 @@ const DesktopApp = () => {
         });
       }
 
-      // Initial AI suggestions
-      await loadAISuggestions();
+      console.log("🔗 Electron event listeners setup completed");
     } catch (error) {
-      console.error("App initialization failed:", error);
-      addNotification("تعذر تهيئة التطبيق", "error");
+      console.error("Failed to setup Electron listeners:", error);
     }
   };
 
@@ -281,7 +273,7 @@ const DesktopApp = () => {
       }
     } catch (error) {
       console.error("Auto categorize failed:", error);
-      addNotification("فشل ��ي التنظ��م التلقائي", "error");
+      addNotification("فشل في التنظ��م التلقائي", "error");
     }
   };
 
@@ -399,7 +391,7 @@ const DesktopApp = () => {
         </div>
         {/* Logo and Title */}
         <div className="mb-12">
-          <div className="text-8xl mb-6 animate-pulse-glow">���</div>
+          <div className="text-8xl mb-6 animate-pulse-glow">🚀</div>
           <h1 className="text-5xl font-bold mb-4 gradient-text tracking-wider">
             KNOUX FINDR
           </h1>
@@ -836,7 +828,7 @@ const DesktopApp = () => {
                           🔍 النتائج ({searchResults.length})
                         </h3>
                         <div className="text-sm text-gray-400">
-                          وجد في 0.23 ثانية • مرتب حسب الصلة
+                          وجد في 0.23 ثانية • م��تب حسب الصلة
                         </div>
                       </div>
                       {searchResults.map((file, index) => (
