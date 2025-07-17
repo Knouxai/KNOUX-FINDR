@@ -329,10 +329,53 @@ const DesktopApp = () => {
       const stats = await window.electronAPI.getFileStats();
       setFileStats(stats);
 
-      addNotification("تم إكمال التحليل ال��كي للمحتوى", "success");
+      addNotification("تم إكمال التحليل الذكي للمحتوى", "success");
     } catch (error) {
       console.error("AI analysis failed:", error);
       addNotification("فشل في التحليل الذكي", "error");
+    }
+  };
+
+  const handleGetSmartSuggestions = async () => {
+    try {
+      addNotification("جاري تحليل اقتراحات الذكاء الاصطناعي...", "info");
+      const suggestions = await window.electronAPI.getSmartSuggestions(
+        searchQuery || "organization",
+      );
+      setAiSuggestions(suggestions);
+      addNotification(`تم إنشاء ${suggestions.length} اقتراح ذكي`, "success");
+    } catch (error) {
+      console.error("Smart suggestions failed:", error);
+      addNotification("فشل في إنشاء الاقتراحات الذكية", "error");
+    }
+  };
+
+  const handleAIAutoCategorize = async () => {
+    try {
+      addNotification("جاري تنظيم الملفات تلقائياً...", "info");
+
+      // Auto-organize current directory or use a default path
+      const result = await window.electronAPI.autoOrganizeFiles(".", {
+        createSubfolders: true,
+        useAI: true,
+        preserveOriginals: false,
+      });
+
+      if (result.success) {
+        addNotification(
+          `تم تنظيم ${result.processedFiles || 0} ملف تلقائياً`,
+          "success",
+        );
+
+        // Refresh stats after organization
+        const stats = await window.electronAPI.getFileStats();
+        setFileStats(stats);
+      } else {
+        addNotification(result.message || "فشل في التنظيم التلقائي", "error");
+      }
+    } catch (error) {
+      console.error("Auto categorize failed:", error);
+      addNotification("فشل في التنظيم التلقائي", "error");
     }
   };
 
@@ -500,7 +543,7 @@ const DesktopApp = () => {
             <div className="text-center p-4 bg-white/5 rounded-lg">
               <div className="text-3xl mb-2">🤖</div>
               <div className="text-sm font-semibold">ذكاء اصطناعي</div>
-              <div className="text-xs text-gray-400">بحث م��قدم</div>
+              <div className="text-xs text-gray-400">بحث متقدم</div>
             </div>
             <div className="text-center p-4 bg-white/5 rounded-lg">
               <div className="text-3xl mb-2">🔍</div>
