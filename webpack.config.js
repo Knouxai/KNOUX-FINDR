@@ -32,9 +32,24 @@ module.exports = {
       template: "./src/index.html",
       title: "KNOUX FINDR",
     }),
+    new webpack.DefinePlugin({
+      "process.env.NODE_ENV": JSON.stringify(
+        process.env.NODE_ENV || "production",
+      ),
+      "process.env.REACT_APP_AUTH_SERVER_URL": JSON.stringify(
+        process.env.REACT_APP_AUTH_SERVER_URL || "",
+      ),
+      "process.env.REACT_APP_API_BASE_URL": JSON.stringify(
+        process.env.REACT_APP_API_BASE_URL || "",
+      ),
+    }),
   ],
   resolve: {
     extensions: [".js", ".jsx"],
+    fallback: {
+      process: require.resolve("process/browser"),
+      buffer: require.resolve("buffer"),
+    },
   },
   devtool: "source-map",
 };
