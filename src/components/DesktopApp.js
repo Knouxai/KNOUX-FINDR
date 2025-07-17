@@ -9,6 +9,9 @@ import ProfessionalAuthScreen from "./ProfessionalAuthScreen";
 import ProfessionalDashboard from "./ProfessionalDashboard";
 import DatabaseManager from "./DatabaseManager";
 import LanguageManager from "./LanguageManager";
+import { useSession } from "../context/SessionContext";
+import aiProcessor from "../services/aiProcessor";
+import duplicateDetector from "../services/duplicateDetector";
 
 /**
  * KNOUX FINDR Desktop App UI
@@ -833,7 +836,7 @@ const DesktopApp = () => {
                     <>
                       <div className="flex justify-between items-center mb-4">
                         <h3 className="text-xl font-bold">
-                          🔍 النتائج ({searchResults.length})
+                          🔍 النتا��ج ({searchResults.length})
                         </h3>
                         <div className="text-sm text-gray-400">
                           وجد في 0.23 ثانية • مرتب حسب الصلة
