@@ -124,11 +124,10 @@ export const AuthProvider = ({ children }) => {
   const logoutAllDevices = async () => {
     try {
       if (authToken) {
-        await fetch("http://localhost:3001/api/logout-all", {
+        await apiCall(API_ENDPOINTS.LOGOUT_ALL, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${authToken}`,
-            "Content-Type": "application/json",
           },
           body: JSON.stringify({ token: authToken }),
         });
