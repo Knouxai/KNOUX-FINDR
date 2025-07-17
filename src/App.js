@@ -16,6 +16,7 @@ import {
   handleFallbackAuth,
 } from "./utils/authFallback";
 import { initializeEnvironmentChecks } from "./utils/environmentCheck";
+import connectionMonitor from "./utils/connectionMonitor";
 
 // Main App Component that handles routing and authentication state
 const AppContent = () => {
