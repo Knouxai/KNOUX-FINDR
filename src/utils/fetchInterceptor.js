@@ -24,10 +24,21 @@ const enhancedFetch = async (url, options = {}) => {
   try {
     // If this is a health check or server availability check, allow it through
     if (url.includes("/health") || url.includes("health")) {
-      return await originalFetch(url, {
-        ...options,
-        signal: AbortSignal.timeout(3000), // 3 second timeout for health checks
-      });
+      // Create timeout signal for health checks
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 second timeout
+
+      try {
+        const response = await originalFetch(url, {
+          ...options,
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+        return response;
+      } catch (error) {
+        clearTimeout(timeoutId);
+        throw error;
+      }
     }
 
     // Check if we're already in offline mode
