@@ -20,27 +20,43 @@ const AppContent = () => {
   const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
-    // Check if running in Electron environment
-    if (window.electronAPI) {
-      setIsElectron(true);
-      // Auto-login for desktop app
-      if (!isAuthenticated) {
-        login({
-          name: "Desktop User",
-          email: "desktop@knoux.com",
-          provider: "desktop",
-          authMethod: "desktop",
-        });
-      }
-      setCurrentPage("desktop");
-    } else {
-      // Web environment routing
-      if (isAuthenticated) {
-        setCurrentPage("dashboard");
+    const initializeApp = async () => {
+      // Check if running in Electron environment
+      if (window.electronAPI) {
+        setIsElectron(true);
+        // Auto-login for desktop app
+        if (!isAuthenticated) {
+          login({
+            name: "Desktop User",
+            email: "desktop@knoux.com",
+            provider: "desktop",
+            authMethod: "desktop",
+          });
+        }
+        setCurrentPage("desktop");
       } else {
-        setCurrentPage("auth");
+        // Web environment routing
+        try {
+          // Check server availability
+          const serverAvailable = await isAuthServerAvailable();
+          if (!serverAvailable) {
+            console.warn(
+              "⚠️ Auth server is not available - fallback mode will be used",
+            );
+          }
+        } catch (error) {
+          console.warn("Unable to check server availability:", error);
+        }
+
+        if (isAuthenticated) {
+          setCurrentPage("dashboard");
+        } else {
+          setCurrentPage("auth");
+        }
       }
-    }
+    };
+
+    initializeApp();
   }, [isAuthenticated, isElectron, login]);
 
   const handleAuthSuccess = (userData) => {
