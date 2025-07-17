@@ -154,8 +154,8 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      if (authToken) {
-        await apiCall(API_ENDPOINTS.LOGOUT, {
+      if (authToken && !isFallbackMode()) {
+        await apiCallWithFallback(API_ENDPOINTS.LOGOUT, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -165,12 +165,14 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Logout request failed:", error);
+      // Continue with local logout even if server request fails
     } finally {
       // Always clear local state
       setUser(null);
       setIsAuthenticated(false);
       setAuthToken(null);
       localStorage.removeItem("knoux_token");
+      localStorage.removeItem("knoux_user"); // Clear fallback user too
     }
   };
 
