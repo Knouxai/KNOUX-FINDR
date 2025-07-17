@@ -26,60 +26,15 @@ const DesktopApp = () => {
   const [isElectron, setIsElectron] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginScreen, setShowLoginScreen] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("تقارير العمل");
-  const [searchResults, setSearchResults] = useState([
-    {
-      id: "search_1",
-      name: "تقرير المبيعات الربعي 2024.pdf",
-      path: "/Users/Desktop/Reports/Q4_Sales_Report_2024.pdf",
-      size: 3847293,
-      modified_at: "2024-01-15T10:30:00Z",
-      extension: ".pdf",
-      mime_type: "application/pdf",
-      category: "Work",
-      aiRelevanceScore: 0.95,
-    },
-    {
-      id: "search_2",
-      name: "عرض تقديمي - استراتيجية المنتج.pptx",
-      path: "/Users/Documents/Presentations/Product_Strategy_2024.pptx",
-      size: 18472938,
-      modified_at: "2024-01-14T16:45:00Z",
-      extension: ".pptx",
-      mime_type:
-        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-      category: "Work",
-      aiRelevanceScore: 0.89,
-    },
-    {
-      id: "search_3",
-      name: "صور_مؤتمر_التقنية_2024",
-      path: "/Users/Pictures/Conference/Tech_Conference_2024/IMG_0847.jpg",
-      size: 6293847,
-      modified_at: "2024-01-13T14:22:00Z",
-      extension: ".jpg",
-      mime_type: "image/jpeg",
-      category: "Work",
-      aiRelevanceScore: 0.82,
-    },
-  ]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
-  const [fileStats, setFileStats] = useState({
-    totalFiles: 147832,
-    totalSize: 2847291840000,
-    totalTypes: 67,
-    analyzedFiles: 139284,
-    categories: {
-      Documents: 45231,
-      Images: 32847,
-      Videos: 8934,
-      Audio: 12847,
-      Code: 15983,
-      Archives: 4821,
-      Work: 18472,
-      Personal: 22631,
-    },
-  });
+  const [isIndexing, setIsIndexing] = useState(false);
+  const [indexingProgress, setIndexingProgress] = useState({});
+  const [duplicateFiles, setDuplicateFiles] = useState([]);
+  const [aiSuggestions, setAiSuggestions] = useState([]);
+  const [fileStats, setFileStats] = useState({});
+  const [isLoadingStats, setIsLoadingStats] = useState(true);
   const [recentFiles, setRecentFiles] = useState([
     {
       id: 1,
