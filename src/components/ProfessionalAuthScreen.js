@@ -20,18 +20,62 @@ const ProfessionalAuthScreen = ({ onAuthSuccess }) => {
   const [notification, setNotification] = useState(null);
   const [user, setUser] = useState(null);
 
-  // Check for existing authentication
+  // Check for existing authentication or OAuth success
   useEffect(() => {
-    const token = localStorage.getItem("knoux_token");
-    if (token) {
-      // Verify token with server
-      fetch("http://localhost:3001/api/verify-token", {
-        method: "POST",
+    // Check for OAuth success in URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const success = urlParams.get("success");
+    const token = urlParams.get("token");
+    const provider = urlParams.get("provider");
+
+    if (success === "true" && token) {
+      // OAuth success detected
+      setIsLoading(true);
+      showNotification(`تم تسجيل الدخول بنجاح عبر ${provider}!`, "success");
+
+      // Store token and fetch user data
+      localStorage.setItem("knoux_token", token);
+
+      // Fetch user data from /api/user
+      fetch("http://localhost:3001/api/user", {
+        method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ token }),
+      })
+        .then((res) => res.json())
+        .then((userData) => {
+          setUser(userData);
+          onAuthSuccess({
+            ...userData,
+            token,
+            provider,
+            authMethod: "oauth",
+          });
+        })
+        .catch((error) => {
+          console.error("Failed to fetch user data:", error);
+          showNotification("فشل في جلب بيانات المستخدم", "error");
+          setIsLoading(false);
+        });
+
+      // Clean up URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+      return;
+    }
+
+    // Check for existing token
+    const existingToken = localStorage.getItem("knoux_token");
+    if (existingToken) {
+      // Verify token with server
+      fetch("http://localhost:3001/api/verify-token", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${existingToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token: existingToken }),
       })
         .then((res) => res.json())
         .then((result) => {
@@ -39,7 +83,7 @@ const ProfessionalAuthScreen = ({ onAuthSuccess }) => {
             setUser(result.user);
             onAuthSuccess({
               ...result.user,
-              token,
+              token: existingToken,
               authMethod: "token",
             });
           } else {
