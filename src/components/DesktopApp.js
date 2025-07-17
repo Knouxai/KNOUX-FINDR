@@ -370,15 +370,8 @@ const DesktopApp = () => {
     }
   };
 
-  // Show splash screen first
-  if (showSplashScreen) {
-    return (
-      <SplashScreen onComplete={handleSplashComplete} isElectron={isElectron} />
-    );
-  }
-
   // Use Professional Auth Screen instead of basic login
-  if (!isElectron || showLoginScreen) {
+  if (!isAuthenticated) {
     return <ProfessionalAuthScreen onAuthSuccess={handleSocialLoginSuccess} />;
   }
 
