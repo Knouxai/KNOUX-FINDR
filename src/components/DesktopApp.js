@@ -68,22 +68,8 @@ const DesktopApp = () => {
       category: "Personal",
     },
     {
-      id: 4,
-      name: "مشروع React النهائي",
-      path: "/Users/Dev/Projects/knoux-findr/src/App.js",
-      size: 23847,
-      modified_at: "2024-01-13T09:15:00Z",
-      extension: ".js",
-      mime_type: "text/javascript",
-      category: "Code",
-    },
-  ]);
-  const [indexingStatus, setIndexingStatus] = useState({
-    status: "completed",
-    message: "تم فهرسة 147,832 ملف بنجاح",
-    filesProcessed: 147832,
-    totalFiles: 147832,
-  });
+        ]);
+    const [indexingStatus, setIndexingStatus] = useState({});
   const [activeView, setActiveView] = useState("professional");
   const [searchFilters, setSearchFilters] = useState({
     useAI: true,
@@ -296,7 +282,7 @@ const DesktopApp = () => {
       }
     } catch (error) {
       console.error("Auto categorize failed:", error);
-      addNotification("فشل في التنظيم التلقائي", "error");
+      addNotification("فشل في التنظ��م التلقائي", "error");
     }
   };
 
@@ -471,7 +457,7 @@ const DesktopApp = () => {
             <div className="text-center p-4 bg-white/5 rounded-lg">
               <div className="text-3xl mb-2">🤖</div>
               <div className="text-sm font-semibold">ذكاء اصطناعي</div>
-              <div className="text-xs text-gray-400">بحث متقدم</div>
+              <div className="text-xs text-gray-400">بحث متقد��</div>
             </div>
             <div className="text-center p-4 bg-white/5 rounded-lg">
               <div className="text-3xl mb-2">🔍</div>
