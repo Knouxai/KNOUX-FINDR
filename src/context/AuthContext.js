@@ -178,8 +178,8 @@ export const AuthProvider = ({ children }) => {
 
   const logoutAllDevices = async () => {
     try {
-      if (authToken) {
-        await apiCall(API_ENDPOINTS.LOGOUT_ALL, {
+      if (authToken && !isFallbackMode()) {
+        await apiCallWithFallback(API_ENDPOINTS.LOGOUT_ALL, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -189,6 +189,7 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Logout all devices failed:", error);
+      // Continue with local logout
     } finally {
       logout();
     }
