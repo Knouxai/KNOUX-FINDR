@@ -300,11 +300,16 @@ const DesktopApp = () => {
     addNotification("ج��ري تشغيل تحليل الملفات المكررة المتقدم...", "info");
 
     try {
-      const duplicates = await window.electronAPI.getAdvancedDuplicates();
+      const duplicates = await window.electronAPI.findAdvancedDuplicates({
+        includeImages: true,
+        includeSimilarNames: true,
+        threshold: 0.85,
+      });
       setDuplicateGroups(duplicates);
+      setDuplicateFiles(duplicates);
       addNotification(
         `تم العثور على ${duplicates.length} مجموعة من الملفات المكررة`,
-        "success",
+        duplicates.length > 0 ? "warning" : "success",
       );
     } catch (error) {
       console.error("Duplicate analysis failed:", error);
@@ -317,16 +322,14 @@ const DesktopApp = () => {
   const handleAIAnalyzeContent = async () => {
     try {
       addNotification("جاري تشغيل التحليل الذكي للمحتوى...", "info");
-      const result = await window.electronAPI.categorizeFiles();
+      // Get AI suggestions based on current content
+      await loadAISuggestions();
 
       // Refresh file stats
       const stats = await window.electronAPI.getFileStats();
       setFileStats(stats);
 
-      addNotification(
-        `تم تصنيف ${result.categorizedCount} ملف بالذكاء الاصطناعي`,
-        "success",
-      );
+      addNotification("تم إكمال التحليل ال��كي للمحتوى", "success");
     } catch (error) {
       console.error("AI analysis failed:", error);
       addNotification("فشل في التحليل الذكي", "error");
@@ -497,7 +500,7 @@ const DesktopApp = () => {
             <div className="text-center p-4 bg-white/5 rounded-lg">
               <div className="text-3xl mb-2">🤖</div>
               <div className="text-sm font-semibold">ذكاء اصطناعي</div>
-              <div className="text-xs text-gray-400">بحث متقدم</div>
+              <div className="text-xs text-gray-400">بحث م��قدم</div>
             </div>
             <div className="text-center p-4 bg-white/5 rounded-lg">
               <div className="text-3xl mb-2">🔍</div>
