@@ -312,7 +312,7 @@ const DesktopApp = () => {
 
       if (result.success) {
         addNotification(
-          `تم ��نظيم ${result.processedFiles || 0} ملف تلقائياً`,
+          `تم تنظيم ${result.processedFiles || 0} ملف تلقائياً`,
           "success",
         );
 
@@ -320,7 +320,7 @@ const DesktopApp = () => {
         const stats = await window.electronAPI.getFileStats();
         updateFileStats(stats);
       } else {
-        addNotification(result.message || "فشل في التنظيم التلقائي", "error");
+        addNotification(result.message || "ف��ل في التنظيم التلقائي", "error");
       }
     } catch (error) {
       console.error("Auto categorize failed:", error);
@@ -527,7 +527,10 @@ const DesktopApp = () => {
           {/* Quick Actions */}
           <div className="space-y-3">
             <button
-              onClick={handleQuickStart}
+              onClick={() => {
+                // Handle quick start
+                console.log("Quick start clicked");
+              }}
               className="w-full py-3 px-6 glass-button rounded-xl text-lg font-semibold hover:scale-105 transition-all duration-200"
             >
               🚀 ابدأ الاستخدام فوراً
@@ -548,7 +551,7 @@ const DesktopApp = () => {
                 }}
                 className="flex-1 py-2 px-3 glass-button rounded-lg text-sm font-semibold hover:scale-105 transition-all duration-200"
               >
-                ⚙️ الإعدادات
+                ⚙️ ��لإعدادات
               </button>
             </div>
           </div>
@@ -934,7 +937,7 @@ const DesktopApp = () => {
                           {fileStats.totalFiles.toLocaleString()} ملف
                         </div>
                         <button className="glass-button px-6 py-3 rounded-lg hover:scale-105 transition-transform">
-                          ت��ميل المزيد من النتائج...
+                          تحميل المزيد من النتائج...
                         </button>
                       </div>
                     </>
