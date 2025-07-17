@@ -12,6 +12,9 @@ import LanguageManager from "./LanguageManager";
 import { useSession } from "../context/SessionContext";
 import aiProcessor from "../services/aiProcessor";
 import duplicateDetector from "../services/duplicateDetector";
+import fileOrganizer from "../services/fileOrganizer";
+import statisticsService from "../services/statisticsService";
+import Settings from "./Settings";
 
 /**
  * KNOUX FINDR Desktop App UI
@@ -243,7 +246,7 @@ const DesktopApp = () => {
 
   const handleRunDuplicateAnalysis = async () => {
     setIsDuplicateAnalysisRunning(true);
-    addNotification("ج��ري تشغيل تحلي�� الملفات ال��كررة المتقدم...", "info");
+    addNotification("ج��ري تشغيل تحلي�� الملفات المكررة المتقدم...", "info");
 
     try {
       const duplicates = await window.electronAPI.findAdvancedDuplicates({
@@ -278,7 +281,7 @@ const DesktopApp = () => {
       addNotification("تم إكمال التحليل الذكي للمحتوى", "success");
     } catch (error) {
       console.error("AI analysis failed:", error);
-      addNotification("ف��ل في التحليل الذكي", "error");
+      addNotification("فشل في التحليل الذكي", "error");
     }
   };
 
@@ -338,7 +341,7 @@ const DesktopApp = () => {
   const getFileIcon = (extension, mimeType) => {
     if (mimeType?.startsWith("image/")) return "🖼️";
     if (mimeType?.startsWith("video/")) return "🎥";
-    if (mimeType?.startsWith("audio/")) return "����";
+    if (mimeType?.startsWith("audio/")) return "������";
 
     switch (extension?.toLowerCase()) {
       case ".pdf":
