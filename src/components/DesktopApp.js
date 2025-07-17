@@ -215,7 +215,7 @@ const DesktopApp = () => {
       }
 
       completeOperation(operationId, { resultsFound: results.length });
-      addNotification(`تم العثور على ${results.length} نتيجة`, "success");
+      addNotification(`تم العث��ر على ${results.length} نتيجة`, "success");
     } catch (error) {
       console.error("Search failed:", error);
       updateOperation(operationId, { status: "failed", error: error.message });
@@ -291,7 +291,7 @@ const DesktopApp = () => {
       const suggestions = await window.electronAPI.getSmartSuggestions(
         searchQuery || "organization",
       );
-      setAiSuggestions(suggestions);
+      updateAiSuggestions(suggestions);
       addNotification(`تم إنشاء ${suggestions.length} اقتراح ذكي`, "success");
     } catch (error) {
       console.error("Smart suggestions failed:", error);
