@@ -122,6 +122,43 @@ const ProfessionalAuthScreen = ({ onAuthSuccess }) => {
     onAuthSuccess(userData);
   };
 
+  // Handle offline mode / demo login
+  const handleOfflineLogin = async () => {
+    try {
+      setIsLoading(true);
+      showNotification("جارٍ التحقق من الاتصال...", "info");
+
+      const serverAvailable = await isAuthServerAvailable();
+
+      if (!serverAvailable) {
+        showNotification(
+          "الخادم غير متاح - سيتم استخدام الوضع التجريبي",
+          "warning",
+        );
+
+        const fallbackResult = await handleFallbackAuth(
+          window.electronAPI ? "electron" : "demo",
+        );
+
+        if (fallbackResult.success) {
+          setUser(fallbackResult.user);
+          onAuthSuccess(fallbackResult.user);
+          showNotification(fallbackResult.message, "success");
+        }
+      } else {
+        showNotification(
+          "الخادم متاح - يمكنك استخدام تسجيل الدخول العادي",
+          "success",
+        );
+      }
+    } catch (error) {
+      console.error("Offline login failed:", error);
+      showNotification("فشل في تسجيل الدخول - يرجى المحاولة مرة أخرى", "error");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const toggleLocalAuth = () => {
     setShowLocalAuth(!showLocalAuth);
   };
